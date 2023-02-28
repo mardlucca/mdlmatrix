@@ -1,4 +1,4 @@
-# Copyright (c) 2022, Marcio Lucca
+# Copyright (c) 2022-2023, Marcio Lucca
 # All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -26,14 +26,13 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-load("@rules_cc//cc:defs.bzl", "cc_binary")
 load("@rules_cc//cc:defs.bzl", "cc_library")
 load("@rules_cc//cc:defs.bzl", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
-  name = "mdl_cpp_template",
+  name = "mdl_matrix",
   srcs = glob(["src/lib/cc/**/*.cc"]),
   hdrs = glob(["src/lib/h/**/*.h", "src/lib/h/**/*.hpp", "includes/**/*.h"]),
   includes = [ "includes" ],
@@ -42,7 +41,7 @@ cc_library(
 
 alias(
   name = "lib",
-  actual = ":mdl_cpp_template"
+  actual = ":mdl_matrix"
 )
 
 cc_test(
@@ -61,12 +60,4 @@ filegroup(
   srcs = glob([
       "src/test/resources/**/*.*"
   ]),
-)
-
-cc_binary(
-  name = "main",
-  srcs = ["src/main/cc/main.cc"],
-  deps = [
-      "//:lib",
-  ]
 )
