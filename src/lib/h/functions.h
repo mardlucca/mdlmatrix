@@ -2,7 +2,7 @@
 #define _MDL_MATH_MATRIX_FUNCTIONS
 
 #include "matrix.h"
-#include "slice.hpp"
+#include "slice.h"
 #include "basematrix_operator_overload.h"
 #include "matrix_operator_overload.h"
 

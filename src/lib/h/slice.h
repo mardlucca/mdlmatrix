@@ -6,8 +6,8 @@
 
 #include "basematrix.h"
 #include "range.h"
-#include "accessor.hpp"
-#include "operation.hpp"
+#include "accessor.h"
+#include "operation.h"
 
 
 namespace mdl {

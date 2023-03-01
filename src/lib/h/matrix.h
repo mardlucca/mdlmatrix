@@ -5,10 +5,10 @@
 #include <sstream>
 
 #include "basematrix.h"
-#include "slice.hpp"
+#include "slice.h"
 #include "range.h"
-#include "accessor.hpp"
-#include "operation.hpp"
+#include "accessor.h"
+#include "operation.h"
 
 namespace mdl {
 namespace math {

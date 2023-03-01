@@ -6,7 +6,7 @@
 
 #include "../h/matrix.h"
 #include "../h/matrices.h"
-#include "../h/operation.hpp"
+#include "../h/operation.h"
 #include "../h/basematrix_operate.h"
 #include <mdl/io.h>
 #include <mdl/util.h>

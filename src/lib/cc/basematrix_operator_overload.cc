@@ -4,7 +4,7 @@
 
 #include "../h/matrix.h"
 #include "../h/basematrix_operate.h"
-#include "../h/operation.hpp"
+#include "../h/operation.h"
 
 namespace mdl {
 namespace math {
