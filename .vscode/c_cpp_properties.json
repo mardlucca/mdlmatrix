@@ -32,7 +32,8 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "bazel-${workspaceFolderBasename}/external/com_google_googletest/googletest/include"
+                "bazel-${workspaceFolderBasename}/external/com_google_googletest/googletest/include/**",
+                "bazel-${workspaceFolderBasename}/external/mdl_common/**"
             ],
             "defines": [],
             "macFrameworkPath": [

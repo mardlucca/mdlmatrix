@@ -33,10 +33,13 @@ package(default_visibility = ["//visibility:public"])
 
 cc_library(
   name = "mdl_matrix",
-  srcs = glob(["src/lib/cc/**/*.cc"]),
-  hdrs = glob(["src/lib/h/**/*.h", "src/lib/h/**/*.hpp", "includes/**/*.h"]),
+  srcs = glob(["src/lib/cc/**/*.cc", "src/lib/h/**/*.h", "src/lib/h/**/*.hpp"]),
+  hdrs = glob(["includes/**/*.h"]),
   includes = [ "includes" ],
-  visibility = ["//visibility:public"]
+  visibility = ["//visibility:public"],
+  deps = [
+    "@mdl_common//:lib",
+  ]
 )
 
 alias(

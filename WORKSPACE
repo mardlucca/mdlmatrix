@@ -28,7 +28,15 @@
 
 workspace(name = "mdl_matrix")
 
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+git_repository(
+  name = "mdl_common",
+  remote = "https://github.com/mardlucca/mdlcommon.git",
+  commit = "3fd53819f9374443dc5d1dfc891a95d24daf409c", 
+  shallow_since = "1677630227 -0500"
+)
 
 http_archive(
   name = "com_google_googletest",

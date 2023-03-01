@@ -1,4 +1,4 @@
-// Copyright (c) 2022, Marcio Lucca
+// Copyright (c) 2023, Marcio Lucca
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -26,18 +26,12 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "../h/examplelib.h"
+#ifndef _MDL_MATRIX
+#define _MDL_MATRIX
 
-#include <iostream>
+#include "src/lib/h/matrices.h"
+#include "src/lib/h/basematrix_operator_overload.h"
+#include "src/lib/h/matrix_operator_overload.h"
+#include "src/lib/h/functions.h"
 
-namespace mdl {
-namespace example {
-
-  int TimesTwo(int num) {
-    return num * 2;
-  }
-
-} // example
-} // mdl
-
-
+#endif // _MDL_MATRIX
