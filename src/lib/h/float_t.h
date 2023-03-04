@@ -34,14 +34,12 @@
 namespace mdl {
 namespace math {
 
-#define _MDL_LA_DOUBLE_PRECISION
-
-#ifdef _MDL_LA_DOUBLE_PRECISION
-  typedef double float_t;
-  constexpr float_t kFloatPrecision = 1e-16;
-#else
+#ifdef _MDL_LA_SINGLE_PRECISION
   typedef float float_t;
   constexpr float_t kFloatPrecision = 1e-7;
+#else
+  typedef double float_t;
+  constexpr float_t kFloatPrecision = 1e-16;
 #endif
 
   inline float_t GetVal(const float_t * matrix, std::size_t cols, std::size_t row, std::size_t col) {
