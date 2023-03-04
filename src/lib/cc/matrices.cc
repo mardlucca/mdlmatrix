@@ -12,12 +12,12 @@ namespace math {
 
   std::random_device Matrices::rd;
   std::mt19937 Matrices::gen(rd());
-  std::uniform_real_distribution<double> Matrices::distribution;
+  std::uniform_real_distribution<float_t> Matrices::distribution;
 
   Matrix Matrices::Identity(int length) {
     return Matrix(
       length, length, 
-      [](int row, int col) { return static_cast<double>(row == col); });
+      [](int row, int col) { return static_cast<float_t>(row == col); });
   }
 
   Matrix Matrices::Ones(int rows, int cols) {
@@ -48,11 +48,11 @@ namespace math {
         });
   }  
 
-  Matrix Matrices::Default(int rows, int cols, double def) {
+  Matrix Matrices::Default(int rows, int cols, float_t def) {
     return Matrix(rows, cols, [def](int row, int col) { return def; });
   }
 
-  Matrix Matrices::WithValues(int cols, const std::vector<double>& values) {
+  Matrix Matrices::WithValues(int cols, const std::vector<float_t>& values) {
     int rows = (cols + values.size() - 1) / cols;
  
     return Matrix(rows, cols,
@@ -87,7 +87,7 @@ namespace math {
           values.push_back(std::stod(val));
         } catch (const std::invalid_argument& e) {
           throw mdl::util::wexceptionstream()
-              .Append("Cannot covert '").Append(val).Append("' to a double.")
+              .Append("Cannot covert '").Append(val).Append("' to a float_t.")
               .Build<mdl::text::parse_exception>();
         }
       }
@@ -105,7 +105,7 @@ namespace math {
       Matrix matrix;
       int line;
       bool ignoreFirstLine;
-      std::vector<double> values;
+      std::vector<float_t> values;
       int cols;
 
       friend Matrix Matrices::FromCsv(const char*, bool);

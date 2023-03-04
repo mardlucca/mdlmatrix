@@ -4,18 +4,20 @@
 #include <iostream>
 #include <sstream>
 
+#include "float_t.h"
+
 namespace mdl {
 namespace math {
 
 class BaseMatrix {
   public:
     virtual ~BaseMatrix();
-    virtual double& operator()(int row, int col) = 0;
-    virtual double operator()(int row, int col) const = 0;
+    virtual float_t& operator()(int row, int col) = 0;
+    virtual float_t operator()(int row, int col) const = 0;
     virtual int NumRows() const = 0;
     virtual int NumCols() const = 0;
     virtual bool Equals(const BaseMatrix& other) const;
-    virtual void ForEach(std::function<void (int, int, double&)> fn);
+    virtual void ForEach(std::function<void (int, int, float_t&)> fn);
 
     static bool Equals(const BaseMatrix& matrix1, const BaseMatrix& matrix2);
   protected:

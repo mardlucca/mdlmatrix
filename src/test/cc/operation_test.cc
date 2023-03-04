@@ -7,7 +7,7 @@ namespace math {
 namespace op {
 
   TEST(OperationTest, TestAbs) {
-    double out;
+    float_t out;
     Abs::operate(-2.5, out);
     ASSERT_EQ(2.5, out);
 
@@ -17,7 +17,7 @@ namespace op {
   }
 
   TEST(OperationTest, TestAddition) {
-    double out;
+    float_t out;
     Addition::operate(2, 3, out);
     ASSERT_EQ(5.0, out);
 
@@ -26,16 +26,16 @@ namespace op {
   }
 
   TEST(OperationTest, TestNegate) {
-    double out;
-    Negate::operate(-2.1, out);
-    ASSERT_EQ(2.1, out);
+    float_t out;
+    Negate::operate(-2.5, out);
+    ASSERT_EQ(2.5, out);
 
     Negate::operate(out);
-    ASSERT_EQ(-2.1, out);
+    ASSERT_EQ(-2.5, out);
   }
 
   TEST(OperationTest, TestMax) {
-    double out;
+    float_t out;
     Max::operate(1, 2, out);
     ASSERT_EQ(2, out);
     Max::operate(2, 1, out);
@@ -49,7 +49,7 @@ namespace op {
   }
 
   TEST(OperationTest, TestMin) {
-    double out;
+    float_t out;
     Min::operate(1, 2, out);
     ASSERT_EQ(1, out);
     Min::operate(2, 1, out);

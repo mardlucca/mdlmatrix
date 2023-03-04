@@ -6,23 +6,23 @@ namespace math {
 
   Matrix::Matrix(int rows, int cols) 
       : rows(rows), cols(cols), 
-        data(std::shared_ptr<double[]>(new double[rows * cols])) {
-    double * ptr = data.get();
+        data(std::shared_ptr<float_t[]>(new float_t[rows * cols])) {
+    float_t * ptr = data.get();
 
     for (int i = 0; i < rows * cols; i++) {
         ptr[i] = 0.0;
     }
   }
 
-  Matrix::Matrix(int rows, int cols, double data[]) 
+  Matrix::Matrix(int rows, int cols, float_t data[]) 
       : rows(rows), cols(cols), 
-        data(std::shared_ptr<double[]>(data)) {
+        data(std::shared_ptr<float_t[]>(data)) {
   }
 
-  Matrix::Matrix(int rows, int cols, std::function<double (int, int)> initFn)
+  Matrix::Matrix(int rows, int cols, std::function<float_t (int, int)> initFn)
       : rows(rows), cols(cols), 
-        data(std::shared_ptr<double[]>(new double[rows * cols])) {
-    double * ptr = data.get();
+        data(std::shared_ptr<float_t[]>(new float_t[rows * cols])) {
+    float_t * ptr = data.get();
 
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < cols; col++) {
@@ -34,8 +34,8 @@ namespace math {
 
   Matrix::Matrix(const Matrix& other)
       : rows(other.rows), cols(other.cols), 
-        data(std::shared_ptr<double[]>(new double[rows * cols])) {
-    std::memcpy(data.get(), other.data.get(), rows * cols * sizeof(double));
+        data(std::shared_ptr<float_t[]>(new float_t[rows * cols])) {
+    std::memcpy(data.get(), other.data.get(), rows * cols * sizeof(float_t));
   }
 
   Matrix::Matrix(Matrix&& other)
@@ -45,8 +45,8 @@ namespace math {
 
   Matrix::Matrix(const BaseMatrix& other) 
       : rows(other.NumRows()), cols(other.NumCols()),
-        data(new double[rows * cols]) {
-    double * buffer = data.get();
+        data(new float_t[rows * cols]) {
+    float_t * buffer = data.get();
 
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < cols; col++) {
@@ -58,8 +58,8 @@ namespace math {
   Matrix& Matrix::operator=(const Matrix& other) {
     rows = other.rows;
     cols = other.cols;
-    data.reset(new double[rows * cols]);
-    std::memcpy(data.get(), other.data.get(), rows * cols * sizeof(double));
+    data.reset(new float_t[rows * cols]);
+    std::memcpy(data.get(), other.data.get(), rows * cols * sizeof(float_t));
 
     return *this;
   }
@@ -76,8 +76,8 @@ namespace math {
     rows = other.NumRows();
     cols = other.NumCols();
 
-    data.reset(new double[rows * cols]);
-    double * buffer = data.get();
+    data.reset(new float_t[rows * cols]);
+    float_t * buffer = data.get();
 
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < cols; col++) {
@@ -103,7 +103,7 @@ namespace math {
     return *this;
   }
 
-  Matrix& Matrix::operator+=(double scalar) {
+  Matrix& Matrix::operator+=(float_t scalar) {
     ReflexiveOperate<op::Addition>(scalar);
     return *this;
   }
@@ -113,7 +113,7 @@ namespace math {
     return *this;
   }
 
-  Matrix& Matrix::operator-=(double scalar) {
+  Matrix& Matrix::operator-=(float_t scalar) {
     ReflexiveOperate<op::Subtraction>(scalar);
     return *this;
   }
@@ -123,7 +123,7 @@ namespace math {
     return *this;
   }
 
-  Matrix& Matrix::operator*=(double scalar) {
+  Matrix& Matrix::operator*=(float_t scalar) {
     ReflexiveOperate<op::Multiplication>(scalar);
     return *this;
   }
@@ -133,7 +133,7 @@ namespace math {
     return *this;
   }
 
-  Matrix& Matrix::operator/=(double scalar) {
+  Matrix& Matrix::operator/=(float_t scalar) {
     ReflexiveOperate<op::Division>(scalar);
     return *this;
   }

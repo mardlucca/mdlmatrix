@@ -4,13 +4,14 @@
 #include <exception>
 #include <sstream>
 
+#include "float_t.h"
 #include "matrix.h"
 
 namespace mdl {
 namespace math {
 
   template <typename Operation>
-  Matrix Operate(double scalar, const BaseMatrix& matrix) {
+  Matrix Operate(float_t scalar, const BaseMatrix& matrix) {
     int rows = matrix.NumRows();
     int cols = matrix.NumCols();
     Matrix result(rows, cols);
@@ -25,7 +26,7 @@ namespace math {
   }
 
   template <typename Operation>
-  Matrix Operate(const BaseMatrix& matrix, double scalar) {
+  Matrix Operate(const BaseMatrix& matrix, float_t scalar) {
     int rows = matrix.NumRows();
     int cols = matrix.NumCols();
     Matrix result(rows, cols);
@@ -95,7 +96,7 @@ namespace math {
   }
 
   template <typename Operation>
-  Matrix RowReduce(const BaseMatrix& matrix, double initialValue = 0.0) {
+  Matrix RowReduce(const BaseMatrix& matrix, float_t initialValue = 0.0) {
     Matrix result(
         matrix.NumRows(), 
         1, 
@@ -114,7 +115,7 @@ namespace math {
   }
 
   template <typename Operation>
-  Matrix ColReduce(const BaseMatrix& matrix, double initialValue = 0.0) {
+  Matrix ColReduce(const BaseMatrix& matrix, float_t initialValue = 0.0) {
     Matrix result(1, 
         matrix.NumCols(), 
         [initialValue] (int row, int col) { return initialValue; });
@@ -132,7 +133,7 @@ namespace math {
   }
 
   template <typename Operation>
-  Matrix Reduce(const BaseMatrix& matrix, double initialValue = 0.0) {
+  Matrix Reduce(const BaseMatrix& matrix, float_t initialValue = 0.0) {
     return matrix.NumRows() > 1
         ? ColReduce<Operation>(matrix, initialValue)
         : RowReduce<Operation>(matrix, initialValue);

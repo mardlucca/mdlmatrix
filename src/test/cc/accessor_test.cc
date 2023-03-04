@@ -7,10 +7,10 @@ namespace math {
 
   class AccessorTestSuite : public ::testing::Test {
     protected:
-      double * data;
+      float_t * data;
 
       void SetUp() override {
-        data = new double[20];
+        data = new float_t[20];
         for (int i = 0; i < 20; i++) {
           data[i] = i;
         }

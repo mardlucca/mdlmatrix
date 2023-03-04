@@ -1,6 +1,7 @@
 #ifndef _MDL_MATH_MATRIX_FUNCTIONS
 #define _MDL_MATH_MATRIX_FUNCTIONS
 
+#include "float_t.h"
 #include "matrix.h"
 #include "slice.h"
 #include "basematrix_operator_overload.h"
@@ -39,7 +40,7 @@ namespace math {
   Matrix StdDev(const BaseMatrix& matrix);
 
   Matrix Prod(const BaseMatrix& matrix1, const BaseMatrix& matrix2);
-  double DotProd(const BaseMatrix& matrix1, const BaseMatrix& matrix2);
+  float_t DotProd(const BaseMatrix& matrix1, const BaseMatrix& matrix2);
 
   Matrix Sigmoid(const BaseMatrix& matrix);
   Matrix SigmoidGradient(const Matrix& matrix);

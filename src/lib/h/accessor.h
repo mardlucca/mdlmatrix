@@ -1,16 +1,18 @@
 #ifndef _MDL_MATH_ACCESSOR
 #define _MDL_MATH_ACCESSOR
 
+#include "float_t.h"
+
 namespace mdl {
 namespace math {
   class TransposedAccessor;
 
   class DirectAccessor {
     public:
-      inline static double Get(double * data, int rowLength, int row, int col) {
+      inline static float_t Get(float_t * data, int rowLength, int row, int col) {
         return *(data + rowLength * row + col);
       }
-      inline static double& GetLRef(double * data, int rowLength, int row, int col) {
+      inline static float_t& GetLRef(float_t * data, int rowLength, int row, int col) {
         return *(data + rowLength * row + col);
       }
       inline static int NumRows(int rows, int cols)  { return rows; }
@@ -32,10 +34,10 @@ namespace math {
 
   class TransposedAccessor {
     public:
-      inline static double Get(double * data, int rowLength, int row, int col) {
+      inline static float_t Get(float_t * data, int rowLength, int row, int col) {
         return *(data + rowLength * col + row);
       }
-      inline static double& GetLRef(double * data, int rowLength, int row, int col) {
+      inline static float_t& GetLRef(float_t * data, int rowLength, int row, int col) {
         return *(data + rowLength * col + row);
       }
       inline static int NumRows(int rows, int cols) { return cols; }

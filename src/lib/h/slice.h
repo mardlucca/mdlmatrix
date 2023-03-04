@@ -4,6 +4,7 @@
 #include <memory>
 #include <iostream>
 
+#include "float_t.h"
 #include "basematrix.h"
 #include "range.h"
 #include "accessor.h"
@@ -19,7 +20,7 @@ namespace math {
   template<typename RowRange, typename ColRange, typename Accessor>
   class Slice : public BaseMatrix {
     public:
-      Slice(std::shared_ptr<double[]> data,
+      Slice(std::shared_ptr<float_t[]> data,
             int rowLength, 
             const RowRange& rowRange, 
             const ColRange& colRange) 
@@ -59,7 +60,7 @@ namespace math {
         return *this;
       }
 
-      inline double& operator()(int row, int col) {
+      inline float_t& operator()(int row, int col) {
         return Accessor::GetLRef(
             data.get(), 
             rowLength, 
@@ -67,7 +68,7 @@ namespace math {
             Accessor::GetCol(rowRange, colRange).Get(col));
       }
       
-      inline double operator()(int row, int col) const {
+      inline float_t operator()(int row, int col) const {
         return Accessor::Get(
             data.get(), 
             rowLength, 
@@ -101,7 +102,7 @@ namespace math {
         return *this;
       }
 
-      Slice& operator+=(double scalar) {
+      Slice& operator+=(float_t scalar) {
         ReflexiveOperate<op::Addition>(scalar);
         return *this;
       }
@@ -117,7 +118,7 @@ namespace math {
         return *this;
       }
 
-      Slice& operator-=(double scalar) {
+      Slice& operator-=(float_t scalar) {
         ReflexiveOperate<op::Subtraction>(scalar);
         return *this;
       }
@@ -133,7 +134,7 @@ namespace math {
         return *this;
       }
 
-      Slice& operator*=(double scalar) {
+      Slice& operator*=(float_t scalar) {
         ReflexiveOperate<op::Multiplication>(scalar);
         return *this;
       }
@@ -149,7 +150,7 @@ namespace math {
         return *this;
       }
       
-      Slice& operator/=(double scalar) {
+      Slice& operator/=(float_t scalar) {
         ReflexiveOperate<op::Division>(scalar);
         return *this;
       }
@@ -162,7 +163,7 @@ namespace math {
       }
 
       template <typename Operation>
-      void ReflexiveOperate(double scalar) {
+      void ReflexiveOperate(float_t scalar) {
         int rows = NumRows();
         int cols = NumCols();
 
@@ -212,7 +213,7 @@ namespace math {
       }
 
     protected:
-      std::shared_ptr<double[]> data;
+      std::shared_ptr<float_t[]> data;
       int rowLength;
       RowRange rowRange;
       ColRange colRange;

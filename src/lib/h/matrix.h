@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 
+#include "float_t.h"
 #include "basematrix.h"
 #include "slice.h"
 #include "range.h"
@@ -20,8 +21,8 @@ class Matrix : public BaseMatrix {
   public:
     Matrix();
     Matrix(int rows, int cols);
-    Matrix(int rows, int cols, double data[]);
-    Matrix(int rows, int cols, std::function<double (int, int)> initFn);
+    Matrix(int rows, int cols, float_t data[]);
+    Matrix(int rows, int cols, std::function<float_t (int, int)> initFn);
     Matrix(const Matrix& other);
     Matrix(Matrix&& other);
     Matrix(const BaseMatrix& other);
@@ -31,18 +32,18 @@ class Matrix : public BaseMatrix {
     Matrix& operator=(const BaseMatrix& other);
 
     Matrix& operator+=(const Matrix& other);
-    Matrix& operator+=(double scalar);
+    Matrix& operator+=(float_t scalar);
     Matrix& operator-=(const Matrix& other);
-    Matrix& operator-=(double scalar);
+    Matrix& operator-=(float_t scalar);
     Matrix& operator*=(const Matrix& other);
-    Matrix& operator*=(double scalar);
+    Matrix& operator*=(float_t scalar);
     Matrix& operator/=(const Matrix& other);
-    Matrix& operator/=(double scalar);
+    Matrix& operator/=(float_t scalar);
 
-    inline double& operator()(int row, int col) override {
+    inline float_t& operator()(int row, int col) override {
       return data.get()[row * cols + col];
     }
-    inline double operator()(int row, int col) const override {
+    inline float_t operator()(int row, int col) const override {
       return data.get()[row * cols + col];
     }
     
@@ -84,9 +85,9 @@ class Matrix : public BaseMatrix {
     
 
     template <typename Operation> 
-    void ReflexiveOperate(double scalar) {
+    void ReflexiveOperate(float_t scalar) {
       int length = rows * cols;
-      double * cell = data.get();
+      float_t * cell = data.get();
       for (int i = 0; i < length; i++) {
         Operation::operate(*cell, scalar);
         cell++;
@@ -103,8 +104,8 @@ class Matrix : public BaseMatrix {
           || (rows2 == 1 && cols2 == 1)) {
 
 
-        double * thisBuffer = data.get();
-        double * otherBuffer = other.data.get();
+        float_t * thisBuffer = data.get();
+        float_t * otherBuffer = other.data.get();
         for (int row = 0; row < rows; row++) {
           for (int col = 0; col < cols; col++) {
             Operation::operate(
@@ -123,7 +124,7 @@ class Matrix : public BaseMatrix {
     template <typename Operation>
     void ReflexiveUnaryOperate() {
       int length = rows * cols;
-      double * cell = data.get();
+      float_t * cell = data.get();
       for (int i = 0; i < length; i++) {
         Operation::operate(*cell);
         cell++;
@@ -133,7 +134,7 @@ class Matrix : public BaseMatrix {
   protected:
     int rows;
     int cols;
-    std::shared_ptr<double[]> data;
+    std::shared_ptr<float_t[]> data;
 
     // template<typename RR, typename CR, typename AC>
     // friend class Slice;

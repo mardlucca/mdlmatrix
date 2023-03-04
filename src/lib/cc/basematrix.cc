@@ -27,7 +27,7 @@ namespace math {
     return matrix1.Equals(matrix2);
   }
 
-  void BaseMatrix::ForEach(std::function<void (int, int, double&)> fn) {
+  void BaseMatrix::ForEach(std::function<void (int, int, float_t&)> fn) {
     int rows = NumRows();
     int cols = NumCols();
 
@@ -54,7 +54,7 @@ namespace math {
     int cols = std::min(NumCols(), other.NumCols());
     
     //TODO: See about pooling/reusing these things somehow.
-    double * buffer = new double[rows * cols];
+    float_t * buffer = new float_t[rows * cols];
 
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < cols; col++) {

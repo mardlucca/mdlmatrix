@@ -13,12 +13,12 @@ namespace math {
     return Operate<op::Addition>(matrix1, matrix2);
   }
 
-  Matrix operator+(double scalar, const BaseMatrix& matrix) {
+  Matrix operator+(float_t scalar, const BaseMatrix& matrix) {
     return Operate<op::Addition>(scalar, matrix);
   }
 
   Matrix operator+(const BaseMatrix& matrix,
-      double scalar) {
+      float_t scalar) {
     return Operate<op::Addition>(matrix, scalar);
   }
 
@@ -26,12 +26,12 @@ namespace math {
     return Operate<op::Subtraction>(matrix1, matrix2);
   }
 
-  Matrix operator-(double scalar, const BaseMatrix& matrix) {
+  Matrix operator-(float_t scalar, const BaseMatrix& matrix) {
     return Operate<op::Subtraction>(scalar, matrix);
   }
 
   Matrix operator-(const BaseMatrix& matrix,
-      double scalar) {
+      float_t scalar) {
     return Operate<op::Subtraction>(matrix, scalar);
   }
 
@@ -39,12 +39,12 @@ namespace math {
     return UnaryOperate<op::Negate>(matrix);
   }
 
-  Matrix operator*(double scalar, const BaseMatrix& matrix) {
+  Matrix operator*(float_t scalar, const BaseMatrix& matrix) {
     return Operate<op::Multiplication>(scalar, matrix);
   }
 
   Matrix operator*(const BaseMatrix& matrix,
-      double scalar) {
+      float_t scalar) {
     return Operate<op::Multiplication>(matrix, scalar);
   }
 
@@ -52,12 +52,12 @@ namespace math {
     return Operate<op::Division>(matrix1, matrix2);
   }
 
-  Matrix operator/(double scalar, const BaseMatrix& matrix) {
+  Matrix operator/(float_t scalar, const BaseMatrix& matrix) {
     return Operate<op::Division>(scalar, matrix);
   }
 
   Matrix operator/(const BaseMatrix& matrix,
-      double scalar) {
+      float_t scalar) {
     return Operate<op::Division>(matrix, scalar);
   }
 
@@ -65,12 +65,12 @@ namespace math {
     return Operate<op::Mod>(matrix1, matrix2);
   }
 
-  Matrix operator%(double scalar, const BaseMatrix& matrix) {
+  Matrix operator%(float_t scalar, const BaseMatrix& matrix) {
     return Operate<op::Mod>(scalar, matrix);
   }
 
   Matrix operator%(const BaseMatrix& matrix,
-      double scalar) {
+      float_t scalar) {
     return Operate<op::Mod>(matrix, scalar);
   }
 
@@ -78,12 +78,12 @@ namespace math {
     return Operate<op::Pow>(matrix1, matrix2);
   }
 
-  Matrix operator^(double scalar, const BaseMatrix& matrix) {
+  Matrix operator^(float_t scalar, const BaseMatrix& matrix) {
     return Operate<op::Pow>(scalar, matrix);
   }
 
   Matrix operator^(const BaseMatrix& matrix,
-      double scalar) {
+      float_t scalar) {
     return Operate<op::Pow>(matrix, scalar);
   }
 
@@ -91,12 +91,12 @@ namespace math {
     return Operate<op::LessThan>(matrix1, matrix2);
   }
 
-  Matrix operator<(double scalar, const BaseMatrix& matrix) {
+  Matrix operator<(float_t scalar, const BaseMatrix& matrix) {
     return Operate<op::LessThan>(scalar, matrix);
   }
 
   Matrix operator<(const BaseMatrix& matrix,
-      double scalar) {
+      float_t scalar) {
     return Operate<op::LessThan>(matrix, scalar);
   }
 
@@ -104,12 +104,12 @@ namespace math {
     return Operate<op::LessThanEquals>(matrix1, matrix2);
   }
 
-  Matrix operator<=(double scalar, const BaseMatrix& matrix) {
+  Matrix operator<=(float_t scalar, const BaseMatrix& matrix) {
     return Operate<op::LessThanEquals>(scalar, matrix);
   }
 
   Matrix operator<=(const BaseMatrix& matrix,
-      double scalar) {
+      float_t scalar) {
     return Operate<op::LessThanEquals>(matrix, scalar);
   }
 
@@ -117,12 +117,12 @@ namespace math {
     return Operate<op::GreaterThan>(matrix1, matrix2);
   }
 
-  Matrix operator>(double scalar, const BaseMatrix& matrix) {
+  Matrix operator>(float_t scalar, const BaseMatrix& matrix) {
     return Operate<op::GreaterThan>(scalar, matrix);
   }
 
   Matrix operator>(const BaseMatrix& matrix,
-      double scalar) {
+      float_t scalar) {
     return Operate<op::GreaterThan>(matrix, scalar);
   }
 
@@ -130,12 +130,12 @@ namespace math {
     return Operate<op::GreaterThanEquals>(matrix1, matrix2);
   }
 
-  Matrix operator>=(double scalar, const BaseMatrix& matrix) {
+  Matrix operator>=(float_t scalar, const BaseMatrix& matrix) {
     return Operate<op::GreaterThanEquals>(scalar, matrix);
   }
 
   Matrix operator>=(const BaseMatrix& matrix,
-      double scalar) {
+      float_t scalar) {
     return Operate<op::GreaterThanEquals>(matrix, scalar);
   }
 
@@ -143,12 +143,12 @@ namespace math {
     return Operate<op::Equals>(matrix1, matrix2);
   }
 
-  Matrix operator==(double scalar, const BaseMatrix& matrix) {
+  Matrix operator==(float_t scalar, const BaseMatrix& matrix) {
     return Operate<op::Equals>(scalar, matrix);
   }
 
   Matrix operator==(const BaseMatrix& matrix,
-      double scalar) {
+      float_t scalar) {
     return Operate<op::Equals>(matrix, scalar);
   }  
 
@@ -156,12 +156,12 @@ namespace math {
     return Operate<op::NotEquals>(matrix1, matrix2);
   }
 
-  Matrix operator!=(double scalar, const BaseMatrix& matrix) {
+  Matrix operator!=(float_t scalar, const BaseMatrix& matrix) {
     return Operate<op::NotEquals>(scalar, matrix);
   }
 
   Matrix operator!=(const BaseMatrix& matrix,
-      double scalar) {
+      float_t scalar) {
     return Operate<op::NotEquals>(matrix, scalar);
   }
 

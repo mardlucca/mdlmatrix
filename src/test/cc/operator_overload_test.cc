@@ -663,7 +663,7 @@ namespace math {
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
     for (int row = 0; row < matrix.NumRows(); row++) {
       for (int col = 0; col < matrix.NumCols(); col++) {
-        ASSERT_EQ(matrix(row, col), 256 / result(row, col));
+        ASSERT_FLOAT_EQ(matrix(row, col), 256 / result(row, col));
       }
     }
   }

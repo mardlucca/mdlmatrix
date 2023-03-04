@@ -39,7 +39,7 @@ namespace math {
     ASSERT_EQ(100, rand.NumRows());
     ASSERT_EQ(101, rand.NumCols());
 
-    double sum = 0.0;
+    float_t sum = 0.0;
     for (int row = 0; row < rand.NumRows(); row++) {
       for (int col = 0; col < rand.NumCols(); col++) {
         sum += rand(row, col);

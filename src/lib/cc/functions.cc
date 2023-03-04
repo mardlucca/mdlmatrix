@@ -88,20 +88,20 @@ namespace math {
   }
 
   Matrix Mean(const BaseMatrix& matrix) {
-    double div = matrix.NumRows() > 1 ? matrix.NumRows() : matrix.NumCols();
+    float_t div = matrix.NumRows() > 1 ? matrix.NumRows() : matrix.NumCols();
     return Sum(matrix) / div;
   }
 
   Matrix Max(const BaseMatrix& matrix) {
-    return Reduce<op::Max>(matrix, -std::numeric_limits<double>::infinity());
+    return Reduce<op::Max>(matrix, -std::numeric_limits<float_t>::infinity());
   }
 
   Matrix Min(const BaseMatrix& matrix) {
-    return Reduce<op::Min>(matrix, std::numeric_limits<double>::infinity());
+    return Reduce<op::Min>(matrix, std::numeric_limits<float_t>::infinity());
   }
 
   Matrix Variance(const BaseMatrix& matrix) {
-    double div = matrix.NumRows() > 1 ? matrix.NumRows() : matrix.NumCols();
+    float_t div = matrix.NumRows() > 1 ? matrix.NumRows() : matrix.NumCols();
     return Sum((matrix - Mean(matrix)) ^ 2) / (div > 1 ? div - 1 : 1);
   }
 
@@ -113,7 +113,7 @@ namespace math {
     return Operate<op::Multiplication>(matrix1, matrix2);
   }
 
-  double DotProd(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {
+  float_t DotProd(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {
     int rows = matrix1.NumRows();
     int cols = matrix1.NumCols();
     
@@ -125,7 +125,7 @@ namespace math {
       throw std::invalid_argument(os.str());
     }
 
-    double result = 0.0;
+    float_t result = 0.0;
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < cols; col++) {
         result += matrix1(row, col) * matrix2(row, col);
@@ -166,12 +166,12 @@ namespace math {
       size += it->NumRows() * it->NumCols();
     }
 
-    double * data = new double[size];
+    float_t * data = new float_t[size];
 
-    double * runner = data;
+    float_t * runner = data;
     for (auto it = matrices.begin(); it != matrices.end(); it++) {
       int numCells = it->NumRows() * it->NumCols();
-      std::memcpy(runner, it->data.get(), numCells * sizeof(double));
+      std::memcpy(runner, it->data.get(), numCells * sizeof(float_t));
       runner += numCells;
     }
 
@@ -184,11 +184,11 @@ namespace math {
 
     std::vector<Matrix> matrices;
 
-    double * runner = matrix.data.get();
+    float_t * runner = matrix.data.get();
     for (auto it = sizes.begin(); it != sizes.end(); it++) {
       int numCells = it->first * it->second;
-      double * data = new double[numCells];
-      std::memcpy(data, runner, numCells * sizeof(double));
+      float_t * data = new float_t[numCells];
+      std::memcpy(data, runner, numCells * sizeof(float_t));
       matrices.push_back(Matrix(it->first, it->second, data));
       runner += numCells;
     }
@@ -225,8 +225,8 @@ namespace math {
 
         if (!in.eof()) {
           if (rows * cols > 0) {
-            std::unique_ptr<double> buffer(new double[rows * cols]);
-            in.read(reinterpret_cast<char *>(buffer.get()), sizeof(double) * rows * cols);
+            std::unique_ptr<float_t> buffer(new float_t[rows * cols]);
+            in.read(reinterpret_cast<char *>(buffer.get()), sizeof(float_t) * rows * cols);
             matrices.push_back(Matrix(rows, cols, buffer.release()));
           } else {
             matrices.push_back(Matrix(0, 0));
@@ -256,7 +256,7 @@ namespace math {
       out.write(reinterpret_cast<const char *>(&mat->cols), sizeof(int));
       if (mat->rows * mat->cols > 0) {
         out.write(reinterpret_cast<const char *>(mat->data.get()), 
-            sizeof(double) * mat->rows * mat->cols);
+            sizeof(float_t) * mat->rows * mat->cols);
       }
     }
   }

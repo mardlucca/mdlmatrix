@@ -38,7 +38,7 @@ namespace math {
     slice(0, 0) += 100;
     slice(0, 1) += 101;
     slice(1, 0) += 1000;
-    double val = slice(1, 1);
+    float_t val = slice(1, 1);
     slice(1, 1) += 1001;
     ASSERT_EQ(val + 1001, slice(1, 1));
 

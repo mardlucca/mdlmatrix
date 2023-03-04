@@ -4,6 +4,7 @@
 #include <exception>
 #include <sstream>
 
+#include "float_t.h"
 #include "matrix.h"
 
 namespace mdl {
@@ -12,7 +13,7 @@ namespace math {
   //       fields
 
   template <typename Operation>
-  Matrix Operate(double scalar, const Matrix& matrix) {
+  Matrix Operate(float_t scalar, const Matrix& matrix) {
     int rows = matrix.NumRows();
     int cols = matrix.NumCols();
     Matrix result(rows, cols);
@@ -27,7 +28,7 @@ namespace math {
   }
 
   template <typename Operation>
-  Matrix Operate(const Matrix& matrix, double scalar) {
+  Matrix Operate(const Matrix& matrix, float_t scalar) {
     int rows = matrix.NumRows();
     int cols = matrix.NumCols();
     Matrix result(rows, cols);
