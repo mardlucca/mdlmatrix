@@ -74,15 +74,15 @@ class Matrix : public BaseMatrix {
           Ranges::FitAndCompose(LeftRange(cols), slicedCols)); 
     }
 
-    std::ostream& operator<<(std::ostream& os);
+    Slice<LeftRange, LeftRange, DirectAccessor> operator()();
+    const Slice<LeftRange, LeftRange, DirectAccessor> operator()() const;
+
+    Matrix Transpose() const;
 
     inline int NumRows() const override { return rows; }
     inline int NumCols() const override { return cols; }
-
-    Slice<LeftRange, LeftRange, TransposedAccessor> Transpose();
-
-    const Slice<LeftRange, LeftRange, TransposedAccessor> Transpose() const;
     
+    std::ostream& operator<<(std::ostream& os);
 
     template <typename Operation> 
     void ReflexiveOperate(float_t scalar) {

@@ -40,9 +40,9 @@ namespace math {
   TEST_F(MatrixTestSuite, TestEquals) {
     ASSERT_TRUE(matrix.Equals(matrix));
     ASSERT_TRUE(matrix.Equals(Matrix(matrix)));
-    ASSERT_FALSE(matrix.Equals(matrix.Transpose()));
-    ASSERT_FALSE(matrix.Transpose().Equals(matrix));
-    ASSERT_TRUE(matrix.Transpose().Equals(matrix.Transpose()));
+    ASSERT_FALSE(matrix.Equals(matrix().Transpose()));
+    ASSERT_FALSE(matrix().Transpose().Equals(matrix));
+    ASSERT_TRUE(matrix().Transpose().Equals(matrix().Transpose()));
 
     Matrix other = matrix;
     ASSERT_TRUE(other.Equals(matrix));
@@ -52,11 +52,11 @@ namespace math {
   }
 
   TEST_F(MatrixTestSuite, TestForEach) {
-    matrix.ForEach([](int row, int col, float_t& val) {
+    matrix.ForEach([](int row, int col, double& val) {
       val = -val;
     });
     int count = 0;
-    matrix.ForEach([&count](int row, int col, float_t& val) {
+    matrix.ForEach([&count](int row, int col, double& val) {
       ASSERT_TRUE(val < 0);
       count++;
     });
@@ -232,7 +232,7 @@ namespace math {
   }
 
   TEST_F(MatrixTestSuite, TestTranspose) {
-    Slice transposed = matrix.Transpose();
+    Slice transposed = matrix().Transpose();
 
     for (int row = 0; row < transposed.NumRows(); row++) {
       for (int col = 0; col < transposed.NumCols(); col++) {
@@ -244,7 +244,7 @@ namespace math {
   }
 
   TEST_F(MatrixTestSuite, TestMaterializeTransposed) {
-    Matrix transposed = matrix.Transpose();
+    Matrix transposed = matrix().Transpose();
 
     for (int row = 0; row < transposed.NumRows(); row++) {
       for (int col = 0; col < transposed.NumCols(); col++) {
@@ -256,7 +256,7 @@ namespace math {
   }
 
   TEST_F(MatrixTestSuite, TestTransposeTwice) {
-    Slice transposed = matrix.Transpose().Transpose();
+    Slice transposed = matrix().Transpose().Transpose();
 
     for (int row = 0; row < transposed.NumRows(); row++) {
       for (int col = 0; col < transposed.NumCols(); col++) {
@@ -268,7 +268,7 @@ namespace math {
   }
 
   TEST_F(MatrixTestSuite, TestTransposeTwiceAndMaterialize) {
-    Matrix transposed = matrix.Transpose().Transpose();
+    Matrix transposed = matrix().Transpose().Transpose();
 
     for (int row = 0; row < transposed.NumRows(); row++) {
       for (int col = 0; col < transposed.NumCols(); col++) {

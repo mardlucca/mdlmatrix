@@ -81,7 +81,7 @@ namespace math {
 
   TEST_F(MatrixOperatorOverloadTestSuite, ReflexiveTransposedMatrixAdditionTest) {
     Matrix result = matrix;
-    result(UnitRange(0), RightRange(0)).Transpose() += vector.Transpose();
+    result(UnitRange(0), RightRange(0)).Transpose() += vector().Transpose();
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
 
@@ -98,7 +98,7 @@ namespace math {
 
   TEST_F(MatrixOperatorOverloadTestSuite, ReflexiveTransposedMatrixAdditionTest2) {
     Matrix result = matrix;
-    result.Transpose() += matrix.Transpose();
+    result().Transpose() += matrix().Transpose();
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
     for (int row = 0; row < matrix.NumRows(); row++) {
@@ -144,7 +144,7 @@ namespace math {
 
   TEST_F(MatrixOperatorOverloadTestSuite, MatrixScalarAdditionTest_Reflexive_Transposed) {
     Matrix result = matrix;
-    result.Transpose() += 102;
+    result().Transpose() += 102;
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
     for (int row = 0; row < matrix.NumRows(); row++) {
@@ -232,7 +232,7 @@ namespace math {
 
   TEST_F(MatrixOperatorOverloadTestSuite, ReflexiveTransposedMatrixSubtractionTest) {
     Matrix result = matrix;
-    result(UnitRange(0), RightRange(0)).Transpose() -= vector.Transpose();
+    result(UnitRange(0), RightRange(0)).Transpose() -= vector().Transpose();
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
 
@@ -249,7 +249,7 @@ namespace math {
 
   TEST_F(MatrixOperatorOverloadTestSuite, ReflexiveTransposedMatrixSubtractionTest2) {
     Matrix result = matrix;
-    result.Transpose() -= matrix.Transpose();
+    result().Transpose() -= matrix().Transpose();
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
     for (int row = 0; row < matrix.NumRows(); row++) {
@@ -339,7 +339,7 @@ namespace math {
 
   TEST_F(MatrixOperatorOverloadTestSuite, MatrixScalarSubtractionTest_Reflexive_Transposed) {
     Matrix result = matrix;
-    result.Transpose() -= 102;
+    result().Transpose() -= 102;
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
     for (int row = 0; row < matrix.NumRows(); row++) {
@@ -403,7 +403,7 @@ namespace math {
   }  
 
   TEST_F(MatrixOperatorOverloadTestSuite, MatrixMatrixMultiplicationTest) {
-    Matrix result = matrix.Transpose() * matrix;
+    Matrix result = matrix().Transpose() * matrix;
 
     cout << result << endl;
 
@@ -424,7 +424,7 @@ namespace math {
   }
 
   TEST_F(MatrixOperatorOverloadTestSuite, VectorMatrixMultiplicationTest) {
-    Matrix result = vector * matrix.Transpose();
+    Matrix result = vector * matrix().Transpose();
 
     ASSERT_EQ(1, result.NumRows());
     ASSERT_EQ(4, result.NumCols());
@@ -466,7 +466,7 @@ namespace math {
 
   TEST_F(MatrixOperatorOverloadTestSuite, ReflexiveTransposedMatrixMultiplicationTest) {
     Matrix result = matrix;
-    result(UnitRange(0), RightRange(0)).Transpose() *= vector.Transpose();
+    result(UnitRange(0), RightRange(0)).Transpose() *= vector().Transpose();
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
 
@@ -483,7 +483,7 @@ namespace math {
 
   TEST_F(MatrixOperatorOverloadTestSuite, ReflexiveTransposedMatrixMultiplicationTest2) {
     Matrix result = matrix;
-    result.Transpose() *= matrix.Transpose();
+    result().Transpose() *= matrix().Transpose();
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
     for (int row = 0; row < matrix.NumRows(); row++) {
@@ -529,7 +529,7 @@ namespace math {
 
   TEST_F(MatrixOperatorOverloadTestSuite, MatrixScalarMultiplicationTest_Reflexive_Transposed) {
     Matrix result = matrix;
-    result.Transpose() *= 256;
+    result().Transpose() *= 256;
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
     for (int row = 0; row < matrix.NumRows(); row++) {
@@ -619,7 +619,7 @@ namespace math {
 
   TEST_F(MatrixOperatorOverloadTestSuite, ReflexiveTransposedMatrixDivisionTest) {
     Matrix result = matrix;
-    result(UnitRange(0), RightRange(0)).Transpose() /= vector.Transpose();
+    result(UnitRange(0), RightRange(0)).Transpose() /= vector().Transpose();
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
 
@@ -636,7 +636,7 @@ namespace math {
 
   TEST_F(MatrixOperatorOverloadTestSuite, ReflexiveTransposedMatrixDivisionTest2) {
     Matrix result = matrix;
-    result.Transpose() /= matrix.Transpose();
+    result().Transpose() /= matrix().Transpose();
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
     for (int row = 0; row < matrix.NumRows(); row++) {
@@ -682,7 +682,7 @@ namespace math {
 
   TEST_F(MatrixOperatorOverloadTestSuite, MatrixScalarDivisionTest_Reflexive_Transposed) {
     Matrix result = matrix;
-    result.Transpose() /= 2;
+    result().Transpose() /= 2;
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
     for (int row = 0; row < matrix.NumRows(); row++) {

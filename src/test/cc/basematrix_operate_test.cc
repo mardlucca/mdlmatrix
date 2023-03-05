@@ -57,7 +57,7 @@ namespace math {
   }
 
   TEST_F(BaseMatrixOperateTestSuite, TransposedMatrixScalarOperateTest) {
-    Matrix result = Operate<op::Addition>(matrix.Transpose(), 20);
+    Matrix result = Operate<op::Addition>(matrix().Transpose(), 20);
     ASSERT_EQ(matrix.NumCols(), result.NumRows());
     ASSERT_EQ(matrix.NumRows(), result.NumCols());
     for (int row = 0; row < matrix.NumRows(); row++) {
@@ -91,7 +91,7 @@ namespace math {
   }
 
   TEST_F(BaseMatrixOperateTestSuite, ScalarTransposedMatrixOperateTest) {
-    Matrix result = Operate<op::Addition>(21, matrix.Transpose());
+    Matrix result = Operate<op::Addition>(21, matrix().Transpose());
     ASSERT_EQ(matrix.NumCols(), result.NumRows());
     ASSERT_EQ(matrix.NumRows(), result.NumCols());
     for (int row = 0; row < matrix.NumRows(); row++) {
@@ -132,7 +132,7 @@ namespace math {
 
   TEST_F(BaseMatrixOperateTestSuite, TransposedMatrixScalarReflexiveOperateTest) {
     Matrix result = matrix;
-    Slice slice = result.Transpose();
+    Slice slice = result().Transpose();
     slice.ReflexiveOperate<op::Addition>(20);
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
@@ -168,7 +168,7 @@ namespace math {
   }
 
   TEST_F(BaseMatrixOperateTestSuite, TransposedMatrixUnaryOperateTest) {
-    Matrix result = UnaryOperate<op::Negate>(matrix.Transpose());
+    Matrix result = UnaryOperate<op::Negate>(matrix().Transpose());
     ASSERT_EQ(matrix.NumRows(), result.NumCols());
     ASSERT_EQ(matrix.NumCols(), result.NumRows());
     for (int row = 0; row < matrix.NumRows(); row++) {
@@ -210,7 +210,7 @@ namespace math {
 
   TEST_F(BaseMatrixOperateTestSuite, ReflexiveUnaryOperateTest_Transposed) {
     Matrix result = matrix;
-    Slice tranposed = result.Transpose();
+    Slice tranposed = result().Transpose();
     tranposed.ReflexiveUnaryOperate<op::Negate>();
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());

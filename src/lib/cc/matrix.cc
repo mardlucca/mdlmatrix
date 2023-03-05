@@ -138,15 +138,24 @@ namespace math {
     return *this;
   }
 
-
-  Slice<LeftRange, LeftRange, TransposedAccessor> Matrix::Transpose() {
-    return Slice<LeftRange, LeftRange, TransposedAccessor>(
-        data, cols, LeftRange(rows), LeftRange(cols));
+  Slice<LeftRange, LeftRange, DirectAccessor> Matrix::operator()() {
+    return (*this)(LeftRange(rows), LeftRange(cols));
+  }
+  const Slice<LeftRange, LeftRange, DirectAccessor> Matrix::operator()() const {
+    return (*this)(LeftRange(rows), LeftRange(cols));
   }
 
-  const Slice<LeftRange, LeftRange, TransposedAccessor> Matrix::Transpose() const {
-    return Slice<LeftRange, LeftRange, TransposedAccessor>(
-        data, cols, LeftRange(rows), LeftRange(cols));
+  Matrix Matrix::Transpose() const {
+    float_t * data1 = data.get();
+    float_t * data2 = new float_t[rows * cols];
+
+    for (int row = 0; row < rows; row++) {
+      for (int col = 0; col < cols; col++) {
+        *(data2 + rows * col + row) = *(data1 + cols * row + col);
+      }
+    }
+
+    return Matrix(cols, rows, data2);
   }
 } // math
 } // mdl
