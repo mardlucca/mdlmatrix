@@ -2,6 +2,8 @@
 
 #include <sstream>
 
+#include <mdl/profiler.h>
+
 namespace mdl {
 namespace math {
 
@@ -37,6 +39,8 @@ namespace math {
 
 
   Matrix operator*(const Matrix& matrix1, const Matrix& matrix2) {
+    auto g1 = profiler::probe("Matrix Multiply");
+
     if (matrix1.cols != matrix2.rows) {
       std::ostringstream os;
       os << "Cannot multiply matrices of incompatible dimensions: " 

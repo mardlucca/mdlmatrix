@@ -1,4 +1,8 @@
 #include "../h/matrix.h"
+#include "../h/impl/multi_thread.h"
+#include "../h/impl/single_thread.h"
+
+#include <mdl/profiler.h>
 
 namespace mdl {
 namespace math {
@@ -146,16 +150,7 @@ namespace math {
   }
 
   Matrix Matrix::Transpose() const {
-    float_t * data1 = data.get();
-    float_t * data2 = new float_t[rows * cols];
-
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < cols; col++) {
-        *(data2 + rows * col + row) = *(data1 + cols * row + col);
-      }
-    }
-
-    return Matrix(cols, rows, data2);
+    return impl::MultiThreaded::Transpose(*this);
   }
 } // math
 } // mdl

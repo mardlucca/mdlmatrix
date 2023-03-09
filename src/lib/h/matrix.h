@@ -1,7 +1,6 @@
 #ifndef _MDL_MATH_MATRIX
 #define _MDL_MATH_MATRIX
 
-#include <iostream>
 #include <sstream>
 
 #include "float_t.h"
@@ -14,8 +13,10 @@
 namespace mdl {
 namespace math {
 
-using std::cout;
-using std::endl;
+namespace impl {
+  class SingleThreaded;
+  class MultiThreaded;
+}
 
 class Matrix : public BaseMatrix {
   public:
@@ -136,9 +137,8 @@ class Matrix : public BaseMatrix {
     int cols;
     std::shared_ptr<float_t[]> data;
 
-    // template<typename RR, typename CR, typename AC>
-    // friend class Slice;
-
+    friend class impl::MultiThreaded;
+    friend class impl::SingleThreaded;
     friend Matrix operator*(const Matrix& matrix1, const Matrix& matrix2);
 
     friend Matrix Pack(const std::vector<Matrix>& matrices);

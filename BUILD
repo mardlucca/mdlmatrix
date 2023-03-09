@@ -26,6 +26,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+load("@rules_cc//cc:defs.bzl", "cc_binary")
 load("@rules_cc//cc:defs.bzl", "cc_library")
 load("@rules_cc//cc:defs.bzl", "cc_test")
 
@@ -39,6 +40,7 @@ cc_library(
   visibility = ["//visibility:public"],
   deps = [
     "@mdl_common//:lib",
+    "@mdl_prof//:lib"
   ]
 )
 
@@ -63,4 +65,13 @@ filegroup(
   srcs = glob([
       "src/test/resources/**/*.*"
   ]),
+)
+
+cc_binary(
+  name = "main",
+  srcs = ["src/main/cc/main.cc"],
+  deps = [
+    "//:lib",
+    "@mdl_prof//:lib"
+  ]
 )

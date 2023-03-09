@@ -243,6 +243,18 @@ namespace math {
     }
   }
 
+  TEST_F(MatrixTestSuite, TestMatrixTranspose) {
+    Matrix transposed = matrix.Transpose();
+
+    for (int row = 0; row < transposed.NumRows(); row++) {
+      for (int col = 0; col < transposed.NumCols(); col++) {
+        ASSERT_EQ(matrix(col, row), transposed(row, col));
+        transposed(row, col) += 100;
+        ASSERT_EQ(matrix(col, row), transposed(row, col) - 100);
+      }
+    }
+  }
+
   TEST_F(MatrixTestSuite, TestMaterializeTransposed) {
     Matrix transposed = matrix().Transpose();
 
