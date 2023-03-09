@@ -15,29 +15,29 @@ namespace impl {
 
   // Lamba takes Matrix, start index and final index
   void Partition(
-      std::size_t numCells, 
-      std::function<std::function<int ()> (std::size_t, std::size_t)> dispatch, 
+      size_t numCells, 
+      std::function<std::function<int ()> (size_t, size_t)> dispatch, 
       int numKernels = kNumKernels);
 
   class MultiThreaded {
     public:
 
       inline static Matrix Transpose(const Matrix& matrix) {
-        std::size_t rows = matrix.rows;
-        std::size_t cols = matrix.cols;
-        std::size_t numCells = rows * cols;
+        size_t rows = matrix.rows;
+        size_t cols = matrix.cols;
+        size_t numCells = rows * cols;
         float_t * ddata = new float_t[numCells];
         float_t * sdata = matrix.data.get();
 
-        Partition(numCells, [sdata, ddata, rows, cols](std::size_t from, std::size_t to) {
+        Partition(numCells, [sdata, ddata, rows, cols](size_t from, size_t to) {
           return [sdata, ddata, from, to, rows, cols]() { 
-            std::size_t frow = from / cols;
-            std::size_t fcol = from % cols;
-            std::size_t trow = to / cols;
-            std::size_t tcol = to % cols;
+            size_t frow = from / cols;
+            size_t fcol = from % cols;
+            size_t trow = to / cols;
+            size_t tcol = to % cols;
             float_t * runner = sdata + from;
 
-            for (std::size_t row = frow, col = fcol; 
+            for (size_t row = frow, col = fcol; 
                 row != trow || col != tcol;) {
 
               *(ddata + rows * col + row) = *runner;

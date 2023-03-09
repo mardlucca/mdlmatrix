@@ -42,15 +42,14 @@ namespace math {
   constexpr float_t kFloatPrecision = 1e-16;
 #endif
 
-  inline float_t GetVal(const float_t * matrix, std::size_t cols, std::size_t row, std::size_t col) {
+  inline float_t GetVal(const float_t * matrix, size_t cols, size_t row, size_t col) {
     return *(matrix + row * cols + col);
   }
 
-  inline float_t& GetRef(float_t * matrix, std::size_t cols, std::size_t row, std::size_t col) {
+  inline float_t& GetRef(float_t * matrix, size_t cols, size_t row, size_t col) {
     return *(matrix + row * cols + col);
   }
 
-  #define _MDL_MATH_LARGE_MATRICES
   #ifdef _MDL_MATH_LARGE_MATRICES
     typedef long size_t;
   #else
