@@ -4,7 +4,7 @@
 #include <random>
 #include <vector>
 
-#include "float_t.h"
+#include "typedefs.h"
 #include "matrix.h"
 
 namespace mdl {
@@ -12,14 +12,14 @@ namespace math {
 
   class Matrices {
     public:
-      static Matrix Identity(int length);
-      static Matrix Ones(int rows, int cols);
-      static Matrix Zeros(int rows, int cols);
-      static Matrix Random(int rows, int cols);
-      static Matrix Sequence(int rows, int cols, int length);
-      static Matrix Sequence(int rows, int cols, Range range);
-      static Matrix Default(int rows, int cols, float_t def);
-      static Matrix WithValues(int cols, const std::vector<float_t>& values);
+      static Matrix Identity(size_t length);
+      static Matrix Ones(size_t rows, size_t cols);
+      static Matrix Zeros(size_t rows, size_t cols);
+      static Matrix Random(size_t rows, size_t cols);
+      static Matrix Sequence(size_t rows, size_t cols, size_t length);
+      static Matrix Sequence(size_t rows, size_t cols, Range range);
+      static Matrix Default(size_t rows, size_t cols, float_t def);
+      static Matrix WithValues(size_t cols, const std::vector<float_t>& values);
 
       static Matrix FromCsv(const char* fileName, bool ignoreFirstLine = false);
       

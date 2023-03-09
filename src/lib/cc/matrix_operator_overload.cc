@@ -16,18 +16,18 @@ namespace math {
   //     throw std::invalid_argument(os.str());
   //   }
     
-  //   int rows = matrix1.rows;
-  //   int cols = matrix2.cols;
+  //   size_t rows = matrix1.rows;
+  //   size_t cols = matrix2.cols;
   //   float_t * data = new float_t[rows * cols];
   //   float_t * data1 = matrix1.data.get();
   //   float_t * data2 = matrix2.data.get();
-  //   int cols1 = matrix1.cols;
-  //   int cols2 = matrix2.cols;
+  //   size_t cols1 = matrix1.cols;
+  //   size_t cols2 = matrix2.cols;
     
-  //   for (int row = 0; row < rows; row++) {
-  //     for (int col = 0; col < cols; col++) {
+  //   for (size_t row = 0; row < rows; row++) {
+  //     for (size_t col = 0; col < cols; col++) {
   //       float_t sum = 0.0;
-  //       for (int k = 0; k < cols1; k++) {
+  //       for (size_t k = 0; k < cols1; k++) {
   //         sum += data1[row * cols1 + k] * data2[k * cols2 + col];
   //       }
   //       data[row * cols + col] = sum;
@@ -49,20 +49,20 @@ namespace math {
       throw std::invalid_argument(os.str());
     }
     
-    int rows = matrix1.rows;
-    int cols = matrix2.cols;
+    size_t rows = matrix1.rows;
+    size_t cols = matrix2.cols;
     float_t * data = new float_t[rows * cols];
     float_t * runner = data;
     float_t * data1 = matrix1.data.get();
     float_t * data2 = matrix2.data.get();
-    int cols1 = matrix1.cols;
-    int cols2 = matrix2.cols;
+    size_t cols1 = matrix1.cols;
+    size_t cols2 = matrix2.cols;
     
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < cols; col++) {
+    for (size_t row = 0; row < rows; row++) {
+      for (size_t col = 0; col < cols; col++) {
         float_t sum = 0.0;
         float_t * data2Runner = data2 + col;
-        for (int k = 0; k < cols1; k++) {
+        for (size_t k = 0; k < cols1; k++) {
           sum += data1[k] * *data2Runner;
           data2Runner += cols2;
         }

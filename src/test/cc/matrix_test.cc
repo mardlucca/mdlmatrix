@@ -14,9 +14,9 @@ namespace math {
       Matrix matrix;
 
       MatrixTestSuite() : matrix(Matrix(4,3)) {
-        int count = 0;
-        for (int row = 0; row < matrix.NumRows(); row++) {
-          for (int col = 0; col < matrix.NumCols(); col++) {
+        size_t count = 0;
+        for (size_t row = 0; row < matrix.NumRows(); row++) {
+          for (size_t col = 0; col < matrix.NumCols(); col++) {
             matrix(row, col) = ++count;
           }
         }
@@ -24,9 +24,9 @@ namespace math {
   };
 
   TEST_F(MatrixTestSuite, TestGetSet) {
-    int count = 0;
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    size_t count = 0;
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(++count, matrix(row, col));
       }
     }
@@ -52,11 +52,11 @@ namespace math {
   }
 
   TEST_F(MatrixTestSuite, TestForEach) {
-    matrix.ForEach([](int row, int col, double& val) {
+    matrix.ForEach([](size_t row, size_t col, double& val) {
       val = -val;
     });
-    int count = 0;
-    matrix.ForEach([&count](int row, int col, double& val) {
+    size_t count = 0;
+    matrix.ForEach([&count](size_t row, size_t col, double& val) {
       ASSERT_TRUE(val < 0);
       count++;
     });
@@ -68,8 +68,8 @@ namespace math {
     ASSERT_EQ(2, slice.NumRows());
     ASSERT_EQ(2, slice.NumCols());
 
-    for (int row = 0; row < slice.NumRows(); row++) {
-      for (int col = 0; col < slice.NumCols(); col++) {
+    for (size_t row = 0; row < slice.NumRows(); row++) {
+      for (size_t col = 0; col < slice.NumCols(); col++) {
         ASSERT_EQ(slice(row, col), matrix(1 + row, 1 + col));
       }
     }
@@ -79,8 +79,8 @@ namespace math {
     slice(1, 0) += 1000;
     slice(1, 1) += 1001;
 
-    for (int row = 0; row < slice.NumRows(); row++) {
-      for (int col = 0; col < slice.NumCols(); col++) {
+    for (size_t row = 0; row < slice.NumRows(); row++) {
+      for (size_t col = 0; col < slice.NumCols(); col++) {
         ASSERT_EQ(slice(row, col), matrix(1 + row, 1 + col));
       }
     }
@@ -92,14 +92,14 @@ namespace math {
     cout << matrix << endl;
     cout << m << endl;
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         m(row, col) += 100;
       }
     }
 
-    for (int row = 0; row < m.NumRows(); row++) {
-      for (int col = 0; col < m.NumCols(); col++) {
+    for (size_t row = 0; row < m.NumRows(); row++) {
+      for (size_t col = 0; col < m.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col), m(row, col) - 100);
       }
     }
@@ -109,14 +109,14 @@ namespace math {
     Slice slice = matrix(RightRange(0), RightRange(0));
     Matrix m = slice;
 
-    for (int row = 0; row < slice.NumRows(); row++) {
-      for (int col = 0; col < slice.NumCols(); col++) {
+    for (size_t row = 0; row < slice.NumRows(); row++) {
+      for (size_t col = 0; col < slice.NumCols(); col++) {
         slice(row, col) += 100;
       }
     }
 
-    for (int row = 0; row < m.NumRows(); row++) {
-      for (int col = 0; col < m.NumCols(); col++) {
+    for (size_t row = 0; row < m.NumRows(); row++) {
+      for (size_t col = 0; col < m.NumCols(); col++) {
         ASSERT_EQ(m(row, col) + 100, slice(row, col));
       }
     }
@@ -125,14 +125,14 @@ namespace math {
   TEST_F(MatrixTestSuite, TestMoveConstructor) {
     Matrix m = std::move(matrix);
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         m(row, col) += 100;
       }
     }
 
-    for (int row = 0; row < m.NumRows(); row++) {
-      for (int col = 0; col < m.NumCols(); col++) {
+    for (size_t row = 0; row < m.NumRows(); row++) {
+      for (size_t col = 0; col < m.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col), m(row, col));
       }
     }
@@ -146,14 +146,14 @@ namespace math {
     //  to a matrix.
     Matrix m = std::move(slice);
 
-    for (int row = 0; row < slice.NumRows(); row++) {
-      for (int col = 0; col < slice.NumCols(); col++) {
+    for (size_t row = 0; row < slice.NumRows(); row++) {
+      for (size_t col = 0; col < slice.NumCols(); col++) {
         slice(row, col) += 100;
       }
     }
 
-    for (int row = 0; row < m.NumRows(); row++) {
-      for (int col = 0; col < m.NumCols(); col++) {
+    for (size_t row = 0; row < m.NumRows(); row++) {
+      for (size_t col = 0; col < m.NumCols(); col++) {
         ASSERT_EQ(m(row, col) + 100, slice(row, col));
       }
     }
@@ -164,14 +164,14 @@ namespace math {
 
     m = matrix;
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         m(row, col) += 100;
       }
     }
 
-    for (int row = 0; row < m.NumRows(); row++) {
-      for (int col = 0; col < m.NumCols(); col++) {
+    for (size_t row = 0; row < m.NumRows(); row++) {
+      for (size_t col = 0; col < m.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col), m(row, col) - 100);
       }
     }
@@ -182,14 +182,14 @@ namespace math {
     Slice slice = matrix(RightRange(0), RightRange(0));
     m = slice;
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         m(row, col) += 100;
       }
     }
 
-    for (int row = 0; row < m.NumRows(); row++) {
-      for (int col = 0; col < m.NumCols(); col++) {
+    for (size_t row = 0; row < m.NumRows(); row++) {
+      for (size_t col = 0; col < m.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col), m(row, col) - 100);
       }
     }
@@ -200,14 +200,14 @@ namespace math {
 
     m = std::move(matrix);
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         m(row, col) += 100;
       }
     }
 
-    for (int row = 0; row < m.NumRows(); row++) {
-      for (int col = 0; col < m.NumCols(); col++) {
+    for (size_t row = 0; row < m.NumRows(); row++) {
+      for (size_t col = 0; col < m.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col), m(row, col));
       }
     }
@@ -218,14 +218,14 @@ namespace math {
     Slice slice = matrix(RightRange(0), RightRange(0));
     m = std::move(slice);
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         m(row, col) += 100;
       }
     }
 
-    for (int row = 0; row < m.NumRows(); row++) {
-      for (int col = 0; col < m.NumCols(); col++) {
+    for (size_t row = 0; row < m.NumRows(); row++) {
+      for (size_t col = 0; col < m.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col), m(row, col) - 100);
       }
     }
@@ -234,8 +234,8 @@ namespace math {
   TEST_F(MatrixTestSuite, TestTranspose) {
     Slice transposed = matrix().Transpose();
 
-    for (int row = 0; row < transposed.NumRows(); row++) {
-      for (int col = 0; col < transposed.NumCols(); col++) {
+    for (size_t row = 0; row < transposed.NumRows(); row++) {
+      for (size_t col = 0; col < transposed.NumCols(); col++) {
         ASSERT_EQ(matrix(col, row), transposed(row, col));
         transposed(row, col) += 100;
         ASSERT_EQ(matrix(col, row), transposed(row, col));
@@ -246,8 +246,8 @@ namespace math {
   TEST_F(MatrixTestSuite, TestMatrixTranspose) {
     Matrix transposed = matrix.Transpose();
 
-    for (int row = 0; row < transposed.NumRows(); row++) {
-      for (int col = 0; col < transposed.NumCols(); col++) {
+    for (size_t row = 0; row < transposed.NumRows(); row++) {
+      for (size_t col = 0; col < transposed.NumCols(); col++) {
         ASSERT_EQ(matrix(col, row), transposed(row, col));
         transposed(row, col) += 100;
         ASSERT_EQ(matrix(col, row), transposed(row, col) - 100);
@@ -258,8 +258,8 @@ namespace math {
   TEST_F(MatrixTestSuite, TestMaterializeTransposed) {
     Matrix transposed = matrix().Transpose();
 
-    for (int row = 0; row < transposed.NumRows(); row++) {
-      for (int col = 0; col < transposed.NumCols(); col++) {
+    for (size_t row = 0; row < transposed.NumRows(); row++) {
+      for (size_t col = 0; col < transposed.NumCols(); col++) {
         ASSERT_EQ(matrix(col, row), transposed(row, col));
         transposed(row, col) += 100;
         ASSERT_EQ(matrix(col, row), transposed(row, col) - 100);
@@ -270,8 +270,8 @@ namespace math {
   TEST_F(MatrixTestSuite, TestTransposeTwice) {
     Slice transposed = matrix().Transpose().Transpose();
 
-    for (int row = 0; row < transposed.NumRows(); row++) {
-      for (int col = 0; col < transposed.NumCols(); col++) {
+    for (size_t row = 0; row < transposed.NumRows(); row++) {
+      for (size_t col = 0; col < transposed.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col), transposed(row, col));
         transposed(row, col) += 100;
         ASSERT_EQ(matrix(row, col), transposed(row, col));
@@ -282,8 +282,8 @@ namespace math {
   TEST_F(MatrixTestSuite, TestTransposeTwiceAndMaterialize) {
     Matrix transposed = matrix().Transpose().Transpose();
 
-    for (int row = 0; row < transposed.NumRows(); row++) {
-      for (int col = 0; col < transposed.NumCols(); col++) {
+    for (size_t row = 0; row < transposed.NumRows(); row++) {
+      for (size_t col = 0; col < transposed.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col), transposed(row, col));
         transposed(row, col) += 100;
         ASSERT_EQ(matrix(row, col), transposed(row, col) - 100);

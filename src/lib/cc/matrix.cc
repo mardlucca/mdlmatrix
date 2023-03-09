@@ -8,28 +8,28 @@ namespace mdl {
 namespace math {
   Matrix::Matrix() : Matrix(0, 0) {}
 
-  Matrix::Matrix(int rows, int cols) 
+  Matrix::Matrix(size_t rows, size_t cols) 
       : rows(rows), cols(cols), 
         data(std::shared_ptr<float_t[]>(new float_t[rows * cols])) {
     float_t * ptr = data.get();
 
-    for (int i = 0; i < rows * cols; i++) {
+    for (size_t i = 0; i < rows * cols; i++) {
         ptr[i] = 0.0;
     }
   }
 
-  Matrix::Matrix(int rows, int cols, float_t data[]) 
+  Matrix::Matrix(size_t rows, size_t cols, float_t data[]) 
       : rows(rows), cols(cols), 
         data(std::shared_ptr<float_t[]>(data)) {
   }
 
-  Matrix::Matrix(int rows, int cols, std::function<float_t (int, int)> initFn)
+  Matrix::Matrix(size_t rows, size_t cols, std::function<float_t (size_t, size_t)> initFn)
       : rows(rows), cols(cols), 
         data(std::shared_ptr<float_t[]>(new float_t[rows * cols])) {
     float_t * ptr = data.get();
 
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < cols; col++) {
+    for (size_t row = 0; row < rows; row++) {
+      for (size_t col = 0; col < cols; col++) {
         *ptr = initFn(row, col);
         ptr++;
       }
@@ -52,8 +52,8 @@ namespace math {
         data(new float_t[rows * cols]) {
     float_t * buffer = data.get();
 
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < cols; col++) {
+    for (size_t row = 0; row < rows; row++) {
+      for (size_t col = 0; col < cols; col++) {
         buffer[row * cols + col] = other(row, col);
       }
     }
@@ -83,8 +83,8 @@ namespace math {
     data.reset(new float_t[rows * cols]);
     float_t * buffer = data.get();
 
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < cols; col++) {
+    for (size_t row = 0; row < rows; row++) {
+      for (size_t col = 0; col < cols; col++) {
         buffer[row * cols + col] = other(row, col);
       }
     }
@@ -93,8 +93,8 @@ namespace math {
   }
 
   std::ostream& Matrix::operator<<(std::ostream& os) {
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < cols; col++) {
+    for (size_t row = 0; row < rows; row++) {
+      for (size_t col = 0; col < cols; col++) {
         os << '\t' << data.get()[row * cols + col];
       }
       os << endl;

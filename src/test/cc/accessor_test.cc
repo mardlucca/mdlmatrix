@@ -11,7 +11,7 @@ namespace math {
 
       void SetUp() override {
         data = new float_t[20];
-        for (int i = 0; i < 20; i++) {
+        for (size_t i = 0; i < 20; i++) {
           data[i] = i;
         }
       }
@@ -27,22 +27,22 @@ namespace math {
     ASSERT_EQ(7, DirectAccessor::Get(data, 8, 0, 7));
     ASSERT_EQ(7, DirectAccessor::Get(data, 7, 1, 0));
 
-    int rows = 4;
-    int cols = 5;
-    int count = 0;
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < cols; col++) {
+    size_t rows = 4;
+    size_t cols = 5;
+    size_t count = 0;
+    for (size_t row = 0; row < rows; row++) {
+      for (size_t col = 0; col < cols; col++) {
         ASSERT_EQ(count++,  DirectAccessor::Get(data, cols, row, col));
       }
     }
   }
 
   TEST_F(AccessorTestSuite, TestGetLREFDirect) {
-    int rows = 4;
-    int cols = 5;
-    int count = 0;
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < cols; col++) {
+    size_t rows = 4;
+    size_t cols = 5;
+    size_t count = 0;
+    for (size_t row = 0; row < rows; row++) {
+      for (size_t col = 0; col < cols; col++) {
         DirectAccessor::GetLRef(data, cols, row, col) = -count;
         ASSERT_EQ(- count++,  DirectAccessor::Get(data, cols, row, col));
       }
@@ -65,22 +65,22 @@ namespace math {
     ASSERT_EQ(7, TransposedAccessor::Get(data, 8, 7, 0));
     ASSERT_EQ(7, TransposedAccessor::Get(data, 7, 0, 1));
 
-    int rows = 4;
-    int cols = 5;
-    int count = 0;
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < cols; col++) {
+    size_t rows = 4;
+    size_t cols = 5;
+    size_t count = 0;
+    for (size_t row = 0; row < rows; row++) {
+      for (size_t col = 0; col < cols; col++) {
         ASSERT_EQ(count++,  TransposedAccessor::Get(data, cols, col, row));
       }
     }
   }
 
   TEST_F(AccessorTestSuite, TestGetLREFTransposed) {
-    int rows = 4;
-    int cols = 5;
-    int count = 0;
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < cols; col++) {
+    size_t rows = 4;
+    size_t cols = 5;
+    size_t count = 0;
+    for (size_t row = 0; row < rows; row++) {
+      for (size_t col = 0; col < cols; col++) {
         TransposedAccessor::GetLRef(data, cols, col, row) = -count;
         ASSERT_EQ(- count++,  TransposedAccessor::Get(data, cols, col, row));
       }
@@ -98,10 +98,10 @@ namespace math {
   }
 
   TEST_F(AccessorTestSuite, TestGet) {
-    int rows = 4;
-    int cols = 5;
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < cols; col++) {
+    size_t rows = 4;
+    size_t cols = 5;
+    for (size_t row = 0; row < rows; row++) {
+      for (size_t col = 0; col < cols; col++) {
         ASSERT_EQ(
             DirectAccessor::Get(data, cols, row, col), 
             TransposedAccessor::Get(data, cols, col, row));

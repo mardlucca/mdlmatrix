@@ -12,13 +12,13 @@ namespace impl {
     public:
 
       inline static Matrix Transpose(const Matrix& matrix) {
-        int rows = matrix.rows;
-        int cols = matrix.cols;
+        size_t rows = matrix.rows;
+        size_t cols = matrix.cols;
         float_t * data1 = matrix.data.get();
         float_t * data2 = new float_t[rows * cols];
     {
-        for (int row = 0; row < rows; row++) {
-          for (int col = 0; col < cols; col++) {
+        for (size_t row = 0; row < rows; row++) {
+          for (size_t col = 0; col < cols; col++) {
             *(data2 + rows * col + row) = *data1;
             data1++;
           }

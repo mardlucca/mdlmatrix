@@ -3,70 +3,72 @@
 
 #include <climits>
 
+#include "typedefs.h"
+
 namespace mdl {
 namespace math {
 
   class LeftRange {
     public:
-      LeftRange(int end);
+      LeftRange(size_t end);
 
-      inline int Get(int index) const { return  index; }
-      inline int Length() const { return end; }
+      inline size_t Get(size_t index) const { return  index; }
+      inline size_t Length() const { return end; }
 
-      LeftRange FitToBounds(int max) const;
+      LeftRange FitToBounds(size_t max) const;
     private:
-      int end;
+      size_t end;
   };
 
   class RightRange {
     public:
-      RightRange(int start);
+      RightRange(size_t start);
 
-      inline int Get(int index) const { return start + index; }
-      inline int GetStart() const { return start; }
-      inline int Length() const { return length; }
+      inline size_t Get(size_t index) const { return start + index; }
+      inline size_t GetStart() const { return start; }
+      inline size_t Length() const { return length; }
 
-      RightRange FitToBounds(int max) const;
+      RightRange FitToBounds(size_t max) const;
     private:   
-      int start;
-      int length;
+      size_t start;
+      size_t length;
 
-      RightRange(int start, int end);
+      RightRange(size_t start, size_t end);
 
       friend class Ranges;
   };
 
   class UnitRange {
     public:
-      UnitRange(int index);
+      UnitRange(size_t index);
 
-      inline int Get(int i) const { return index; }
-      inline int GetIndex() const { return index; }
-      inline int Length() const { return index >= 0; }
+      inline size_t Get(size_t i) const { return index; }
+      inline size_t GetIndex() const { return index; }
+      inline size_t Length() const { return index >= 0; }
 
-      UnitRange FitToBounds(int max) const;
+      UnitRange FitToBounds(size_t max) const;
     private:   
-      int index;
+      size_t index;
   };
 
   class Range {
     public:
-      int start;
-      int end;
-      int increment;
-      int length;
+      size_t start;
+      size_t end;
+      size_t increment;
+      size_t length;
 
-      Range(int start = 0, int end = INT_MAX, int increment = 1);
+      Range(size_t start = 0, size_t end = INT_MAX, size_t increment = 1);
       
-      inline int Get(int index) const {   
+      inline size_t Get(size_t index) const {   
           return  start + index * increment;
       }
-      inline int GetStart() const { return start; }
-      inline int GetEnd() const { return end; }
-      inline int GetIncrement() const { return increment; }
-      inline int Length() const { return length; };    
+      inline size_t GetStart() const { return start; }
+      inline size_t GetEnd() const { return end; }
+      inline size_t GetIncrement() const { return increment; }
+      inline size_t Length() const { return length; };    
 
-      Range FitToBounds(int max) const;
+      Range FitToBounds(size_t max) const;
   };
 
   class Ranges {

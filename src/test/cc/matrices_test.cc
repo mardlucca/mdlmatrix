@@ -14,8 +14,8 @@ namespace math {
     ASSERT_EQ(2, ones.NumRows());
     ASSERT_EQ(3, ones.NumCols());
 
-    for (int row = 0; row < ones.NumRows(); row++) {
-      for (int col = 0; col < ones.NumCols(); col++) {
+    for (size_t row = 0; row < ones.NumRows(); row++) {
+      for (size_t col = 0; col < ones.NumCols(); col++) {
         ASSERT_EQ(1, ones(row, col));
       }
     }
@@ -26,8 +26,8 @@ namespace math {
     ASSERT_EQ(2, zeros.NumRows());
     ASSERT_EQ(3, zeros.NumCols());
 
-    for (int row = 0; row < zeros.NumRows(); row++) {
-      for (int col = 0; col < zeros.NumCols(); col++) {
+    for (size_t row = 0; row < zeros.NumRows(); row++) {
+      for (size_t col = 0; col < zeros.NumCols(); col++) {
         ASSERT_EQ(0, zeros(row, col));
       }
     }
@@ -40,8 +40,8 @@ namespace math {
     ASSERT_EQ(101, rand.NumCols());
 
     float_t sum = 0.0;
-    for (int row = 0; row < rand.NumRows(); row++) {
-      for (int col = 0; col < rand.NumCols(); col++) {
+    for (size_t row = 0; row < rand.NumRows(); row++) {
+      for (size_t col = 0; col < rand.NumCols(); col++) {
         sum += rand(row, col);
       }
     }
@@ -55,7 +55,7 @@ namespace math {
     ASSERT_EQ(2, seq.NumRows());
     ASSERT_EQ(10, seq.NumCols());
     
-    for (int col = 0; col < seq.NumCols(); col++) {
+    for (size_t col = 0; col < seq.NumCols(); col++) {
       ASSERT_EQ(col, seq(0, col));
       ASSERT_EQ(0, seq(1, col));
     }
@@ -67,7 +67,7 @@ namespace math {
     ASSERT_EQ(2, seq.NumRows());
     ASSERT_EQ(10, seq.NumCols());
     
-    for (int col = 0; col < seq.NumCols(); col++) {
+    for (size_t col = 0; col < seq.NumCols(); col++) {
       ASSERT_EQ(1 + col, seq(0, col));
       ASSERT_EQ(0, seq(1, col));
     }
@@ -79,7 +79,7 @@ namespace math {
     ASSERT_EQ(2, seq.NumRows());
     ASSERT_EQ(10, seq.NumCols());
     
-    for (int col = 0; col < seq.NumCols(); col++) {
+    for (size_t col = 0; col < seq.NumCols(); col++) {
       ASSERT_EQ(seq.NumCols() - col, seq(0, col));
       ASSERT_EQ(0, seq(1, col));
     }
@@ -91,8 +91,8 @@ namespace math {
     ASSERT_EQ(2, def.NumRows());
     ASSERT_EQ(10, def.NumCols());
     
-    for (int row = 0; row < def.NumRows(); row++) {
-      for (int col = 0; col < def.NumCols(); col++) {
+    for (size_t row = 0; row < def.NumRows(); row++) {
+      for (size_t col = 0; col < def.NumCols(); col++) {
         ASSERT_EQ(-2.5, def(row, col));
       }
     }

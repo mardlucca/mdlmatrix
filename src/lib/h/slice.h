@@ -4,7 +4,7 @@
 #include <memory>
 #include <iostream>
 
-#include "float_t.h"
+#include "typedefs.h"
 #include "basematrix.h"
 #include "range.h"
 #include "accessor.h"
@@ -21,7 +21,7 @@ namespace math {
   class Slice : public BaseMatrix {
     public:
       Slice(std::shared_ptr<float_t[]> data,
-            int rowLength, 
+            size_t rowLength, 
             const RowRange& rowRange, 
             const ColRange& colRange) 
           : data(data), rowLength(rowLength), rowRange(rowRange), colRange(colRange) {
@@ -60,7 +60,7 @@ namespace math {
         return *this;
       }
 
-      inline float_t& operator()(int row, int col) {
+      inline float_t& operator()(size_t row, size_t col) {
         return Accessor::GetLRef(
             data.get(), 
             rowLength, 
@@ -68,13 +68,34 @@ namespace math {
             Accessor::GetCol(rowRange, colRange).Get(col));
       }
       
-      inline float_t operator()(int row, int col) const {
+      inline float_t operator()(size_t row, size_t col) const {
         return Accessor::Get(
             data.get(), 
             rowLength, 
             Accessor::GetRow(rowRange, colRange).Get(row), 
             Accessor::GetCol(rowRange, colRange).Get(col));
       }
+
+#ifdef _MDL_MATH_LARGE_MATRICES
+      inline float_t& operator()(size_t row, int col) {
+        return (*this)(row, (size_t) col);
+      }
+      inline float_t operator()(size_t row, int col) const {
+        return (*this)(row, (size_t) col);
+      }
+      inline float_t& operator()(int row, size_t col) {
+        return (*this)((size_t) row, col);
+      }
+      inline float_t operator()(int row, size_t col) const {
+        return (*this)((size_t) row, col);
+      }
+      inline float_t& operator()(int row, int col) {
+        return (*this)((size_t) row, (size_t) col);
+      }
+      inline float_t operator()(int row, int col) const {
+        return (*this)((size_t) row, (size_t) col);
+      }
+#endif
 
       auto operator()(const Range& slicedRows, const Range& slicedCols) {
         auto rowRng = Ranges::FitAndCompose(rowRange, Accessor::GetRow(slicedRows, slicedCols));
@@ -155,8 +176,8 @@ namespace math {
         return *this;
       }
       
-      int NumRows() const { return Accessor::GetRow(rowRange.Length(), colRange.Length()); }
-      int NumCols() const { return Accessor::GetCol(rowRange.Length(), colRange.Length()); }
+      size_t NumRows() const { return Accessor::GetRow(rowRange.Length(), colRange.Length()); }
+      size_t NumCols() const { return Accessor::GetCol(rowRange.Length(), colRange.Length()); }
 
       Slice<RowRange, ColRange, typename Accessor::transposedType> Transpose() {
         return Slice<RowRange, ColRange, typename Accessor::transposedType>(std::move(*this));
@@ -164,11 +185,11 @@ namespace math {
 
       template <typename Operation>
       void ReflexiveOperate(float_t scalar) {
-        int rows = NumRows();
-        int cols = NumCols();
+        size_t rows = NumRows();
+        size_t cols = NumCols();
 
-        for (int row = 0; row < rows; row++) {
-          for (int col = 0; col < cols; col++) {
+        for (size_t row = 0; row < rows; row++) {
+          for (size_t col = 0; col < cols; col++) {
             Operation::operate((*this)(row, col), scalar);
           }
         }
@@ -176,17 +197,17 @@ namespace math {
 
       template <typename Operation>
       void ReflexiveOperate(const BaseMatrix& other) {
-        int rows1 = NumRows();
-        int cols1 = NumCols();
-        int rows2 = other.NumRows();
-        int cols2 = other.NumCols();
+        size_t rows1 = NumRows();
+        size_t cols1 = NumCols();
+        size_t rows2 = other.NumRows();
+        size_t cols2 = other.NumCols();
 
         if ((rows1 == rows2 && (cols1 == cols2 || cols2 == 1))
             || (cols1 == cols2 && rows2 == 1)
             || (rows2 == 1 && cols2 == 1)) {
 
-          for (int row = 0; row < rows1; row++) {
-            for (int col = 0; col < cols1; col++) {
+          for (size_t row = 0; row < rows1; row++) {
+            for (size_t col = 0; col < cols1; col++) {
               Operation::operate(
                   (*this)(row, col), 
                   other(rows2 == 1 ? 0 : row, cols2 == 1 ? 0 : col));
@@ -202,11 +223,11 @@ namespace math {
 
       template <typename Operation>
       void ReflexiveUnaryOperate() {
-        int rows = NumRows();
-        int cols = NumCols();
+        size_t rows = NumRows();
+        size_t cols = NumCols();
 
-        for (int row = 0; row < rows; row++) {
-          for (int col = 0; col < cols; col++) {
+        for (size_t row = 0; row < rows; row++) {
+          for (size_t col = 0; col < cols; col++) {
             Operation::operate((*this)(row, col));
           }
         }
@@ -214,7 +235,7 @@ namespace math {
 
     protected:
       std::shared_ptr<float_t[]> data;
-      int rowLength;
+      size_t rowLength;
       RowRange rowRange;
       ColRange colRange;
 

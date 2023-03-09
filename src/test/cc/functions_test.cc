@@ -8,13 +8,13 @@ namespace math {
 
   TEST(MatrixFunctionsTest, AbsTest) {
     Matrix mat = Matrices::Sequence(2,2,Range(-1, -5, -1));
-    mat.ForEach([](int row, int col, float_t& val) {
+    mat.ForEach([](size_t row, size_t col, float_t& val) {
       ASSERT_TRUE(val < 0);
     });
-    Abs(mat).ForEach([](int row, int col, float_t& val) {
+    Abs(mat).ForEach([](size_t row, size_t col, float_t& val) {
       ASSERT_TRUE(val > 0);
     });
-    mat.ForEach([](int row, int col, float_t& val) {
+    mat.ForEach([](size_t row, size_t col, float_t& val) {
       ASSERT_TRUE(val < 0);
     });
   }
@@ -42,7 +42,7 @@ namespace math {
     Matrix m1 = Exp(Matrices::WithValues(1, {0,1,2}));
     Matrix expected = Matrices::WithValues(1, {1, e, e * e});
 
-    (m1 - expected).ForEach([](int row, int col, float_t& val) {
+    (m1 - expected).ForEach([](size_t row, size_t col, float_t& val) {
       ASSERT_TRUE(val < 0.001);
     });
   }
@@ -155,17 +155,17 @@ namespace math {
         4,14,15, 1});
 
     Matrix expected = Matrices::WithValues(4, {29.6667, 27, 27, 29.6667});
-    (Variance(data) - expected).ForEach([](int row, int col, float_t& val) {
+    (Variance(data) - expected).ForEach([](size_t row, size_t col, float_t& val) {
       ASSERT_TRUE(val < 0.001);
     });
 
     expected = Matrices::WithValues(1, {2.3704});
-    (Variance(Variance(data)) - expected).ForEach([](int row, int col, float_t& val) {
+    (Variance(Variance(data)) - expected).ForEach([](size_t row, size_t col, float_t& val) {
       ASSERT_TRUE(val < 0.001);
     });
 
     expected = Matrices::WithValues(1, {0});
-    (Variance(Variance(Variance(data))) - expected).ForEach([](int row, int col, float_t& val) {
+    (Variance(Variance(Variance(data))) - expected).ForEach([](size_t row, size_t col, float_t& val) {
       ASSERT_TRUE(val < 0.001);
     });
   }
@@ -178,12 +178,12 @@ namespace math {
         4,14,15, 1});
 
     Matrix expected = Matrices::WithValues(4, {5.4467, 5.1962, 5.1962, 5.4467});
-    (StdDev(data) - expected).ForEach([](int row, int col, float_t& val) {
+    (StdDev(data) - expected).ForEach([](size_t row, size_t col, float_t& val) {
       ASSERT_TRUE(val < 0.001);
     });
 
     expected = Matrices::WithValues(1, {0.1447});
-    (StdDev(StdDev(data)) - expected).ForEach([](int row, int col, float_t& val) {
+    (StdDev(StdDev(data)) - expected).ForEach([](size_t row, size_t col, float_t& val) {
       ASSERT_TRUE(val < 0.001);
     });
   }

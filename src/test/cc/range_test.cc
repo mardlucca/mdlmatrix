@@ -8,7 +8,7 @@ namespace math {
   TEST(RangeTest, TestLeftRange) {
     LeftRange range(10);
     ASSERT_EQ(10, range.Length());
-    for (int i = 0; i < 100; i++) {
+    for (size_t i = 0; i < 100; i++) {
       ASSERT_EQ(i, range.Get(i));
     }
   }
@@ -29,13 +29,13 @@ namespace math {
   TEST(RangeTest, TestRightRange) {
     RightRange range(10);
     ASSERT_EQ(0, range.Length());
-    for (int i = 0; i < 100; i++) {
+    for (size_t i = 0; i < 100; i++) {
       ASSERT_EQ(10 + i, range.Get(i));
     }
 
     range = RightRange(5).FitToBounds(10);
     ASSERT_EQ(5, range.Length());
-    for (int i = 0; i < 100; i++) {
+    for (size_t i = 0; i < 100; i++) {
       ASSERT_EQ(5 + i, range.Get(i));
     }
   }
@@ -57,7 +57,7 @@ namespace math {
   TEST(RangeTest, TestUnitRange) {
     UnitRange range(10);
     ASSERT_EQ(1, range.Length());
-    for (int i = 0; i < 100; i++) {
+    for (size_t i = 0; i < 100; i++) {
       ASSERT_EQ(10, range.Get(i));
     }
   }
@@ -80,13 +80,13 @@ namespace math {
   TEST(RangeTest, TestRangeIncrementing) {
     Range range(5, 10);
     ASSERT_EQ(5, range.Length());
-    for (int i = 0; i < 100; i++) {
+    for (size_t i = 0; i < 100; i++) {
       ASSERT_EQ(5 + i, range.Get(i));
     }
 
     Range range2(5, 10, 2);
     ASSERT_EQ(3, range2.Length());
-    for (int i = 0; i < 100; i++) {
+    for (size_t i = 0; i < 100; i++) {
       ASSERT_EQ(5 + i * 2, range2.Get(i));
     }
 
@@ -103,13 +103,13 @@ namespace math {
   TEST(RangeTest, TestRangeDecrementing) {
     Range range(10, 5, -1);
     ASSERT_EQ(5, range.Length());
-    for (int i = 0; i < 100; i++) {
+    for (size_t i = 0; i < 100; i++) {
       ASSERT_EQ(10 - i, range.Get(i));
     }
 
     Range range2(10, 5, -2);
     ASSERT_EQ(3, range2.Length());
-    for (int i = 0; i < 100; i++) {
+    for (size_t i = 0; i < 100; i++) {
       ASSERT_EQ(10 - i * 2, range2.Get(i));
     }
 

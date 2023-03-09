@@ -26,15 +26,15 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _MDL_MATH_FLOAT_T
-#define _MDL_MATH_FLOAT_T
+#ifndef _MDL_MATH_TYPEDEFS
+#define _MDL_MATH_TYPEDEFS
 
 #include <cstddef>
 
 namespace mdl {
 namespace math {
 
-#ifdef _MDL_LA_SINGLE_PRECISION
+#ifdef _MDL_MATH_SINGLE_PRECISION
   typedef float float_t;
   constexpr float_t kFloatPrecision = 1e-7;
 #else
@@ -50,7 +50,15 @@ namespace math {
     return *(matrix + row * cols + col);
   }
 
+  #define _MDL_MATH_LARGE_MATRICES
+  #ifdef _MDL_MATH_LARGE_MATRICES
+    typedef long size_t;
+  #else
+    typedef int size_t;
+  #endif  
+
+
 } // namespace math
 } // namespace mdl
 
-#endif // _MDL_MATH_FLOAT_T
+#endif // TYPEDEFS

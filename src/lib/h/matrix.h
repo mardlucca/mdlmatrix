@@ -3,7 +3,7 @@
 
 #include <sstream>
 
-#include "float_t.h"
+#include "typedefs.h"
 #include "basematrix.h"
 #include "slice.h"
 #include "range.h"
@@ -21,9 +21,9 @@ namespace impl {
 class Matrix : public BaseMatrix {
   public:
     Matrix();
-    Matrix(int rows, int cols);
-    Matrix(int rows, int cols, float_t data[]);
-    Matrix(int rows, int cols, std::function<float_t (int, int)> initFn);
+    Matrix(size_t rows, size_t cols);
+    Matrix(size_t rows, size_t cols, float_t data[]);
+    Matrix(size_t rows, size_t cols, std::function<float_t (size_t, size_t)> initFn);
     Matrix(const Matrix& other);
     Matrix(Matrix&& other);
     Matrix(const BaseMatrix& other);
@@ -41,13 +41,34 @@ class Matrix : public BaseMatrix {
     Matrix& operator/=(const Matrix& other);
     Matrix& operator/=(float_t scalar);
 
+    inline float_t& operator()(size_t row, size_t col) override {
+      return data.get()[row * cols + col];
+    }
+    inline float_t operator()(size_t row, size_t col) const override {
+      return data.get()[row * cols + col];
+    }
+    
+#ifdef _MDL_MATH_LARGE_MATRICES
+    inline float_t& operator()(size_t row, int col) override {
+      return data.get()[row * cols + col];
+    }
+    inline float_t operator()(size_t row, int col) const override {
+      return data.get()[row * cols + col];
+    }
+    inline float_t& operator()(int row, size_t col) override {
+      return data.get()[row * cols + col];
+    }
+    inline float_t operator()(int row, size_t col) const override {
+      return data.get()[row * cols + col];
+    }
     inline float_t& operator()(int row, int col) override {
       return data.get()[row * cols + col];
     }
     inline float_t operator()(int row, int col) const override {
       return data.get()[row * cols + col];
     }
-    
+#endif
+
     template<typename FRR, typename FCR>
     auto operator()(const FRR& slicedRows, const FCR& slicedCols) {
       // Indidentaly this compiles because FitAndCompose(LeftRange, X) always results in 
@@ -80,16 +101,16 @@ class Matrix : public BaseMatrix {
 
     Matrix Transpose() const;
 
-    inline int NumRows() const override { return rows; }
-    inline int NumCols() const override { return cols; }
+    inline size_t NumRows() const override { return rows; }
+    inline size_t NumCols() const override { return cols; }
     
     std::ostream& operator<<(std::ostream& os);
 
     template <typename Operation> 
     void ReflexiveOperate(float_t scalar) {
-      int length = rows * cols;
+      size_t length = rows * cols;
       float_t * cell = data.get();
-      for (int i = 0; i < length; i++) {
+      for (size_t i = 0; i < length; i++) {
         Operation::operate(*cell, scalar);
         cell++;
       }
@@ -97,8 +118,8 @@ class Matrix : public BaseMatrix {
 
     template <typename Operation>
     void ReflexiveOperate(const Matrix& other) {
-      int rows2 = other.rows;
-      int cols2 = other.cols;
+      size_t rows2 = other.rows;
+      size_t cols2 = other.cols;
 
       if ((rows == rows2 && (cols == cols2 || cols2 == 1))
           || (cols == cols2 && rows2 == 1)
@@ -107,8 +128,8 @@ class Matrix : public BaseMatrix {
 
         float_t * thisBuffer = data.get();
         float_t * otherBuffer = other.data.get();
-        for (int row = 0; row < rows; row++) {
-          for (int col = 0; col < cols; col++) {
+        for (size_t row = 0; row < rows; row++) {
+          for (size_t col = 0; col < cols; col++) {
             Operation::operate(
                 thisBuffer[row * cols + col], 
                 otherBuffer[(rows2 == 1 ? 0 : row) * cols2 + (cols2 == 1 ? 0 : col)]);
@@ -124,17 +145,17 @@ class Matrix : public BaseMatrix {
 
     template <typename Operation>
     void ReflexiveUnaryOperate() {
-      int length = rows * cols;
+      size_t length = rows * cols;
       float_t * cell = data.get();
-      for (int i = 0; i < length; i++) {
+      for (size_t i = 0; i < length; i++) {
         Operation::operate(*cell);
         cell++;
       }
     }    
 
   protected:
-    int rows;
-    int cols;
+    size_t rows;
+    size_t cols;
     std::shared_ptr<float_t[]> data;
 
     friend class impl::MultiThreaded;
@@ -144,7 +165,7 @@ class Matrix : public BaseMatrix {
     friend Matrix Pack(const std::vector<Matrix>& matrices);
     friend std::vector<Matrix> Unpack(
         const Matrix& matrix, 
-        const std::vector<std::pair<int, int>>& sizes);
+        const std::vector<std::pair<size_t, size_t>>& sizes);
     friend void SaveMtx(const char* fileName, const std::vector<Matrix>& mats);
 };
 

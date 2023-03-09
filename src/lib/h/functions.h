@@ -1,7 +1,7 @@
 #ifndef _MDL_MATH_MATRIX_FUNCTIONS
 #define _MDL_MATH_MATRIX_FUNCTIONS
 
-#include "float_t.h"
+#include "typedefs.h"
 #include "matrix.h"
 #include "slice.h"
 #include "basematrix_operator_overload.h"
@@ -52,7 +52,7 @@ namespace math {
   Matrix Pack(const std::vector<Matrix>& matrices);
   std::vector<Matrix> Unpack(
       const Matrix& matrix, 
-      const std::vector<std::pair<int, int>>& sizes);
+      const std::vector<std::pair<size_t, size_t>>& sizes);
 
   std::vector<Matrix> FromMtx(const char* fileName);
   void SaveMtx(const char* fileName, const Matrix& matrix);

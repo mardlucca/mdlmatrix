@@ -14,16 +14,16 @@ namespace impl {
   mdl::concurrent::ExecutorService executor(kNumKernels, factory);
 
   void Partition(
-      int numCells, 
-      std::function<std::function<int ()> (int, int)> dispatch, 
+      std::size_t numCells, 
+      std::function<std::function<int ()> (std::size_t, std::size_t)> dispatch, 
       int numKernels) {
-    int partitionSize = numCells / numKernels;
-    int mod = numCells % numKernels;
+    std::size_t partitionSize = numCells / numKernels;
+    size_t mod = numCells % numKernels;
 
     std::vector<mdl::concurrent::Future<int>> futures;
-    int left = 0;
+    std::size_t left = 0;
     while (left < numCells) {
-      int right = left + partitionSize + (mod > 0);
+      std::size_t right = left + partitionSize + (mod > 0);
       futures.push_back(executor.Submit(dispatch(left, right)));
       mod--;
       left = right;

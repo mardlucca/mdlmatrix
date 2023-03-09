@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "float_t.h"
+#include "typedefs.h"
 
 namespace mdl {
 namespace math {
@@ -12,12 +12,20 @@ namespace math {
 class BaseMatrix {
   public:
     virtual ~BaseMatrix();
+    virtual float_t& operator()(size_t row, size_t col) = 0;
+    virtual float_t operator()(size_t row, size_t col) const = 0;
+#ifdef _MDL_MATH_LARGE_MATRICES
+    virtual float_t& operator()(size_t row, int col) = 0;
+    virtual float_t operator()(size_t row, int col) const = 0;
+    virtual float_t& operator()(int row, size_t col) = 0;
+    virtual float_t operator()(int row, size_t col) const = 0;
     virtual float_t& operator()(int row, int col) = 0;
     virtual float_t operator()(int row, int col) const = 0;
-    virtual int NumRows() const = 0;
-    virtual int NumCols() const = 0;
+#endif
+    virtual size_t NumRows() const = 0;
+    virtual size_t NumCols() const = 0;
     virtual bool Equals(const BaseMatrix& other) const;
-    virtual void ForEach(std::function<void (int, int, float_t&)> fn);
+    virtual void ForEach(std::function<void (size_t, size_t, float_t&)> fn);
 
     static bool Equals(const BaseMatrix& matrix1, const BaseMatrix& matrix2);
   protected:

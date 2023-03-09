@@ -14,50 +14,50 @@ namespace math {
   std::mt19937 Matrices::gen(rd());
   std::uniform_real_distribution<float_t> Matrices::distribution;
 
-  Matrix Matrices::Identity(int length) {
+  Matrix Matrices::Identity(size_t length) {
     return Matrix(
       length, length, 
-      [](int row, int col) { return static_cast<float_t>(row == col); });
+      [](size_t row, size_t col) { return static_cast<float_t>(row == col); });
   }
 
-  Matrix Matrices::Ones(int rows, int cols) {
+  Matrix Matrices::Ones(size_t rows, size_t cols) {
     return Matrix(rows, cols,
-        [](int row, int col) { return 1.0; });
+        [](size_t row, size_t col) { return 1.0; });
   }
 
-  Matrix Matrices::Zeros(int rows, int cols) {
+  Matrix Matrices::Zeros(size_t rows, size_t cols) {
     return Matrix(rows, cols);
   }
 
-  Matrix Matrices::Random(int rows, int cols) {
+  Matrix Matrices::Random(size_t rows, size_t cols) {
     return Matrix(rows, cols,
-        [](int row, int col) { 
+        [](size_t row, size_t col) { 
           return Matrices::distribution(Matrices::rd); 
         });
   }
 
-  Matrix Matrices::Sequence(int rows, int cols, int length) {
+  Matrix Matrices::Sequence(size_t rows, size_t cols, size_t length) {
     return Sequence(rows, cols, Range(0, length));
   }
 
-  Matrix Matrices::Sequence(int rows, int cols, Range range) {
+  Matrix Matrices::Sequence(size_t rows, size_t cols, Range range) {
     return Matrix(rows, cols,
-        [cols, range](int row, int col) {
-          int index = row * cols + col;
+        [cols, range](size_t row, size_t col) {
+          size_t index = row * cols + col;
           return index < range.Length() ? range.Get(index) : 0; 
         });
   }  
 
-  Matrix Matrices::Default(int rows, int cols, float_t def) {
-    return Matrix(rows, cols, [def](int row, int col) { return def; });
+  Matrix Matrices::Default(size_t rows, size_t cols, float_t def) {
+    return Matrix(rows, cols, [def](size_t row, size_t col) { return def; });
   }
 
-  Matrix Matrices::WithValues(int cols, const std::vector<float_t>& values) {
-    int rows = (cols + values.size() - 1) / cols;
+  Matrix Matrices::WithValues(size_t cols, const std::vector<float_t>& values) {
+    size_t rows = (cols + values.size() - 1) / cols;
  
     return Matrix(rows, cols,
-        [cols, &values](int row, int col) {
-          int index = row * cols + col;
+        [cols, &values](size_t row, size_t col) {
+          size_t index = row * cols + col;
           return index < values.size() ? values[index] : 0; 
         });
   }
@@ -103,10 +103,10 @@ namespace math {
 
     private:
       Matrix matrix;
-      int line;
+      size_t line;
       bool ignoreFirstLine;
       std::vector<float_t> values;
-      int cols;
+      size_t cols;
 
       friend Matrix Matrices::FromCsv(const char*, bool);
       Matrix& GetMatrix() { return matrix; }

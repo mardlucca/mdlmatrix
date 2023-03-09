@@ -114,8 +114,8 @@ namespace math {
   }
 
   float_t DotProd(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {
-    int rows = matrix1.NumRows();
-    int cols = matrix1.NumCols();
+    size_t rows = matrix1.NumRows();
+    size_t cols = matrix1.NumCols();
     
     if (rows != matrix2.NumRows() || cols != matrix2.NumCols()) {
       std::ostringstream os;
@@ -126,8 +126,8 @@ namespace math {
     }
 
     float_t result = 0.0;
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < cols; col++) {
+    for (size_t row = 0; row < rows; row++) {
+      for (size_t col = 0; col < cols; col++) {
         result += matrix1(row, col) * matrix2(row, col);
       }
     }
@@ -161,7 +161,7 @@ namespace math {
   }
 
   Matrix Pack(const std::vector<Matrix>& matrices) {
-    int size = 0;
+    size_t size = 0;
     for (auto it = matrices.begin(); it != matrices.end(); it++) {
       size += it->NumRows() * it->NumCols();
     }
@@ -170,7 +170,7 @@ namespace math {
 
     float_t * runner = data;
     for (auto it = matrices.begin(); it != matrices.end(); it++) {
-      int numCells = it->NumRows() * it->NumCols();
+      size_t numCells = it->NumRows() * it->NumCols();
       std::memcpy(runner, it->data.get(), numCells * sizeof(float_t));
       runner += numCells;
     }
@@ -180,13 +180,13 @@ namespace math {
 
   std::vector<Matrix> Unpack(
       const Matrix& matrix, 
-      const std::vector<std::pair<int, int>>& sizes) {
+      const std::vector<std::pair<size_t, size_t>>& sizes) {
 
     std::vector<Matrix> matrices;
 
     float_t * runner = matrix.data.get();
     for (auto it = sizes.begin(); it != sizes.end(); it++) {
-      int numCells = it->first * it->second;
+      size_t numCells = it->first * it->second;
       float_t * data = new float_t[numCells];
       std::memcpy(data, runner, numCells * sizeof(float_t));
       matrices.push_back(Matrix(it->first, it->second, data));
@@ -225,7 +225,7 @@ namespace math {
 
         if (!in.eof()) {
           if (rows * cols > 0) {
-            std::unique_ptr<float_t> buffer(new float_t[rows * cols]);
+            std::unique_ptr<float_t> buffer(new float_t[((size_t) rows) * cols]);
             in.read(reinterpret_cast<char *>(buffer.get()), sizeof(float_t) * rows * cols);
             matrices.push_back(Matrix(rows, cols, buffer.release()));
           } else {
@@ -252,8 +252,10 @@ namespace math {
     out.write(reinterpret_cast<const char *>(&kMtxFileMark), sizeof(int));
 
     for (auto mat = mats.begin(); mat != mats.end(); mat++) {
-      out.write(reinterpret_cast<const char *>(&mat->rows), sizeof(int));
-      out.write(reinterpret_cast<const char *>(&mat->cols), sizeof(int));
+      int rows = mat->rows;
+      int cols = mat->cols;
+      out.write(reinterpret_cast<const char *>(&rows), sizeof(int));
+      out.write(reinterpret_cast<const char *>(&cols), sizeof(int));
       if (mat->rows * mat->cols > 0) {
         out.write(reinterpret_cast<const char *>(mat->data.get()), 
             sizeof(float_t) * mat->rows * mat->cols);

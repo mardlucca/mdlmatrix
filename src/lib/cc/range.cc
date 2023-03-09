@@ -14,33 +14,33 @@ namespace math {
   const RightRange Ranges::SKIP_FIRST = RightRange(1);
 
 
-  LeftRange::LeftRange(int end) : end(end) {}
+  LeftRange::LeftRange(size_t end) : end(end) {}
 
-  LeftRange LeftRange::FitToBounds(int max) const {
-    int newEnd = end < 0 ? 0 : end;
+  LeftRange LeftRange::FitToBounds(size_t max) const {
+    size_t newEnd = end < 0 ? 0 : end;
     return LeftRange(newEnd <= max ? newEnd : max);
   }
 
-  RightRange::RightRange(int start) : RightRange(start, start) {}
+  RightRange::RightRange(size_t start) : RightRange(start, start) {}
 
-  RightRange::RightRange(int start, int end) 
+  RightRange::RightRange(size_t start, size_t end) 
     : start(start), length(end - start) {}
 
-  RightRange RightRange::FitToBounds(int max) const {
-    int newStart = start < 0 ? 0 : start;
+  RightRange RightRange::FitToBounds(size_t max) const {
+    size_t newStart = start < 0 ? 0 : start;
     return RightRange(newStart > max ? max : newStart, max);
   }
 
 
-  UnitRange::UnitRange(int index) : index(index) {}
+  UnitRange::UnitRange(size_t index) : index(index) {}
 
-  UnitRange UnitRange::FitToBounds(int max) const {
-    int newIndex = index < 0 ? -1 : index;
+  UnitRange UnitRange::FitToBounds(size_t max) const {
+    size_t newIndex = index < 0 ? -1 : index;
     return UnitRange(newIndex >= max ? -1 : newIndex);
   }
 
 
-  Range::Range(int start, int end, int increment) : 
+  Range::Range(size_t start, size_t end, size_t increment) : 
       start(start), end(end), increment(increment) {
     if ((increment > 0 && start > end)
         || (increment < 0 && end > start)) {
@@ -50,15 +50,15 @@ namespace math {
     }
   }
 
-  Range Range::FitToBounds(int max) const {
-    int min = 0;
+  Range Range::FitToBounds(size_t max) const {
+    size_t min = 0;
     if (increment < 0) {
       max--;
       min--;
     }
 
-    int newStart = start < min ? min : start;
-    int newEnd = end < min ? min : end;
+    size_t newStart = start < min ? min : start;
+    size_t newEnd = end < min ? min : end;
     
     return Range(newStart > max ? max : newStart,
         newEnd > max ? max : newEnd, increment);

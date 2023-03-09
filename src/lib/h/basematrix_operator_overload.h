@@ -1,7 +1,7 @@
 #ifndef _MDL_MATH_BASESLICE_OPERATOR_OVERLOAD
 #define _MDL_MATH_BASESLICE_OPERATOR_OVERLOAD
 
-#include "float_t.h"
+#include "typedefs.h"
 #include "matrix.h"
 
 namespace mdl {

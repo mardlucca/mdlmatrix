@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-#include "float_t.h"
+#include "typedefs.h"
 
 namespace mdl {
 namespace math {

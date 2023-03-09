@@ -4,7 +4,7 @@
 #include <exception>
 #include <sstream>
 
-#include "float_t.h"
+#include "typedefs.h"
 #include "matrix.h"
 
 namespace mdl {
@@ -12,12 +12,12 @@ namespace math {
 
   template <typename Operation>
   Matrix Operate(float_t scalar, const BaseMatrix& matrix) {
-    int rows = matrix.NumRows();
-    int cols = matrix.NumCols();
+    size_t rows = matrix.NumRows();
+    size_t cols = matrix.NumCols();
     Matrix result(rows, cols);
 
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < cols; col++) {
+    for (size_t row = 0; row < rows; row++) {
+      for (size_t col = 0; col < cols; col++) {
         Operation::operate(scalar, matrix(row, col), result(row, col));
       }
     }
@@ -27,12 +27,12 @@ namespace math {
 
   template <typename Operation>
   Matrix Operate(const BaseMatrix& matrix, float_t scalar) {
-    int rows = matrix.NumRows();
-    int cols = matrix.NumCols();
+    size_t rows = matrix.NumRows();
+    size_t cols = matrix.NumCols();
     Matrix result(rows, cols);
 
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < cols; col++) {
+    for (size_t row = 0; row < rows; row++) {
+      for (size_t col = 0; col < cols; col++) {
         Operation::operate(matrix(row, col), scalar, result(row, col));
       }
     }
@@ -44,10 +44,10 @@ namespace math {
   Matrix Operate(
       const BaseMatrix& matrix1, 
       const BaseMatrix& matrix2) {
-    int rows1 = matrix1.NumRows();
-    int cols1 = matrix1.NumCols();
-    int rows2 = matrix2.NumRows();
-    int cols2 = matrix2.NumCols();
+    size_t rows1 = matrix1.NumRows();
+    size_t cols1 = matrix1.NumCols();
+    size_t rows2 = matrix2.NumRows();
+    size_t cols2 = matrix2.NumCols();
 
     if ((rows1 == rows2 && 
             (cols1 == cols2 || cols1 == 1 || cols2 == 1))
@@ -56,14 +56,14 @@ namespace math {
         || (rows1 == 1 && cols1 == 1)
         || (rows2 == 1 && cols2 == 1)) {
 
-      int rows = std::max(rows1, rows2);
-      int cols = std::max(cols1, cols2);
+      size_t rows = std::max(rows1, rows2);
+      size_t cols = std::max(cols1, cols2);
       Matrix result(rows, cols);
 
       rows1--; cols1--; rows2--; cols2--;
 
-      for (int row = 0; row < rows; row++) {
-        for (int col = 0; col < cols; col++) {
+      for (size_t row = 0; row < rows; row++) {
+        for (size_t col = 0; col < cols; col++) {
           Operation::operate(
               matrix1(row <= rows1 ? row : rows1, col <= cols1 ? col : cols1), 
               matrix2(row <= rows2 ? row : rows2, col <= cols2 ? col : cols2), 
@@ -82,12 +82,12 @@ namespace math {
 
   template <typename Operation>
   Matrix UnaryOperate(const BaseMatrix& matrix) {
-    int rows = matrix.NumRows();
-    int cols = matrix.NumCols();
+    size_t rows = matrix.NumRows();
+    size_t cols = matrix.NumCols();
     Matrix result(rows, cols);
 
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < cols; col++) {
+    for (size_t row = 0; row < rows; row++) {
+      for (size_t col = 0; col < cols; col++) {
         Operation::operate(matrix(row, col), result(row, col));
       }
     }
@@ -100,13 +100,13 @@ namespace math {
     Matrix result(
         matrix.NumRows(), 
         1, 
-        [initialValue] (int row, int col) { return initialValue; });
+        [initialValue] (size_t row, size_t col) { return initialValue; });
 
-    int rows = matrix.NumRows();
-    int cols = matrix.NumCols();
+    size_t rows = matrix.NumRows();
+    size_t cols = matrix.NumCols();
 
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < cols; col++) {
+    for (size_t row = 0; row < rows; row++) {
+      for (size_t col = 0; col < cols; col++) {
         Operation::operate(result(row, 0), matrix(row, col));
       }
     }
@@ -118,13 +118,13 @@ namespace math {
   Matrix ColReduce(const BaseMatrix& matrix, float_t initialValue = 0.0) {
     Matrix result(1, 
         matrix.NumCols(), 
-        [initialValue] (int row, int col) { return initialValue; });
+        [initialValue] (size_t row, size_t col) { return initialValue; });
 
-    int rows = matrix.NumRows();
-    int cols = matrix.NumCols();
+    size_t rows = matrix.NumRows();
+    size_t cols = matrix.NumCols();
 
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < cols; col++) {
+    for (size_t row = 0; row < rows; row++) {
+      for (size_t col = 0; col < cols; col++) {
         Operation::operate(result(0, col), matrix(row, col));
       }
     }

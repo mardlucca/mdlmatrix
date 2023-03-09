@@ -67,13 +67,13 @@ int main() {
 
   //     kernel void Mult(constant float* m1 [[buffer(0)]],
   //                      constant float* m2 [[buffer(1)]],
-  //                      constant int& cols  [[buffer(2)]],
+  //                      constant size_t& cols  [[buffer(2)]],
   //                      device float* out [[buffer(3)]],
   //                      uint2 index [[ thread_position_in_grid ]],
   //                      uint2 gridSize [[ threads_per_grid ]]) {
   //       float sum = 0.0;
-  //       for (int col = 0; col < cols; col++) {
-  //         int idx = index.y * cols + col;
+  //       for (size_t col = 0; col < cols; col++) {
+  //         size_t idx = index.y * cols + col;
   //         sum += m1[idx] * m2[idx];
   //       }
   //       out[index.y * gridSize.x + index.x] = sum;
@@ -93,7 +93,7 @@ int main() {
 
   //   mdl::compute::MetalComputeEngine engine;
   //   engine.LoadLibrary(shader);
-  //   const int kSize = 2000;
+  //   const size_t kSize = 2000;
 
   //   float * m1 = Sequence(kSize, kSize);
   //   // float * m2 = Sequence(kSize, kSize, 20.0);

@@ -19,9 +19,9 @@ namespace math {
 
       MatrixOperateTestSuite() 
           : matrix(Matrix(4,3)), vector(Matrix(1,3)), colVector(Matrix(4,1)) {
-        int count = 0;
-        for (int row = 0; row < matrix.NumRows(); row++) {
-          for (int col = 0; col < matrix.NumCols(); col++) {
+        size_t count = 0;
+        for (size_t row = 0; row < matrix.NumRows(); row++) {
+          for (size_t col = 0; col < matrix.NumCols(); col++) {
             matrix(row, col) = ++count;
           }
         }
@@ -37,8 +37,8 @@ namespace math {
     Matrix result = Operate<op::Addition>(matrix, 20);
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col) + 20, result(row, col));
       }
     }
@@ -49,8 +49,8 @@ namespace math {
     ASSERT_EQ(matrix.NumRows() / 2, result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
 
-    for (int row = 0; row < result.NumRows(); row++) {
-      for (int col = 0; col < result.NumCols(); col++) {
+    for (size_t row = 0; row < result.NumRows(); row++) {
+      for (size_t col = 0; col < result.NumCols(); col++) {
         ASSERT_EQ(matrix(row * 2, col) + 20, result(row, col));
       }
     }
@@ -60,8 +60,8 @@ namespace math {
     Matrix result = Operate<op::Addition>(matrix().Transpose(), 20);
     ASSERT_EQ(matrix.NumCols(), result.NumRows());
     ASSERT_EQ(matrix.NumRows(), result.NumCols());
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col) + 20, result(col, row));
       }
     }
@@ -71,8 +71,8 @@ namespace math {
     Matrix result = Operate<op::Addition>(21, matrix);
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col) + 21, result(row, col));
       }
     }
@@ -83,8 +83,8 @@ namespace math {
     ASSERT_EQ(matrix.NumRows() / 2, result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
 
-    for (int row = 0; row < result.NumRows(); row++) {
-      for (int col = 0; col < result.NumCols(); col++) {
+    for (size_t row = 0; row < result.NumRows(); row++) {
+      for (size_t col = 0; col < result.NumCols(); col++) {
         ASSERT_EQ(matrix(row * 2, col) + 21, result(row, col));
       }
     }
@@ -94,8 +94,8 @@ namespace math {
     Matrix result = Operate<op::Addition>(21, matrix().Transpose());
     ASSERT_EQ(matrix.NumCols(), result.NumRows());
     ASSERT_EQ(matrix.NumRows(), result.NumCols());
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col) + 21, result(col, row));
       }
     }
@@ -106,8 +106,8 @@ namespace math {
     result.ReflexiveOperate<op::Addition>(20);
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col) + 20, result(row, col));
       }
     }
@@ -119,8 +119,8 @@ namespace math {
     slice.ReflexiveOperate<op::Addition>(20);
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         if (row % 2 == 0) {
           ASSERT_EQ(matrix(row, col) + 20, result(row, col));
         } else {
@@ -137,8 +137,8 @@ namespace math {
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col) + 20, result(row, col));
       }
     }
@@ -148,8 +148,8 @@ namespace math {
     Matrix result = UnaryOperate<op::Negate>(matrix);
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(-matrix(row, col), result(row, col));
       }
     }
@@ -160,8 +160,8 @@ namespace math {
     ASSERT_EQ(matrix.NumRows() / 2, result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
 
-    for (int row = 0; row < result.NumRows(); row++) {
-      for (int col = 0; col < result.NumCols(); col++) {
+    for (size_t row = 0; row < result.NumRows(); row++) {
+      for (size_t col = 0; col < result.NumCols(); col++) {
         ASSERT_EQ(-matrix(row * 2, col), result(row, col));
       }
     }
@@ -171,8 +171,8 @@ namespace math {
     Matrix result = UnaryOperate<op::Negate>(matrix().Transpose());
     ASSERT_EQ(matrix.NumRows(), result.NumCols());
     ASSERT_EQ(matrix.NumCols(), result.NumRows());
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(-matrix(row, col), result(col, row));
       }
     }
@@ -184,8 +184,8 @@ namespace math {
     result.ReflexiveUnaryOperate<op::Negate>();
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(-matrix(row, col), result(row, col));
       }
     }
@@ -197,8 +197,8 @@ namespace math {
     slice.ReflexiveUnaryOperate<op::Negate>();
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         if (row % 2 == 0) {
           ASSERT_EQ(-matrix(row, col), result(row, col));
         } else {
@@ -214,8 +214,8 @@ namespace math {
     tranposed.ReflexiveUnaryOperate<op::Negate>();
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(-matrix(row, col), result(row, col));
       }
     }
@@ -226,8 +226,8 @@ namespace math {
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(2 * matrix(row, col), result(row, col));
       }
     }
@@ -242,8 +242,8 @@ namespace math {
 
     cout << result << endl; 
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col) + vector(0, col), result(row, col));
       }
     }
@@ -257,8 +257,8 @@ namespace math {
 
     cout << result << endl; 
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col) + vector(0, col), result(row, col));
       }
     }
@@ -272,8 +272,8 @@ namespace math {
 
     cout << result << endl; 
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col) + colVector(row, 0), result(row, col));
       }
     }
@@ -287,8 +287,8 @@ namespace math {
 
     cout << result << endl; 
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col) + colVector(row, 0), result(row, col));
       }
     }
@@ -303,8 +303,8 @@ namespace math {
 
     cout << result << endl; 
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col) + matrix(0,0), result(row, col));
       }
     }
@@ -319,8 +319,8 @@ namespace math {
 
     cout << result << endl; 
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col) + matrix(0,0), result(row, col));
       }
     }
@@ -332,8 +332,8 @@ namespace math {
     ASSERT_EQ(1, result.NumRows());
     ASSERT_EQ(vector.NumCols(), result.NumCols());
 
-    for (int row = 0; row < vector.NumRows(); row++) {
-      for (int col = 0; col < vector.NumCols(); col++) {
+    for (size_t row = 0; row < vector.NumRows(); row++) {
+      for (size_t col = 0; col < vector.NumCols(); col++) {
         ASSERT_EQ(matrix(1, col) + vector(0, col), result(row, col));
       }
     }
@@ -345,8 +345,8 @@ namespace math {
     ASSERT_EQ(1, result.NumRows());
     ASSERT_EQ(vector.NumCols(), result.NumCols());
 
-    for (int row = 0; row < vector.NumRows(); row++) {
-      for (int col = 0; col < vector.NumCols(); col++) {
+    for (size_t row = 0; row < vector.NumRows(); row++) {
+      for (size_t col = 0; col < vector.NumCols(); col++) {
         ASSERT_EQ(matrix(1, col) + vector(0, col), result(row, col));
       }
     }
@@ -358,8 +358,8 @@ namespace math {
     ASSERT_EQ(1, result.NumRows());
     ASSERT_EQ(vector.NumCols(), result.NumCols());
 
-    for (int row = 0; row < vector.NumRows(); row++) {
-      for (int col = 0; col < vector.NumCols(); col++) {
+    for (size_t row = 0; row < vector.NumRows(); row++) {
+      for (size_t col = 0; col < vector.NumCols(); col++) {
         ASSERT_EQ(matrix(1, 0) + vector(0, col), result(row, col));
       }
     }
@@ -371,8 +371,8 @@ namespace math {
     ASSERT_EQ(1, result.NumRows());
     ASSERT_EQ(vector.NumCols(), result.NumCols());
 
-    for (int row = 0; row < vector.NumRows(); row++) {
-      for (int col = 0; col < vector.NumCols(); col++) {
+    for (size_t row = 0; row < vector.NumRows(); row++) {
+      for (size_t col = 0; col < vector.NumCols(); col++) {
         ASSERT_EQ(matrix(1, 0) + vector(0, col), result(row, col));
       }
     }
@@ -384,8 +384,8 @@ namespace math {
     ASSERT_EQ(colVector.NumRows(), result.NumRows());
     ASSERT_EQ(1, result.NumCols());
 
-    for (int row = 0; row < colVector.NumRows(); row++) {
-      for (int col = 0; col < colVector.NumCols(); col++) {
+    for (size_t row = 0; row < colVector.NumRows(); row++) {
+      for (size_t col = 0; col < colVector.NumCols(); col++) {
         ASSERT_EQ(matrix(row, 1) + colVector(row, 0), result(row, col));
       }
     }
@@ -397,8 +397,8 @@ namespace math {
     ASSERT_EQ(colVector.NumRows(), result.NumRows());
     ASSERT_EQ(1, result.NumCols());
 
-    for (int row = 0; row < colVector.NumRows(); row++) {
-      for (int col = 0; col < colVector.NumCols(); col++) {
+    for (size_t row = 0; row < colVector.NumRows(); row++) {
+      for (size_t col = 0; col < colVector.NumCols(); col++) {
         ASSERT_EQ(matrix(row, 1) + colVector(row, 0), result(row, col));
       }
     }
@@ -450,8 +450,8 @@ namespace math {
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(2 * matrix(row, col), result(row, col));
       }
     }
@@ -463,8 +463,8 @@ namespace math {
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col), result(row, col) - vector(0, col));
       }
     }
@@ -476,8 +476,8 @@ namespace math {
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col), result(row, col) - colVector(row, 0));
       }
     }
@@ -489,8 +489,8 @@ namespace math {
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         ASSERT_EQ(matrix(row, col), result(row, col) - matrix(1, 1));
       }
     }
@@ -503,8 +503,8 @@ namespace math {
     ASSERT_EQ(1, result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         if (row == 0) {
           ASSERT_EQ(original(row, col), matrix(row, col) - vector(0, col));
         } else {
@@ -521,8 +521,8 @@ namespace math {
     ASSERT_EQ(original.NumRows(), result.NumRows());
     ASSERT_EQ(1, result.NumCols());
 
-    for (int row = 0; row < matrix.NumRows(); row++) {
-      for (int col = 0; col < matrix.NumCols(); col++) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
         if (col == 0) {
           ASSERT_EQ(original(row, col), matrix(row, col) - colVector(row, 0));
         } else {
@@ -536,8 +536,8 @@ namespace math {
     Matrix original = vector;
     vector.ReflexiveOperate<op::Addition>(vector);
 
-    for (int row = 0; row < vector.NumRows(); row++) {
-      for (int col = 0; col < vector.NumCols(); col++) {
+    for (size_t row = 0; row < vector.NumRows(); row++) {
+      for (size_t col = 0; col < vector.NumCols(); col++) {
         ASSERT_EQ(2 * original(row, col), vector(row, col));
       }
     }
@@ -547,8 +547,8 @@ namespace math {
     Matrix original = colVector;
     colVector.ReflexiveOperate<op::Addition>(colVector);
 
-    for (int row = 0; row < colVector.NumRows(); row++) {
-      for (int col = 0; col < colVector.NumCols(); col++) {
+    for (size_t row = 0; row < colVector.NumRows(); row++) {
+      for (size_t col = 0; col < colVector.NumCols(); col++) {
         ASSERT_EQ(2 * original(row, col), colVector(row, col));
       }
     }
