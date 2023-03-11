@@ -33,5 +33,6 @@
 #include "src/lib/h/basematrix_operator_overload.h"
 #include "src/lib/h/matrix_operator_overload.h"
 #include "src/lib/h/functions.h"
+#include "src/lib/h/metal/engine.h"
 
 #endif // _MDL_MATRIX

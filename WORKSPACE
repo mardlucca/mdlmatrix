@@ -38,11 +38,22 @@ git_repository(
   shallow_since = "1677633385 -0500"
 )
 
+local_repository(
+    name = "mdl_compute",
+    path = "../mdlcompute",
+)
+
 http_archive(
   name = "com_google_googletest",
   urls = ["https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip"],
   strip_prefix = "googletest-609281088cfefc76f9d0ce82e1ff6c30cc3591e5",
   sha256 = "5cf189eb6847b4f8fc603a3ffff3b0771c08eec7dd4bd961bfd45477dd13eb73",
+)
+
+http_archive(
+  name = "metal-cpp",
+  urls = ["https://github.com/mardlucca/thirdparty-libs/raw/master/cpp/macos/metal-cpp_macOS12_iOS15.zip"],
+  sha256 = "0648fc6f60d037c241e50c908e0bd2984f904c3202b56d8924c181c31075b453"
 )
 
 local_repository(

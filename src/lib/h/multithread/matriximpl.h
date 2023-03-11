@@ -1,5 +1,5 @@
-#ifndef _MDL_MATH_IMPL_MULTI_THREAD
-#define _MDL_MATH_IMPL_MULTI_THREAD
+#ifndef _MDL_MATH_MULTI_THREAD_MATRIXIMPL
+#define _MDL_MATH_MULTI_THREAD_MATRIXIMPL
 
 #include <mdl/concurrent.h>
 #include <mdl/profiler.h>
@@ -7,19 +7,13 @@
 #include <vector>
 
 #include "../matrix.h"
+#include "../../h/multithread/helper.h"
 
 namespace mdl {
 namespace math {
-namespace impl {
-  extern const int kNumKernels;
+namespace multithread {
 
-  // Lamba takes Matrix, start index and final index
-  void Partition(
-      size_t numCells, 
-      std::function<std::function<int ()> (size_t, size_t)> dispatch, 
-      int numKernels = kNumKernels);
-
-  class MultiThreaded {
+  class MatrixImpl {
     public:
 
       inline static Matrix Transpose(const Matrix& matrix) {
@@ -52,8 +46,8 @@ namespace impl {
         return Matrix(cols, rows, ddata);
       }
   };
-} // namespace impl
+} // namespace multithread
 } // namespace math
 } // namespace mdl
 
-#endif // _MDL_MATH_IMPL_SINGLE_THREAD
+#endif // _MDL_MATH_MULTI_THREAD_MATRIX

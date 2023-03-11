@@ -16,7 +16,10 @@ namespace math {
 
     for (size_t row = 0; row < rows; row++) {
       for (size_t col = 0; col < cols; col++) {
-        if ((*this)(row, col) != other(row, col)) { return false; }
+      float_t diff = std::abs((*this)(row, col) - other(row, col));
+        if (diff > kFloatPrecision) {
+          return false;
+        }
       }
     }
 

@@ -1,6 +1,7 @@
 #include "../h/matrix.h"
-#include "../h/impl/multi_thread.h"
-#include "../h/impl/single_thread.h"
+#include "../h/metal/matriximpl.h"
+#include "../h/multithread/matriximpl.h"
+#include "../h/singlethread/matriximpl.h"
 
 #include <mdl/profiler.h>
 
@@ -150,7 +151,7 @@ namespace math {
   }
 
   Matrix Matrix::Transpose() const {
-    return impl::MultiThreaded::Transpose(*this);
+    return metal::MatrixImpl::Transpose(*this);
   }
 } // math
 } // mdl

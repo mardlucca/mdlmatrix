@@ -34,6 +34,7 @@
 namespace mdl {
 namespace math {
 
+#define _MDL_MATH_SINGLE_PRECISION
 #ifdef _MDL_MATH_SINGLE_PRECISION
   typedef float float_t;
   constexpr float_t kFloatPrecision = 1e-7;

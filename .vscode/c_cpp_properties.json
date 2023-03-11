@@ -33,7 +33,10 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "bazel-${workspaceFolderBasename}/external/com_google_googletest/googletest/include/**",
-                "bazel-${workspaceFolderBasename}/external/mdl_common/**"
+                "bazel-${workspaceFolderBasename}/external/mdl_common/**",
+                "bazel-${workspaceFolderBasename}/external/mdl_prof/**",
+                "bazel-${workspaceFolderBasename}/external/mdl_compute/**",
+                "/private/var/tmp/_bazel_mlucca/2b5ab04eee47efefa330c609d9ce4a27/external/metal-cpp/metal-cpp/**"
             ],
             "defines": [],
             "macFrameworkPath": [

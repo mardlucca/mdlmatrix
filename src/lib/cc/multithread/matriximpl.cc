@@ -1,4 +1,5 @@
-#include "../../h/impl/multi_thread.h"
+#include "../../h/multithread/helper.h"
+
 
 #include <mdl/concurrent.h>
 #include <mdl/matrix.h>
@@ -7,7 +8,7 @@
 
 namespace mdl {
 namespace math {
-namespace impl {
+namespace multithread {
 
   const int kNumKernels = 6;
   mdl::concurrent::ThreadFactory factory("yo");
@@ -35,6 +36,6 @@ namespace impl {
     }
   }
 
-} // namespace impl
+} // namespace multithread
 } // namespace math
 } // namespace mdl

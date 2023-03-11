@@ -52,11 +52,11 @@ namespace math {
   }
 
   TEST_F(MatrixTestSuite, TestForEach) {
-    matrix.ForEach([](size_t row, size_t col, double& val) {
+    matrix.ForEach([](size_t row, size_t col, float_t& val) {
       val = -val;
     });
     size_t count = 0;
-    matrix.ForEach([&count](size_t row, size_t col, double& val) {
+    matrix.ForEach([&count](size_t row, size_t col, float_t& val) {
       ASSERT_TRUE(val < 0);
       count++;
     });

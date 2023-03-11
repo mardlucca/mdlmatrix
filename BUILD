@@ -40,6 +40,7 @@ cc_library(
   visibility = ["//visibility:public"],
   deps = [
     "@mdl_common//:lib",
+    "@mdl_compute//:lib",
     "@mdl_prof//:lib"
   ]
 )

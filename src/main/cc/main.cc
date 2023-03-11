@@ -37,6 +37,12 @@ namespace mdl {
   using mdl::math::float_t;
 
   void doTransposeTest() {
+    std::cout << "Loading Metal..." << std::endl;
+    {
+      auto g = profiler::probe("Loading metal...");
+      math::metal::Engine::Init();
+    }
+
     std::cout << "Loading up data..." << std::endl;
     Matrix examples;
     {
@@ -44,12 +50,16 @@ namespace mdl {
       examples = FromMtx(
           "../mdlml/src/test/resources/CharacterData.mtx")[0];
     }
-    examples = examples | examples;
+
     std::cout << "Loaded data: " << examples.NumRows() << 'x' << examples.NumCols() << std::endl;
     std::cout << "Transposing..." << std::endl;
-    for (long i = 0; i < 500; i++) {
+    Matrix transp = examples.Transpose();
+    for (long i = 0; i < 100; i++) {
       auto g = profiler::probe("Transpose loop");
       Matrix m = examples.Transpose();
+      if (!m.Equals(transp)) {
+        std::cout << "Different" << std::endl;
+      }
     }
   }
 }
@@ -60,61 +70,3 @@ int main() {
   mdl::profiler::save(out);
   return 0;
 }
-
-  // const char * shader = R"(
-  //     #include <metal_stdlib>
-  //     using namespace metal;
-
-  //     kernel void Mult(constant float* m1 [[buffer(0)]],
-  //                      constant float* m2 [[buffer(1)]],
-  //                      constant size_t& cols  [[buffer(2)]],
-  //                      device float* out [[buffer(3)]],
-  //                      uint2 index [[ thread_position_in_grid ]],
-  //                      uint2 gridSize [[ threads_per_grid ]]) {
-  //       float sum = 0.0;
-  //       for (size_t col = 0; col < cols; col++) {
-  //         size_t idx = index.y * cols + col;
-  //         sum += m1[idx] * m2[idx];
-  //       }
-  //       out[index.y * gridSize.x + index.x] = sum;
-  //     }
-
-  //     kernel void Sum(device float* vector [[buffer(0)]],
-  //              constant float& scalar [[buffer(1)]],
-  //              uint index [[ thread_position_in_grid ]]) {
-  //       vector[index] += scalar;
-  //     }
-  // )";
-
-  // TEST(MetaldMatrixOpsTestSuite, TestMult) {
-  //   using mdl::compute::in;
-  //   using mdl::compute::out;
-  //   using mdl::compute::inout;
-
-  //   mdl::compute::MetalComputeEngine engine;
-  //   engine.LoadLibrary(shader);
-  //   const size_t kSize = 2000;
-
-  //   float * m1 = Sequence(kSize, kSize);
-  //   // float * m2 = Sequence(kSize, kSize, 20.0);
-  //   // float * m3 = new float[kSize*kSize];
-
-  //   auto start = mdl::util::Now();
-
-  //   for (size_t i = 0; i < 1; i++)
-  //   {
-  //     engine.NewBatch()
-  //         .WithGrid(1, kSize * kSize, 1, 64)
-  //         // .Call("Mult", in(m1, kSize*kSize), in(m2, kSize*kSize), in(kSize), out(m3, kSize*kSize))
-  //         .Call("Sum", inout(m1, kSize*kSize), 2.0)
-  //         .Dispatch().Wait();
-  //   }
-  //   auto end = mdl::util::Now();
-
-  //   cout << "Ellapsed: " << mdl::util::EllapsedTime(start, end) << endl;
-
-
-  //   delete[] m1;
-  //   // delete[] m2;
-  //   // delete[] m3;
-  // }

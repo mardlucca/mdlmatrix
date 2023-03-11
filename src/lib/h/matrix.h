@@ -13,9 +13,14 @@
 namespace mdl {
 namespace math {
 
-namespace impl {
-  class SingleThreaded;
-  class MultiThreaded;
+namespace metal {
+  class MatrixImpl;
+}
+namespace multithread {
+  class MatrixImpl;
+}
+namespace singlethread {
+  class MatrixImpl;
 }
 
 class Matrix : public BaseMatrix {
@@ -158,8 +163,9 @@ class Matrix : public BaseMatrix {
     size_t cols;
     std::shared_ptr<float_t[]> data;
 
-    friend class impl::MultiThreaded;
-    friend class impl::SingleThreaded;
+    friend class metal::MatrixImpl;
+    friend class multithread::MatrixImpl;
+    friend class singlethread::MatrixImpl;
     friend Matrix operator*(const Matrix& matrix1, const Matrix& matrix2);
 
     friend Matrix Pack(const std::vector<Matrix>& matrices);
