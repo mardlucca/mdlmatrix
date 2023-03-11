@@ -7,7 +7,7 @@
 
 namespace mdl {
 namespace math {
-namespace impl {
+namespace multithread {
 
   const int kNumKernels = 8;
   mdl::concurrent::ThreadFactory factory("yo");
@@ -35,6 +35,6 @@ namespace impl {
     }
   }
 
-} // namespace impl
+} // namespace multithread
 } // namespace math
 } // namespace mdl

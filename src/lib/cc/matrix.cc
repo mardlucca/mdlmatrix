@@ -151,7 +151,7 @@ namespace math {
   }
 
   Matrix Matrix::Transpose() const {
-    return metal::MatrixImpl::Transpose(*this);
+    return multithread::MatrixImpl::Transpose(*this);
   }
 } // math
 } // mdl
