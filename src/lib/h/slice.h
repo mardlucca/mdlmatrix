@@ -9,11 +9,11 @@
 #include "range.h"
 #include "accessor.h"
 #include "operation.h"
-
+#include "singlethread/basematrix_reflexive_impl.h"
 
 namespace mdl {
 namespace math {
-
+  using singlethread::BaseMatrixReflexiveImpl;
   using std::cout;
   using std::endl;
 
@@ -114,65 +114,65 @@ namespace math {
 
       template<typename RR, typename CR, typename AC>
       Slice& operator+=(const Slice<RR, CR, AC>& other) {
-        ReflexiveOperate<op::Addition>(other);
+        BaseMatrixReflexiveImpl::ReflexiveOperate<op::Addition>(this, other);
         return *this;
       }
       
       Slice& operator+=(const BaseMatrix& other) {
-        ReflexiveOperate<op::Addition>(other);
+        BaseMatrixReflexiveImpl::ReflexiveOperate<op::Addition>(this, other);
         return *this;
       }
 
       Slice& operator+=(float_t scalar) {
-        ReflexiveOperate<op::Addition>(scalar);
+        BaseMatrixReflexiveImpl::ReflexiveOperate<op::Addition>(this, scalar);
         return *this;
       }
 
       template<typename RR, typename CR, typename AC>
       Slice& operator-=(const Slice<RR, CR, AC>& other) {
-        ReflexiveOperate<op::Subtraction>(other);
+        BaseMatrixReflexiveImpl::ReflexiveOperate<op::Subtraction>(this, other);
         return *this;
       }
       
       Slice& operator-=(const BaseMatrix& other) {
-        ReflexiveOperate<op::Subtraction>(other);
+        BaseMatrixReflexiveImpl::ReflexiveOperate<op::Subtraction>(this, other);
         return *this;
       }
 
       Slice& operator-=(float_t scalar) {
-        ReflexiveOperate<op::Subtraction>(scalar);
+        BaseMatrixReflexiveImpl::ReflexiveOperate<op::Subtraction>(this, scalar);
         return *this;
       }
 
       template<typename RR, typename CR, typename AC>
       Slice& operator*=(const Slice<RR, CR, AC>& other) {
-        ReflexiveOperate<op::Multiplication>(other);
+        BaseMatrixReflexiveImpl::ReflexiveOperate<op::Multiplication>(this, other);
         return *this;
       }
 
       Slice& operator*=(const BaseMatrix& other) {
-        ReflexiveOperate<op::Multiplication>(other);
+        BaseMatrixReflexiveImpl::ReflexiveOperate<op::Multiplication>(this, other);
         return *this;
       }
 
       Slice& operator*=(float_t scalar) {
-        ReflexiveOperate<op::Multiplication>(scalar);
+        BaseMatrixReflexiveImpl::ReflexiveOperate<op::Multiplication>(this, scalar);
         return *this;
       }
 
       template<typename RR, typename CR, typename AC>
       Slice& operator/=(const Slice<RR, CR, AC>& other) {
-        ReflexiveOperate<op::Division>(other);
+        BaseMatrixReflexiveImpl::ReflexiveOperate<op::Division>(this, other);
         return *this;
       }
 
       Slice& operator/=(const BaseMatrix& other) {
-        ReflexiveOperate<op::Division>(other);
+        BaseMatrixReflexiveImpl::ReflexiveOperate<op::Division>(this, other);
         return *this;
       }
       
       Slice& operator/=(float_t scalar) {
-        ReflexiveOperate<op::Division>(scalar);
+        BaseMatrixReflexiveImpl::ReflexiveOperate<op::Division>(this, scalar);
         return *this;
       }
       
@@ -181,56 +181,6 @@ namespace math {
 
       Slice<RowRange, ColRange, typename Accessor::transposedType> Transpose() {
         return Slice<RowRange, ColRange, typename Accessor::transposedType>(std::move(*this));
-      }
-
-      template <typename Operation>
-      void ReflexiveOperate(float_t scalar) {
-        size_t rows = NumRows();
-        size_t cols = NumCols();
-
-        for (size_t row = 0; row < rows; row++) {
-          for (size_t col = 0; col < cols; col++) {
-            Operation::operate((*this)(row, col), scalar);
-          }
-        }
-      }
-
-      template <typename Operation>
-      void ReflexiveOperate(const BaseMatrix& other) {
-        size_t rows1 = NumRows();
-        size_t cols1 = NumCols();
-        size_t rows2 = other.NumRows();
-        size_t cols2 = other.NumCols();
-
-        if ((rows1 == rows2 && (cols1 == cols2 || cols2 == 1))
-            || (cols1 == cols2 && rows2 == 1)
-            || (rows2 == 1 && cols2 == 1)) {
-
-          for (size_t row = 0; row < rows1; row++) {
-            for (size_t col = 0; col < cols1; col++) {
-              Operation::operate(
-                  (*this)(row, col), 
-                  other(rows2 == 1 ? 0 : row, cols2 == 1 ? 0 : col));
-            }
-          }
-        } else {
-          std::ostringstream os;
-          os << "Cannot operate on matrices of different dimensions: " << rows1 << 'x' << cols1
-              << " and " << rows2 << 'x' << cols2;
-          throw std::invalid_argument(os.str());
-        }
-      }
-
-      template <typename Operation>
-      void ReflexiveUnaryOperate() {
-        size_t rows = NumRows();
-        size_t cols = NumCols();
-
-        for (size_t row = 0; row < rows; row++) {
-          for (size_t col = 0; col < cols; col++) {
-            Operation::operate((*this)(row, col));
-          }
-        }
       }
 
     protected:

@@ -15,12 +15,15 @@ namespace math {
 
 namespace metal {
   class MatrixImpl;
+  class MatrixReflexiveImpl;
 }
 namespace multithread {
   class MatrixImpl;
+  class MatrixReflexiveImpl;
 }
 namespace singlethread {
   class MatrixImpl;
+  class MatrixReflexiveImpl;
 }
 
 class Matrix : public BaseMatrix {
@@ -111,53 +114,6 @@ class Matrix : public BaseMatrix {
     
     std::ostream& operator<<(std::ostream& os);
 
-    template <typename Operation> 
-    void ReflexiveOperate(float_t scalar) {
-      size_t length = rows * cols;
-      float_t * cell = data.get();
-      for (size_t i = 0; i < length; i++) {
-        Operation::operate(*cell, scalar);
-        cell++;
-      }
-    }
-
-    template <typename Operation>
-    void ReflexiveOperate(const Matrix& other) {
-      size_t rows2 = other.rows;
-      size_t cols2 = other.cols;
-
-      if ((rows == rows2 && (cols == cols2 || cols2 == 1))
-          || (cols == cols2 && rows2 == 1)
-          || (rows2 == 1 && cols2 == 1)) {
-
-
-        float_t * thisBuffer = data.get();
-        float_t * otherBuffer = other.data.get();
-        for (size_t row = 0; row < rows; row++) {
-          for (size_t col = 0; col < cols; col++) {
-            Operation::operate(
-                thisBuffer[row * cols + col], 
-                otherBuffer[(rows2 == 1 ? 0 : row) * cols2 + (cols2 == 1 ? 0 : col)]);
-          }
-        }
-      } else {
-        std::ostringstream os;
-        os << "Cannot operate on matrices of different dimensions: " << rows << 'x' << cols
-            << " and " << rows2 << 'x' << cols2;
-        throw std::invalid_argument(os.str());
-      }
-    }
-
-    template <typename Operation>
-    void ReflexiveUnaryOperate() {
-      size_t length = rows * cols;
-      float_t * cell = data.get();
-      for (size_t i = 0; i < length; i++) {
-        Operation::operate(*cell);
-        cell++;
-      }
-    }    
-
   protected:
     size_t rows;
     size_t cols;
@@ -166,6 +122,9 @@ class Matrix : public BaseMatrix {
     friend class metal::MatrixImpl;
     friend class multithread::MatrixImpl;
     friend class singlethread::MatrixImpl;
+    friend class metal::MatrixReflexiveImpl;
+    friend class multithread::MatrixReflexiveImpl;
+    friend class singlethread::MatrixReflexiveImpl;
     friend Matrix operator*(const Matrix& matrix1, const Matrix& matrix2);
 
     friend Matrix Pack(const std::vector<Matrix>& matrices);

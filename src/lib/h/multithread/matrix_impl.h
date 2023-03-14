@@ -1,5 +1,5 @@
-#ifndef _MDL_MATH_MULTI_THREAD_MATRIXIMPL
-#define _MDL_MATH_MULTI_THREAD_MATRIXIMPL
+#ifndef _MDL_MATH_MULTI_THREAD_MATRIX_IMPL
+#define _MDL_MATH_MULTI_THREAD_MATRIX_IMPL
 
 #include <mdl/concurrent.h>
 #include <mdl/profiler.h>
@@ -50,4 +50,4 @@ namespace multithread {
 } // namespace math
 } // namespace mdl
 
-#endif // _MDL_MATH_MULTI_THREAD_MATRIX
+#endif // _MDL_MATH_MULTI_THREAD_MATRIX_IMPL

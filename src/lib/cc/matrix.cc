@@ -1,12 +1,18 @@
 #include "../h/matrix.h"
-#include "../h/metal/matriximpl.h"
-#include "../h/multithread/matriximpl.h"
-#include "../h/singlethread/matriximpl.h"
+#include "../h/metal/matrix_impl.h"
+#include "../h/multithread/matrix_impl.h"
+#include "../h/singlethread/matrix_impl.h"
+#include "../h/singlethread/matrix_reflexive_impl.h"
+#include "../h/multithread/matrix_impl.h"
+// #include "../h/singlethread/matrix_reflexive_impl.h"
+
 
 #include <mdl/profiler.h>
 
 namespace mdl {
 namespace math {
+  using singlethread::MatrixReflexiveImpl;
+
   Matrix::Matrix() : Matrix(0, 0) {}
 
   Matrix::Matrix(size_t rows, size_t cols) 
@@ -104,42 +110,42 @@ namespace math {
   }
 
   Matrix& Matrix::operator+=(const Matrix& other) {
-    ReflexiveOperate<op::Addition>(other);
+    MatrixReflexiveImpl::ReflexiveOperate<op::Addition>(this, other);
     return *this;
   }
 
   Matrix& Matrix::operator+=(float_t scalar) {
-    ReflexiveOperate<op::Addition>(scalar);
+    MatrixReflexiveImpl::ReflexiveOperate<op::Addition>(this, scalar);
     return *this;
   }
 
   Matrix& Matrix::operator-=(const Matrix& other) {
-    ReflexiveOperate<op::Subtraction>(other);
+    MatrixReflexiveImpl::ReflexiveOperate<op::Subtraction>(this, other);
     return *this;
   }
 
   Matrix& Matrix::operator-=(float_t scalar) {
-    ReflexiveOperate<op::Subtraction>(scalar);
+    MatrixReflexiveImpl::ReflexiveOperate<op::Subtraction>(this, scalar);
     return *this;
   }
 
   Matrix& Matrix::operator*=(const Matrix& other) {
-    ReflexiveOperate<op::Multiplication>(other);
+    MatrixReflexiveImpl::ReflexiveOperate<op::Multiplication>(this, other);
     return *this;
   }
 
   Matrix& Matrix::operator*=(float_t scalar) {
-    ReflexiveOperate<op::Multiplication>(scalar);
+    MatrixReflexiveImpl::ReflexiveOperate<op::Multiplication>(this, scalar);
     return *this;
   }
 
   Matrix& Matrix::operator/=(const Matrix& other) {
-    ReflexiveOperate<op::Division>(other);
+    MatrixReflexiveImpl::ReflexiveOperate<op::Division>(this, other);
     return *this;
   }
 
   Matrix& Matrix::operator/=(float_t scalar) {
-    ReflexiveOperate<op::Division>(scalar);
+    MatrixReflexiveImpl::ReflexiveOperate<op::Division>(this, scalar);
     return *this;
   }
 

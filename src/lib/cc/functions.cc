@@ -7,7 +7,7 @@
 #include "../h/matrix.h"
 #include "../h/matrices.h"
 #include "../h/operation.h"
-#include "../h/basematrix_operate.h"
+#include "../h/singlethread/basematrix_impl.h"
 #include <mdl/io.h>
 #include <mdl/util.h>
 
@@ -15,76 +15,78 @@ namespace mdl {
 namespace math {
   const int kMtxFileMark = 0x11080101;
 
+  using singlethread::BaseMatrixImpl;
+
   Matrix Abs(const BaseMatrix& matrix) {
-    return UnaryOperate<op::Abs>(matrix);
+    return BaseMatrixImpl::UnaryOperate<op::Abs>(matrix);
   }
   
   Matrix Ceil(const BaseMatrix& matrix) {
-    return UnaryOperate<op::Ceil>(matrix);
+    return BaseMatrixImpl::UnaryOperate<op::Ceil>(matrix);
   }
 
   Matrix Floor(const BaseMatrix& matrix) {
-    return UnaryOperate<op::Floor>(matrix);
+    return BaseMatrixImpl::UnaryOperate<op::Floor>(matrix);
   }
 
   Matrix Round(const BaseMatrix& matrix) {
-    return UnaryOperate<op::Round>(matrix);
+    return BaseMatrixImpl::UnaryOperate<op::Round>(matrix);
   }
 
 
   Matrix Exp(const BaseMatrix& matrix) {
-    return UnaryOperate<op::Exp>(matrix);
+    return BaseMatrixImpl::UnaryOperate<op::Exp>(matrix);
   }
 
   Matrix Log(const BaseMatrix& matrix) {
-    return UnaryOperate<op::Log>(matrix);
+    return BaseMatrixImpl::UnaryOperate<op::Log>(matrix);
   }
 
   Matrix Log2(const BaseMatrix& matrix) {
-    return UnaryOperate<op::Log2>(matrix);
+    return BaseMatrixImpl::UnaryOperate<op::Log2>(matrix);
   }
 
   Matrix Log10(const BaseMatrix& matrix) {
-    return UnaryOperate<op::Log10>(matrix);
+    return BaseMatrixImpl::UnaryOperate<op::Log10>(matrix);
   }
 
 
   Matrix Sin(const BaseMatrix& matrix) {
-    return UnaryOperate<op::Sin>(matrix);
+    return BaseMatrixImpl::UnaryOperate<op::Sin>(matrix);
   }
 
   Matrix Cos(const BaseMatrix& matrix) {
-    return UnaryOperate<op::Cos>(matrix);
+    return BaseMatrixImpl::UnaryOperate<op::Cos>(matrix);
   }
 
   Matrix Tan(const BaseMatrix& matrix) {
-    return UnaryOperate<op::Tan>(matrix);
+    return BaseMatrixImpl::UnaryOperate<op::Tan>(matrix);
   }
 
   Matrix Asin(const BaseMatrix& matrix) {
-    return UnaryOperate<op::Asin>(matrix);
+    return BaseMatrixImpl::UnaryOperate<op::Asin>(matrix);
   }
 
   Matrix Acos(const BaseMatrix& matrix) {
-    return UnaryOperate<op::Acos>(matrix);
+    return BaseMatrixImpl::UnaryOperate<op::Acos>(matrix);
   }
 
   Matrix Atan(const BaseMatrix& matrix) {
-    return UnaryOperate<op::Atan>(matrix);
+    return BaseMatrixImpl::UnaryOperate<op::Atan>(matrix);
   }
 
 
   Matrix Sqr(const BaseMatrix& matrix) {
-    return UnaryOperate<op::Sqr>(matrix);
+    return BaseMatrixImpl::UnaryOperate<op::Sqr>(matrix);
   }
 
   Matrix Sqrt(const BaseMatrix& matrix) {
-    return UnaryOperate<op::Sqrt>(matrix);
+    return BaseMatrixImpl::UnaryOperate<op::Sqrt>(matrix);
   }
 
 
   Matrix Sum(const BaseMatrix& matrix) {
-    return Reduce<op::Addition>(matrix);
+    return BaseMatrixImpl::Reduce<op::Addition>(matrix);
   }
 
   Matrix Mean(const BaseMatrix& matrix) {
@@ -93,11 +95,11 @@ namespace math {
   }
 
   Matrix Max(const BaseMatrix& matrix) {
-    return Reduce<op::Max>(matrix, -std::numeric_limits<float_t>::infinity());
+    return BaseMatrixImpl::Reduce<op::Max>(matrix, -std::numeric_limits<float_t>::infinity());
   }
 
   Matrix Min(const BaseMatrix& matrix) {
-    return Reduce<op::Min>(matrix, std::numeric_limits<float_t>::infinity());
+    return BaseMatrixImpl::Reduce<op::Min>(matrix, std::numeric_limits<float_t>::infinity());
   }
 
   Matrix Variance(const BaseMatrix& matrix) {
@@ -110,7 +112,7 @@ namespace math {
   }
 
   Matrix Prod(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {
-    return Operate<op::Multiplication>(matrix1, matrix2);
+    return BaseMatrixImpl::Operate<op::Multiplication>(matrix1, matrix2);
   }
 
   float_t DotProd(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {

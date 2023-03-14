@@ -11,7 +11,7 @@
 namespace mdl {
 namespace math {
 namespace multithread {
-  extern const int kNumKernels;
+  const int kNumKernels = 8;
 
   // Lamba takes Matrix, start index and final index
   void Partition(

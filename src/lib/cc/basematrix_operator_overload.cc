@@ -3,178 +3,179 @@
 #include <sstream>
 
 #include "../h/matrix.h"
-#include "../h/basematrix_operate.h"
+#include "../h/singlethread/basematrix_impl.h"
 #include "../h/operation.h"
 
 namespace mdl {
 namespace math {
+  using singlethread::BaseMatrixImpl;
 
   Matrix operator+(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {
-    return Operate<op::Addition>(matrix1, matrix2);
+    return BaseMatrixImpl::Operate<op::Addition>(matrix1, matrix2);
   }
 
   Matrix operator+(float_t scalar, const BaseMatrix& matrix) {
-    return Operate<op::Addition>(scalar, matrix);
+    return BaseMatrixImpl::Operate<op::Addition>(scalar, matrix);
   }
 
   Matrix operator+(const BaseMatrix& matrix,
       float_t scalar) {
-    return Operate<op::Addition>(matrix, scalar);
+    return BaseMatrixImpl::Operate<op::Addition>(matrix, scalar);
   }
 
   Matrix operator-(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {
-    return Operate<op::Subtraction>(matrix1, matrix2);
+    return BaseMatrixImpl::Operate<op::Subtraction>(matrix1, matrix2);
   }
 
   Matrix operator-(float_t scalar, const BaseMatrix& matrix) {
-    return Operate<op::Subtraction>(scalar, matrix);
+    return BaseMatrixImpl::Operate<op::Subtraction>(scalar, matrix);
   }
 
   Matrix operator-(const BaseMatrix& matrix,
       float_t scalar) {
-    return Operate<op::Subtraction>(matrix, scalar);
+    return BaseMatrixImpl::Operate<op::Subtraction>(matrix, scalar);
   }
 
   Matrix operator-(const BaseMatrix& matrix) {
-    return UnaryOperate<op::Negate>(matrix);
+    return BaseMatrixImpl::UnaryOperate<op::Negate>(matrix);
   }
 
   Matrix operator*(float_t scalar, const BaseMatrix& matrix) {
-    return Operate<op::Multiplication>(scalar, matrix);
+    return BaseMatrixImpl::Operate<op::Multiplication>(scalar, matrix);
   }
 
   Matrix operator*(const BaseMatrix& matrix,
       float_t scalar) {
-    return Operate<op::Multiplication>(matrix, scalar);
+    return BaseMatrixImpl::Operate<op::Multiplication>(matrix, scalar);
   }
 
   Matrix operator/(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {
-    return Operate<op::Division>(matrix1, matrix2);
+    return BaseMatrixImpl::Operate<op::Division>(matrix1, matrix2);
   }
 
   Matrix operator/(float_t scalar, const BaseMatrix& matrix) {
-    return Operate<op::Division>(scalar, matrix);
+    return BaseMatrixImpl::Operate<op::Division>(scalar, matrix);
   }
 
   Matrix operator/(const BaseMatrix& matrix,
       float_t scalar) {
-    return Operate<op::Division>(matrix, scalar);
+    return BaseMatrixImpl::Operate<op::Division>(matrix, scalar);
   }
 
   Matrix operator%(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {
-    return Operate<op::Mod>(matrix1, matrix2);
+    return BaseMatrixImpl::Operate<op::Mod>(matrix1, matrix2);
   }
 
   Matrix operator%(float_t scalar, const BaseMatrix& matrix) {
-    return Operate<op::Mod>(scalar, matrix);
+    return BaseMatrixImpl::Operate<op::Mod>(scalar, matrix);
   }
 
   Matrix operator%(const BaseMatrix& matrix,
       float_t scalar) {
-    return Operate<op::Mod>(matrix, scalar);
+    return BaseMatrixImpl::Operate<op::Mod>(matrix, scalar);
   }
 
   Matrix operator^(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {
-    return Operate<op::Pow>(matrix1, matrix2);
+    return BaseMatrixImpl::Operate<op::Pow>(matrix1, matrix2);
   }
 
   Matrix operator^(float_t scalar, const BaseMatrix& matrix) {
-    return Operate<op::Pow>(scalar, matrix);
+    return BaseMatrixImpl::Operate<op::Pow>(scalar, matrix);
   }
 
   Matrix operator^(const BaseMatrix& matrix,
       float_t scalar) {
-    return Operate<op::Pow>(matrix, scalar);
+    return BaseMatrixImpl::Operate<op::Pow>(matrix, scalar);
   }
 
   Matrix operator<(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {
-    return Operate<op::LessThan>(matrix1, matrix2);
+    return BaseMatrixImpl::Operate<op::LessThan>(matrix1, matrix2);
   }
 
   Matrix operator<(float_t scalar, const BaseMatrix& matrix) {
-    return Operate<op::LessThan>(scalar, matrix);
+    return BaseMatrixImpl::Operate<op::LessThan>(scalar, matrix);
   }
 
   Matrix operator<(const BaseMatrix& matrix,
       float_t scalar) {
-    return Operate<op::LessThan>(matrix, scalar);
+    return BaseMatrixImpl::Operate<op::LessThan>(matrix, scalar);
   }
 
   Matrix operator<=(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {
-    return Operate<op::LessThanEquals>(matrix1, matrix2);
+    return BaseMatrixImpl::Operate<op::LessThanEquals>(matrix1, matrix2);
   }
 
   Matrix operator<=(float_t scalar, const BaseMatrix& matrix) {
-    return Operate<op::LessThanEquals>(scalar, matrix);
+    return BaseMatrixImpl::Operate<op::LessThanEquals>(scalar, matrix);
   }
 
   Matrix operator<=(const BaseMatrix& matrix,
       float_t scalar) {
-    return Operate<op::LessThanEquals>(matrix, scalar);
+    return BaseMatrixImpl::Operate<op::LessThanEquals>(matrix, scalar);
   }
 
   Matrix operator>(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {
-    return Operate<op::GreaterThan>(matrix1, matrix2);
+    return BaseMatrixImpl::Operate<op::GreaterThan>(matrix1, matrix2);
   }
 
   Matrix operator>(float_t scalar, const BaseMatrix& matrix) {
-    return Operate<op::GreaterThan>(scalar, matrix);
+    return BaseMatrixImpl::Operate<op::GreaterThan>(scalar, matrix);
   }
 
   Matrix operator>(const BaseMatrix& matrix,
       float_t scalar) {
-    return Operate<op::GreaterThan>(matrix, scalar);
+    return BaseMatrixImpl::Operate<op::GreaterThan>(matrix, scalar);
   }
 
   Matrix operator>=(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {
-    return Operate<op::GreaterThanEquals>(matrix1, matrix2);
+    return BaseMatrixImpl::Operate<op::GreaterThanEquals>(matrix1, matrix2);
   }
 
   Matrix operator>=(float_t scalar, const BaseMatrix& matrix) {
-    return Operate<op::GreaterThanEquals>(scalar, matrix);
+    return BaseMatrixImpl::Operate<op::GreaterThanEquals>(scalar, matrix);
   }
 
   Matrix operator>=(const BaseMatrix& matrix,
       float_t scalar) {
-    return Operate<op::GreaterThanEquals>(matrix, scalar);
+    return BaseMatrixImpl::Operate<op::GreaterThanEquals>(matrix, scalar);
   }
 
   Matrix operator==(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {
-    return Operate<op::Equals>(matrix1, matrix2);
+    return BaseMatrixImpl::Operate<op::Equals>(matrix1, matrix2);
   }
 
   Matrix operator==(float_t scalar, const BaseMatrix& matrix) {
-    return Operate<op::Equals>(scalar, matrix);
+    return BaseMatrixImpl::Operate<op::Equals>(scalar, matrix);
   }
 
   Matrix operator==(const BaseMatrix& matrix,
       float_t scalar) {
-    return Operate<op::Equals>(matrix, scalar);
+    return BaseMatrixImpl::Operate<op::Equals>(matrix, scalar);
   }  
 
   Matrix operator!=(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {
-    return Operate<op::NotEquals>(matrix1, matrix2);
+    return BaseMatrixImpl::Operate<op::NotEquals>(matrix1, matrix2);
   }
 
   Matrix operator!=(float_t scalar, const BaseMatrix& matrix) {
-    return Operate<op::NotEquals>(scalar, matrix);
+    return BaseMatrixImpl::Operate<op::NotEquals>(scalar, matrix);
   }
 
   Matrix operator!=(const BaseMatrix& matrix,
       float_t scalar) {
-    return Operate<op::NotEquals>(matrix, scalar);
+    return BaseMatrixImpl::Operate<op::NotEquals>(matrix, scalar);
   }
 
   Matrix operator!(const BaseMatrix& matrix) {
-    return UnaryOperate<op::Not>(matrix);
+    return BaseMatrixImpl::UnaryOperate<op::Not>(matrix);
   }
 
   Matrix operator&&(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {
-    return Operate<op::And>(matrix1, matrix2);
+    return BaseMatrixImpl::Operate<op::And>(matrix1, matrix2);
   }
   
   Matrix operator||(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {
-    return Operate<op::Or>(matrix1, matrix2);
+    return BaseMatrixImpl::Operate<op::Or>(matrix1, matrix2);
   }
 
   Matrix operator|(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {

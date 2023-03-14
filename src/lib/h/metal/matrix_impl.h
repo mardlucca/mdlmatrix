@@ -1,5 +1,5 @@
-#ifndef _MDL_MATH_METAL_MATRIXIMPL
-#define _MDL_MATH_METAL_MATRIXIMPL
+#ifndef _MDL_MATH_METAL_MATRIX_IMPL
+#define _MDL_MATH_METAL_MATRIX_IMPL
 
 #include <mdl/compute.h>
 #include <mdl/profiler.h>
@@ -44,4 +44,4 @@ namespace metal {
 } // namespace math
 } // namespace mdl
 
-#endif // _MDL_MATH_METAL_MATRIXIMPL
+#endif // _MDL_MATH_METAL_MATRIX_IMPL
