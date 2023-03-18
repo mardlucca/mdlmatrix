@@ -35,8 +35,10 @@
 namespace mdl {
   using namespace mdl::math;
   using mdl::math::float_t;
-
-  void doTransposeTest() {
+  
+  Matrix examples;
+  
+  void doLoadData() {
     std::cout << "Loading Metal..." << std::endl;
     {
       auto g = profiler::probe("Loading metal...");
@@ -44,7 +46,6 @@ namespace mdl {
     }
 
     std::cout << "Loading up data..." << std::endl;
-    Matrix examples;
     {
       auto g0 = profiler::probe("Loading data");
       examples = FromMtx(
@@ -52,20 +53,45 @@ namespace mdl {
     }
 
     std::cout << "Loaded data: " << examples.NumRows() << 'x' << examples.NumCols() << std::endl;
+  }
+
+  void doTransposeTest(size_t count) {
     std::cout << "Transposing..." << std::endl;
-    Matrix transp = examples.Transpose();
-    for (long i = 0; i < 100; i++) {
-      auto g = profiler::probe("Transpose loop");
+    auto g = profiler::probe("Transpose loop");
+    for (size_t i = 0; i < count; i++) {
+      auto g = profiler::probe("Transposing");
       Matrix m = examples.Transpose();
-      if (!m.Equals(transp)) {
-        std::cout << "Different" << std::endl;
-      }
+    }
+  }
+
+  void doAddittionTest(size_t count) {
+    std::cout << "Adding..." << std::endl;
+    auto g = profiler::probe("Addition Loop");
+    Slice slice = examples();
+    for (size_t i = 0; i < count; i++) {
+      auto g = profiler::probe("Adding");
+      slice += 1.0;
+    }
+  }
+
+  void doSliceToMatrixTest(size_t count) {
+    std::cout << "SliceToMatrix..." << std::endl;
+    auto g = profiler::probe("SliceToMatrix Loop");
+    for (size_t i = 0; i < count; i++) {
+      auto g = profiler::probe("Materializing");
+      Matrix m = examples();
     }
   }
 }
 
 int main() {
-  mdl::doTransposeTest();
+  {
+    auto g = mdl::profiler::probe("Total");
+    mdl::doLoadData();
+    // mdl::doTransposeTest(1000);
+    // mdl::doAddittionTest(10000);
+    mdl::doSliceToMatrixTest(1000);
+  }
   std::ofstream out("prof-report.xml");
   mdl::profiler::save(out);
   return 0;

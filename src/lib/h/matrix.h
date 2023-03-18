@@ -111,6 +111,8 @@ class Matrix : public BaseMatrix {
 
     inline size_t NumRows() const override { return rows; }
     inline size_t NumCols() const override { return cols; }
+    inline size_t NumCells() const override { return rows * cols; }
+
     
     std::ostream& operator<<(std::ostream& os);
 

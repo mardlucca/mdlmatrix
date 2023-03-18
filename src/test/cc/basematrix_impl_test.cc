@@ -5,11 +5,12 @@
 #include <mdl/matrix.h>
 #include "src/lib/h/singlethread/basematrix_impl.h"
 #include "src/lib/h/singlethread/basematrix_reflexive_impl.h"
+#include "src/lib/h/multithread/basematrix_impl.h"
 
 namespace mdl {
 namespace math {
-  using singlethread::BaseMatrixImpl;
-  using singlethread::BaseMatrixReflexiveImpl;
+  using multithread::BaseMatrixImpl;
+  using multithread::BaseMatrixReflexiveImpl;
   using std::cout;
   using std::endl;
 

@@ -424,7 +424,7 @@ namespace math {
   }
 
   TEST_F(MatrixOperatorOverloadTestSuite, VectorMatrixMultiplicationTest) {
-    Matrix result = vector * matrix().Transpose();
+    Matrix result = vector * matrix.Transpose();
 
     ASSERT_EQ(1, result.NumRows());
     ASSERT_EQ(4, result.NumCols());

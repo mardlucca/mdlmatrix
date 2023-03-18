@@ -24,6 +24,7 @@ class BaseMatrix {
 #endif
     virtual size_t NumRows() const = 0;
     virtual size_t NumCols() const = 0;
+    virtual size_t NumCells() const = 0;
     virtual bool Equals(const BaseMatrix& other) const;
     virtual void ForEach(std::function<void (size_t, size_t, float_t&)> fn);
 

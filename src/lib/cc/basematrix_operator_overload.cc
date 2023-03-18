@@ -4,11 +4,13 @@
 
 #include "../h/matrix.h"
 #include "../h/singlethread/basematrix_impl.h"
+#include "../h/multithread/basematrix_impl.h"
 #include "../h/operation.h"
 
 namespace mdl {
 namespace math {
-  using singlethread::BaseMatrixImpl;
+  // using singlethread::BaseMatrixImpl;
+  using multithread::BaseMatrixImpl;
 
   Matrix operator+(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {
     return BaseMatrixImpl::Operate<op::Addition>(matrix1, matrix2);

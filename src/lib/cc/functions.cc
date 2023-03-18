@@ -8,6 +8,7 @@
 #include "../h/matrices.h"
 #include "../h/operation.h"
 #include "../h/singlethread/basematrix_impl.h"
+#include "../h/multithread/basematrix_impl.h"
 #include <mdl/io.h>
 #include <mdl/util.h>
 
@@ -15,7 +16,7 @@ namespace mdl {
 namespace math {
   const int kMtxFileMark = 0x11080101;
 
-  using singlethread::BaseMatrixImpl;
+  using multithread::BaseMatrixImpl;
 
   Matrix Abs(const BaseMatrix& matrix) {
     return BaseMatrixImpl::UnaryOperate<op::Abs>(matrix);

@@ -12,6 +12,7 @@ namespace math {
 namespace metal {
   using mdl::compute::in;
   using mdl::compute::out;
+  using mdl::compute::shared;
 
   using std::cout;
   using std::endl;
@@ -32,7 +33,7 @@ namespace metal {
 
         Engine::Get()->NewBatch()
             .WithGrid(matrix.NumRows(), matrix.NumCols(), 2, matrix.NumCols())
-            .Call("Transpose", in(sdata, buffSize), out(data, buffSize), rows)
+            .Call("Transpose", in(sdata, buffSize), out(data, buffSize), in(rows))
             .Dispatch()
             .Wait();
 

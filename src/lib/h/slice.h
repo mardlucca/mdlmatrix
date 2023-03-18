@@ -10,10 +10,14 @@
 #include "accessor.h"
 #include "operation.h"
 #include "singlethread/basematrix_reflexive_impl.h"
+#include "multithread/basematrix_reflexive_impl.h"
+
+#include <mdl/profiler.h>
 
 namespace mdl {
 namespace math {
-  using singlethread::BaseMatrixReflexiveImpl;
+  // using singlethread::BaseMatrixReflexiveImpl;
+  using multithread::BaseMatrixReflexiveImpl;
   using std::cout;
   using std::endl;
 
@@ -124,6 +128,7 @@ namespace math {
       }
 
       Slice& operator+=(float_t scalar) {
+        auto g = profiler::probe("Slice add");
         BaseMatrixReflexiveImpl::ReflexiveOperate<op::Addition>(this, scalar);
         return *this;
       }
@@ -178,6 +183,8 @@ namespace math {
       
       size_t NumRows() const { return Accessor::GetRow(rowRange.Length(), colRange.Length()); }
       size_t NumCols() const { return Accessor::GetCol(rowRange.Length(), colRange.Length()); }
+      size_t NumCells() const { return NumRows() * NumCols(); }
+
 
       Slice<RowRange, ColRange, typename Accessor::transposedType> Transpose() {
         return Slice<RowRange, ColRange, typename Accessor::transposedType>(std::move(*this));

@@ -5,11 +5,14 @@
 #include <mdl/matrix.h>
 #include "src/lib/h/singlethread/matrix_impl.h"
 #include "src/lib/h/singlethread/matrix_reflexive_impl.h"
+#include "src/lib/h/multithread/matrix_impl.h"
+#include "src/lib/h/multithread/matrix_reflexive_impl.h"
+
 
 namespace mdl {
 namespace math {
-  using singlethread::MatrixImpl;
-  using singlethread::MatrixReflexiveImpl;
+  using multithread::MatrixImpl;
+  using multithread::MatrixReflexiveImpl;
   using std::cout;
   using std::endl;
 
@@ -225,8 +228,6 @@ namespace math {
 
     ASSERT_EQ(matrix.NumRows(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
-
-    cout << result << endl; 
 
     for (size_t row = 0; row < matrix.NumRows(); row++) {
       for (size_t col = 0; col < matrix.NumCols(); col++) {
@@ -496,6 +497,7 @@ namespace math {
 
   TEST_F(MatrixImplTestSuite, ColReduceTest_Matrix) {
     Matrix result = MatrixImpl::ColReduce<op::Addition>(matrix);
+    cout << result << endl;
     ASSERT_EQ(1, result.NumRows());
     ASSERT_EQ(3, result.NumCols());
 

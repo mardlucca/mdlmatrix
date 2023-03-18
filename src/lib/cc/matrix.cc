@@ -4,14 +4,14 @@
 #include "../h/singlethread/matrix_impl.h"
 #include "../h/singlethread/matrix_reflexive_impl.h"
 #include "../h/multithread/matrix_impl.h"
-// #include "../h/singlethread/matrix_reflexive_impl.h"
+#include "../h/multithread/matrix_reflexive_impl.h"
 
 
 #include <mdl/profiler.h>
 
 namespace mdl {
 namespace math {
-  using singlethread::MatrixReflexiveImpl;
+  using multithread::MatrixReflexiveImpl;
 
   Matrix::Matrix() : Matrix(0, 0) {}
 
