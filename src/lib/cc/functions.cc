@@ -15,6 +15,7 @@
 namespace mdl {
 namespace math {
   const int kMtxFileMark = 0x11080101;
+  const int kDoublePrecisionBit = 0x01;
 
   using multithread::BaseMatrixImpl;
 
@@ -220,6 +221,9 @@ namespace math {
             .Build();
       }
 
+      int controlReg;
+      in.read(reinterpret_cast<char *>(&controlReg), sizeof(int));
+
      do {
         int rows;
         int cols;
@@ -228,9 +232,29 @@ namespace math {
 
         if (!in.eof()) {
           if (rows * cols > 0) {
-            std::unique_ptr<float_t> buffer(new float_t[((size_t) rows) * cols]);
-            in.read(reinterpret_cast<char *>(buffer.get()), sizeof(float_t) * rows * cols);
-            matrices.push_back(Matrix(rows, cols, buffer.release()));
+            if (controlReg & kDoublePrecisionBit) {
+              std::unique_ptr<double_t> buffer(new double_t[((size_t) rows) * cols]);
+              in.read(reinterpret_cast<char *>(buffer.get()), sizeof(double_t) * rows * cols);
+
+              if (kDoublePrecision) {
+                matrices.push_back(Matrix(rows, cols, reinterpret_cast<float_t *>(buffer.release())));
+              } else {
+                matrices.push_back(Matrix(rows, cols, 
+                  reinterpret_cast<float_t *>(
+                    ToSingleBuff(buffer.get(), ((size_t) rows) * cols))));
+              }
+            } else {
+              std::unique_ptr<single_t> buffer(new single_t[((size_t) rows) * cols]);
+              in.read(reinterpret_cast<char *>(buffer.get()), sizeof(single_t) * rows * cols);
+
+              if (kDoublePrecision) {
+                matrices.push_back(Matrix(rows, cols, 
+                  reinterpret_cast<float_t *>(
+                    ToDoubleBuff(buffer.get(), ((size_t) rows) * cols))));
+              } else {
+                matrices.push_back(Matrix(rows, cols, reinterpret_cast<float_t *>(buffer.release())));
+              }
+            }
           } else {
             matrices.push_back(Matrix(0, 0));
           }
@@ -244,7 +268,6 @@ namespace math {
     return matrices;
   }
 
-
   void SaveMtx(const char* fileName, const Matrix& matrix) {
     SaveMtx(fileName, std::vector<Matrix>({matrix}));
   }
@@ -253,6 +276,13 @@ namespace math {
   void SaveMtx(const char* fileName, const std::vector<Matrix>& mats) {
     std::ofstream out(fileName, std::ios_base::binary | std::ios_base::out);
     out.write(reinterpret_cast<const char *>(&kMtxFileMark), sizeof(int));
+
+    int controlReg = 0;
+    if (kDoublePrecision) {
+      controlReg |= kDoublePrecisionBit;
+    }
+
+    out.write(reinterpret_cast<const char *>(&controlReg), sizeof(controlReg));
 
     for (auto mat = mats.begin(); mat != mats.end(); mat++) {
       int rows = mat->rows;

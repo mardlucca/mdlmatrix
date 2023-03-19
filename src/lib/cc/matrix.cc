@@ -157,6 +157,7 @@ namespace math {
   }
 
   Matrix Matrix::Transpose() const {
+    auto g = profiler::probe("Transpose");
     return multithread::MatrixImpl::Transpose(*this);
   }
 } // math

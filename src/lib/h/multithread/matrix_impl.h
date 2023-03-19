@@ -2,7 +2,6 @@
 #define _MDL_MATH_MULTI_THREAD_MATRIX_IMPL
 
 #include <mdl/concurrent.h>
-#include <mdl/profiler.h>
 #include <functional>
 #include <vector>
 

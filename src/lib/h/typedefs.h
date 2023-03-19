@@ -30,18 +30,27 @@
 #define _MDL_MATH_TYPEDEFS
 
 #include <cstddef>
+#include <memory>
 
 namespace mdl {
 namespace math {
 
-// #define _MDL_MATH_SINGLE_PRECISION
-#ifdef _MDL_MATH_SINGLE_PRECISION
-  typedef float float_t;
-  constexpr float_t kFloatPrecision = 1e-7;
-#else
-  typedef double float_t;
-  constexpr float_t kFloatPrecision = 1e-16;
-#endif
+  #ifdef _MDL_MATH_LARGE_MATRICES
+    typedef long size_t;
+  #else
+    typedef int size_t;
+  #endif  
+
+  #define _MDL_MATH_SINGLE_PRECISION
+  #ifdef _MDL_MATH_SINGLE_PRECISION
+    typedef float float_t;
+    const float_t kFloatPrecision = 1e-7;
+    const bool kDoublePrecision = false;
+  #else
+    typedef double float_t;
+    const float_t kFloatPrecision = 1e-16;
+    const bool kDoublePrecision = true;
+  #endif
 
   inline float_t GetVal(const float_t * matrix, size_t cols, size_t row, size_t col) {
     return *(matrix + row * cols + col);
@@ -51,11 +60,11 @@ namespace math {
     return *(matrix + row * cols + col);
   }
 
-  #ifdef _MDL_MATH_LARGE_MATRICES
-    typedef long size_t;
-  #else
-    typedef int size_t;
-  #endif  
+  typedef float single_t;
+  typedef double double_t;
+
+  single_t * ToSingleBuff(const double_t * buff, std::size_t size);
+  double_t * ToDoubleBuff(const single_t * buff, std::size_t size);
 
 
 } // namespace math

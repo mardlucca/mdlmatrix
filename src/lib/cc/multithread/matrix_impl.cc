@@ -31,25 +31,32 @@ namespace multithread {
         size_t trow = to / cols;
         size_t tcol = to % cols;
 
+        float_t * runner1 = m1Data + frow * cols1;
+        float_t * rRunner = rData + frow * cols + fcol;
+        float_t * runner2 = m2Data + fcol * cols1;
         for (size_t row = frow, col = fcol; 
             row != trow || col != tcol;) {
-          float_t * runner1 = m1Data + row * cols1;
-          float_t * runner2 = m2Data + col * cols1;
-          
           float_t sum = 0.0;
+          
           #pragma clang loop vectorize(enable)
           for (int i = 0; i < cols1; i++) {
-            sum += *runner1 * *runner2;
-            runner1++;
-            runner2++;
+            sum += runner1[i] * runner2[i];
           }
-          rData[row * cols + col] = sum;
+         
+          *(rRunner++) = sum;
           col++;
-          if (col >= cols) { col = 0; row++;}
+          runner2 += cols1;
+
+          if (col >= cols) { 
+            col = 0; 
+            row++;
+            runner1 += cols1;
+            runner2 = m2Data;
+          }
         }
         return 0; 
       };
-    }, 1);
+    });
 
     return Matrix(rows, cols, rData);
   }
