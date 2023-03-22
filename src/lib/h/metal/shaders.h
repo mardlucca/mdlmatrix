@@ -9,7 +9,7 @@ namespace math {
 namespace metal {
 namespace shader {
 
-  std::string Transpose();
+  std::string MatrixImpl();
 
 } // namespace shader
 } // namespace metal
