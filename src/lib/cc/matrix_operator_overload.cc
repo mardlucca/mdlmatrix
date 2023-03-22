@@ -2,6 +2,7 @@
 
 #include "../h/singlethread/matrix_impl.h"
 #include "../h/multithread/matrix_impl.h"
+#include "../h/metal/matrix_impl.h"
 #include <mdl/profiler.h>
 
 namespace mdl {

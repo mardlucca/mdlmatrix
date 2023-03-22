@@ -24,10 +24,6 @@ namespace math {
       static Matrix FromCsv(const char* fileName, bool ignoreFirstLine = false);
       
       static Matrix Biased(const BaseMatrix& matrix);
-    private:
-      static std::random_device rd;
-      static std::mt19937 gen;
-      static std::uniform_real_distribution<float_t> distribution;
   };
 
 } // math

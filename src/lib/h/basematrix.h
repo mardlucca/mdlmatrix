@@ -27,6 +27,8 @@ class BaseMatrix {
     virtual size_t NumCells() const = 0;
     virtual bool Equals(const BaseMatrix& other) const;
     virtual void ForEach(std::function<void (size_t, size_t, float_t&)> fn);
+    virtual void RowSwap(size_t row1, size_t row2);
+    virtual void Shuffle();
 
     static bool Equals(const BaseMatrix& matrix1, const BaseMatrix& matrix2);
   protected:

@@ -1,6 +1,8 @@
 #include "../h/matrices.h"
 
 #include "../h/basematrix_operator_overload.h"
+#include "../h/misc.h"
+
 #include <mdl/text.h>
 #include <mdl/util.h>
 
@@ -9,10 +11,6 @@
 
 namespace mdl {
 namespace math {
-
-  std::random_device Matrices::rd;
-  std::mt19937 Matrices::gen(rd());
-  std::uniform_real_distribution<float_t> Matrices::distribution;
 
   Matrix Matrices::Identity(size_t length) {
     return Matrix(
@@ -32,7 +30,7 @@ namespace math {
   Matrix Matrices::Random(size_t rows, size_t cols) {
     return Matrix(rows, cols,
         [](size_t row, size_t col) { 
-          return Matrices::distribution(Matrices::rd); 
+          return NextRand(); 
         });
   }
 

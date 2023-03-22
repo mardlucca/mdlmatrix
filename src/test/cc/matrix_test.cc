@@ -63,6 +63,54 @@ namespace math {
     ASSERT_EQ(matrix.NumRows() * matrix.NumCols(), count);
   }
 
+  TEST_F(MatrixTestSuite, TestRowSwap) {
+    Matrix expected = matrix;
+    expected(UnitRange(0), RightRange(0)) += 6.0;
+    expected(UnitRange(2), RightRange(0)) -= 6.0;
+   
+    matrix.RowSwap(0, 2);
+    ASSERT_TRUE(expected.Equals(matrix));
+  }
+
+  TEST_F(MatrixTestSuite, TestRowSwap_SameRow) {
+    Matrix expected = matrix;
+    matrix.RowSwap(0, 0);
+    ASSERT_TRUE(expected.Equals(matrix));
+  }
+
+  TEST_F(MatrixTestSuite, TestShuffle) {
+    bool different = false;
+    float_t sum = Sum(Sum(matrix))(0, 0);
+    // try 10 times, shuffling must produce a different configuration
+    for (int i = 0; i < 10 && !different; i++) {
+      Matrix temp = matrix;
+      temp.Shuffle();
+
+      ASSERT_EQ(sum, Sum(Sum(temp))(0, 0));
+      different = !temp.Equals(matrix);
+    }
+
+    ASSERT_TRUE(different);
+  }
+
+
+  TEST_F(MatrixTestSuite, TestShuffle_Vector) {
+    Matrix mat = Matrices::Sequence(1, 10, Range(1));
+
+    bool different = false;
+    float_t sum = Sum(Sum(mat))(0, 0);
+    // try 10 times, shuffling must produce a different configuration
+    for (int i = 0; i < 10 && !different; i++) {
+      Matrix temp = mat;
+      temp.Shuffle();
+
+      ASSERT_EQ(sum, Sum(Sum(temp))(0, 0));
+      different = !temp.Equals(mat);
+    }
+
+    ASSERT_TRUE(different);
+  }
+
   TEST_F(MatrixTestSuite, TestBasicSlice) {
     Slice slice = matrix(Range(1,3), RightRange(1));
     ASSERT_EQ(2, slice.NumRows());

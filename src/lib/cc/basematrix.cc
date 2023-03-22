@@ -1,5 +1,7 @@
 #include "../h/basematrix.h"
 
+#include "../h/misc.h"
+
 namespace mdl {
 namespace math {
 
@@ -40,6 +42,35 @@ namespace math {
       }
     }
   }
+
+  void BaseMatrix::RowSwap(size_t row1, size_t row2) {
+    if (row1 == row2) { return; }
+
+    size_t cols = NumCols();
+
+    for (size_t col = 0; col < cols; col++) {
+      float_t temp = (*this)(row1, col);
+      (*this)(row1, col) = (*this)(row2, col);
+      (*this)(row2, col) = temp;
+    }
+  }
+
+  void BaseMatrix::Shuffle() {
+    if (NumRows() == 1) {
+      for (size_t i = NumCols() - 1; i > 0; i--) {
+        size_t j = NextRand(i + 1);
+        float_t temp = (*this)(0, i);
+        (*this)(0, i) = (*this)(0, j);
+        (*this)(0, j) = temp;
+      }
+    } else {
+      for (size_t i = NumRows() - 1; i > 0; i--) {
+        size_t j = NextRand(i + 1);
+        RowSwap(i, j);
+      }
+    }
+  }
+
 
   void BaseMatrix::Copy(const BaseMatrix& other) {
     size_t rows = std::min(NumRows(), other.NumRows());

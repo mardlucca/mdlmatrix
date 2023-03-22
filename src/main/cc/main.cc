@@ -88,9 +88,9 @@ int main() {
   {
     auto g = mdl::profiler::probe("Total");
     mdl::doLoadData();
-    // mdl::doTransposeTest(1000);
+    mdl::doTransposeTest(1000);
     // mdl::doAddittionTest(10000);
-    mdl::doSliceToMatrixTest(1000);
+    // mdl::doSliceToMatrixTest(1000);
   }
   std::ofstream out("prof-report.xml");
   mdl::profiler::save(out);

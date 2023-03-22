@@ -405,8 +405,6 @@ namespace math {
   TEST_F(MatrixOperatorOverloadTestSuite, MatrixMatrixMultiplicationTest) {
     Matrix result = matrix().Transpose() * matrix;
 
-    cout << result << endl;
-
     ASSERT_EQ(matrix.NumCols(), result.NumRows());
     ASSERT_EQ(matrix.NumCols(), result.NumCols());
 
