@@ -26,14 +26,52 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_cc//cc:defs.bzl", "cc_test")
+
 package(default_visibility = ["//visibility:public"])
+
+cc_library(
+  name = "mdl_matrix",
+  srcs = glob(["src/lib/cc/**/*.cc", "src/lib/h/**/*.h"]),
+  hdrs = glob(["includes/**/*.h"]),
+  includes = [ "includes" ],
+  visibility = ["//visibility:public"],
+  deps = [
+    "@mdl_common//:lib",
+    "@mdl_compute//:lib",
+    "@mdl_prof//:lib"
+  ]
+)
 
 alias(
   name = "lib",
-  actual = "//lib:lib"
+  actual = ":mdl_matrix"
 )
 
-alias(
-  name = "tests",
-  actual = "//lib:tests"
+cc_test(
+  name = "tests", 
+  size = "small",
+  srcs = glob(["src/test/cc/**/*.cc"]),
+  deps = [
+    "@com_google_googletest//:gtest_main",
+    "//:lib"
+  ],
+  data = [ "test_resources" ]
 )
+
+filegroup(
+  name = "test_resources",
+  srcs = glob([
+      "src/test/resources/**/*.*"
+  ]),
+)
+
+# cc_binary(
+#   name = "main",
+#   srcs = ["main/cc/main.cc"],
+#   deps = [
+#     "//:lib",
+#     "@mdl_prof//:lib"
+#   ]
+# )

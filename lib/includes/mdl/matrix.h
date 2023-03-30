@@ -29,10 +29,10 @@
 #ifndef _MDL_MATRIX
 #define _MDL_MATRIX
 
-#include "src/lib/h/matrices.h"
-#include "src/lib/h/basematrix_operator_overload.h"
-#include "src/lib/h/matrix_operator_overload.h"
-#include "src/lib/h/functions.h"
-#include "src/lib/h/metal/engine.h"
+#include "../../src/lib/h/matrices.h"
+#include "../../src/lib/h/basematrix_operator_overload.h"
+#include "../../src/lib/h/matrix_operator_overload.h"
+#include "../../src/lib/h/functions.h"
+#include "../../src/lib/h/metal/engine.h"
 
 #endif // _MDL_MATRIX

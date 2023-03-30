@@ -26,14 +26,21 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package(default_visibility = ["//visibility:public"])
+load("@rules_cc//cc:defs.bzl", "cc_binary")
 
-alias(
-  name = "lib",
-  actual = "//lib:lib"
+cc_binary(
+  name = "main",
+  srcs = ["main/cc/main.cc"],
+  deps = [
+    "//:lib",
+    "@mdl_prof//:lib"
+  ]
 )
 
-alias(
-  name = "tests",
-  actual = "//lib:tests"
+cc_binary(
+  name = "csv2mtx",
+  srcs = ["csv2mtx/cc/main.cc"],
+  deps = [
+    "//:lib"
+  ]
 )

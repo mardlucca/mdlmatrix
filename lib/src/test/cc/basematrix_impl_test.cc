@@ -3,9 +3,9 @@
 #include <iostream>
 
 #include <mdl/matrix.h>
-#include "src/lib/h/singlethread/basematrix_impl.h"
-#include "src/lib/h/singlethread/basematrix_reflexive_impl.h"
-#include "src/lib/h/multithread/basematrix_impl.h"
+#include "../../lib/h/singlethread/basematrix_impl.h"
+#include "../../lib/h/singlethread/basematrix_reflexive_impl.h"
+#include "../../lib/h/multithread/basematrix_impl.h"
 
 namespace mdl {
 namespace math {

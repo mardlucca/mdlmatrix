@@ -3,10 +3,10 @@
 #include <iostream>
 
 #include <mdl/matrix.h>
-#include "src/lib/h/singlethread/matrix_impl.h"
-#include "src/lib/h/singlethread/matrix_reflexive_impl.h"
-#include "src/lib/h/multithread/matrix_impl.h"
-#include "src/lib/h/multithread/matrix_reflexive_impl.h"
+#include "../../lib/h/singlethread/matrix_impl.h"
+#include "../../lib/h/singlethread/matrix_reflexive_impl.h"
+#include "../../lib/h/multithread/matrix_impl.h"
+#include "../../lib/h/multithread/matrix_reflexive_impl.h"
 
 
 namespace mdl {

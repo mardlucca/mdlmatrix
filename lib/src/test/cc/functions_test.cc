@@ -240,13 +240,13 @@ namespace math {
   }
 
   TEST(MatrixFunctionsTest, TestFromMtx_DoublePrecision) {
-    Matrix m = FromMtx("src/test/resources/matrix/mat_seq_4_5_double.mtx")[0];
+    Matrix m = FromMtx("lib/src/test/resources/matrix/mat_seq_4_5_double.mtx")[0];
     Matrix expected = Matrices::Sequence(4, 5, Range(1));
     ASSERT_TRUE(m.Equals(expected));
   }
 
   TEST(MatrixFunctionsTest, TestFromMtx_SinglePrecision) {
-    Matrix m = FromMtx("src/test/resources/matrix/mat_seq_4_5_single.mtx")[0];
+    Matrix m = FromMtx("lib/src/test/resources/matrix/mat_seq_4_5_single.mtx")[0];
     Matrix expected = Matrices::Sequence(4, 5, Range(1));
     ASSERT_TRUE(m.Equals(expected));
   }
@@ -271,13 +271,13 @@ namespace math {
 
   TEST(MatrixFunctionsTest, TestFromMtx_WrongFormat) {
     ASSERT_THROW(
-      FromMtx("src/test/resources/matrix/MatricesTestSuite_FromCsv.csv"),
+      FromMtx("lib/src/test/resources/matrix/MatricesTestSuite_FromCsv.csv"),
       std::runtime_error);
   }
 
   TEST(MatrixFunctionsTest, TestFromMtx_NotFound) {
     ASSERT_THROW(
-      FromMtx("src/test/resources/matrix/bogus.mtx"),
+      FromMtx("lib/src/test/resources/matrix/bogus.mtx"),
       mdl::io::file_not_found_exception);
   }
 

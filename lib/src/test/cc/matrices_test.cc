@@ -127,7 +127,7 @@ namespace math {
 
   TEST(MatricesTestSuite, WithValuesMatrixTest_FromCsv) {
     Matrix m = Matrices::FromCsv(
-        "src/test/resources/matrix/MatricesTestSuite_FromCsv.csv");
+        "lib/src/test/resources/matrix/MatricesTestSuite_FromCsv.csv");
 
     
 
@@ -144,7 +144,7 @@ namespace math {
   TEST(MatricesTestSuite, WithValuesMatrixTest_FromCsv_Invalid) {
     ASSERT_THROW(
         Matrices::FromCsv(
-            "src/test/resources/matrix/MatricesTestSuite_FromCsv_Invalid.csv"), 
+            "lib/src/test/resources/matrix/MatricesTestSuite_FromCsv_Invalid.csv"), 
         mdl::text::parse_exception);
   }
 
