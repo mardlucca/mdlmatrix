@@ -33,7 +33,7 @@ alias(
   actual = "//lib:lib"
 )
 
-alias(
-  name = "tests",
-  actual = "//lib:tests"
+test_suite(
+    name = "tests",
+    tests = ["//lib:tests"],
 )
