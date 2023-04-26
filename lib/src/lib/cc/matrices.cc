@@ -95,7 +95,10 @@ namespace math {
           cols = values.size();
         }
 
-        matrix = Matrices::WithValues(cols, values);
+        if (cols > 0) {
+          matrix = Matrices::WithValues(cols, values);
+        }
+        
         values.clear();
       }
 

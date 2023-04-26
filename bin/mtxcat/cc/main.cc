@@ -28,45 +28,45 @@
 
 #include <iostream>
 
+#include <mdl/text.h>
 #include <mdl/util.h>
 #include <mdl/matrix.h>
-#include <vector>
 
 namespace mdl {
 namespace math {
 namespace tools {
   using util::GetOpts;
+  using util::functional::AsFunction;
+  using util::functional::Assign;
+  using util::functional::Set;
+  using text::ParseInt;
 
-  GetOpts opts;
-  const char* inputFiles = "/dev/stdin";
-  const char* outputFile = "/dev/stdout";
-  bool skipFirstLine = false;
+  const char* inputFile = "/dev/stdin";
   bool help = false;
+  int fr = 0;
+  int fc = 0;
+  int tr = 10;
+  int tc = 10;
+
+  GetOpts opts(Assign(&inputFile));
 
   void PrintUsage() {
     std::cout << 
-R"(usage: csv2mtx [-i <file>|-o <file>|-s|-h]
+R"(usage: mtxcat [-h] file
 where:
-  -i  Input file name. Default to stdin.
-  -o  Output file name. Defaults to stdout.
-  -s  Whether or not to skip the first line in the CSV file. Defaults to false.
-  -h  Shows this help message.
+  --fr  From row. Defaults to 0.
+  --fc  From col. Defaults to 0.
+  --tr  To row, not including last. Defaults to 10.
+  --tc  To col, not including last. Defaults to 10.
 )" << std::endl;
   }
 
   bool ParseArgs(const char** args, int argc) {
-    opts.AddOption('h', []() {
-      help = true;
-    });
-    opts.AddOption('i', [](const char* value) {
-      inputFiles = value;
-    });
-    opts.AddOption('o', [](const char* value) {
-      outputFile = value;
-    });
-    opts.AddOption('s', []() {
-      skipFirstLine = true;
-    });
+    opts.AddOption('h', Set(&help, true));
+    opts.AddOption("fr", Assign(&fr, AsFunction(ParseInt)));
+    opts.AddOption("fc", Assign(&fc, AsFunction(ParseInt)));
+    opts.AddOption("tr", Assign(&tr, AsFunction(ParseInt)));
+    opts.AddOption("tc", Assign(&tc, AsFunction(ParseInt)));
 
     return opts.Parse(args, argc);
   }
@@ -82,9 +82,10 @@ where:
       return 0;
     }
 
-    Matrix m = mdl::math::Matrices::FromCsv(inputFiles, skipFirstLine);
-    mdl::math::SaveMtx(outputFile, m);
-
+    FromMtx(inputFile, [](Matrix&& matrix) {
+      std::cout << matrix(Range(fr, tr), Range(fc, tc)) << std::endl;
+      return true;
+    });
     return 0;
   }
 

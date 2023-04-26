@@ -148,5 +148,11 @@ namespace math {
         mdl::text::parse_exception);
   }
 
+  TEST(MatricesTestSuite, WithValuesMatrixTest_FromCsv_Emtpy) {
+    Matrix m = Matrices::FromCsv(
+            "lib/src/test/resources/matrix/MatricesTestSuite_FromCsv_Empty.csv");
+    ASSERT_EQ(0, m.NumRows());
+    ASSERT_EQ(0, m.NumCols());
+  }
 } // math
 } // mdl

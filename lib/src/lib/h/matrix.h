@@ -29,6 +29,7 @@ namespace singlethread {
 class Matrix : public BaseMatrix {
   public:
     Matrix();
+    explicit Matrix(float_t value);
     Matrix(size_t rows, size_t cols);
     Matrix(size_t rows, size_t cols, float_t data[]);
     Matrix(size_t rows, size_t cols, std::function<float_t (size_t, size_t)> initFn);
@@ -133,7 +134,9 @@ class Matrix : public BaseMatrix {
     friend std::vector<Matrix> Unpack(
         const Matrix& matrix, 
         const std::vector<std::pair<size_t, size_t>>& sizes);
-    friend void SaveMtx(const char* fileName, const std::vector<Matrix>& mats);
+    
+    template <class It>
+    friend void SaveMtx(const char* fileName, It begin, It end);
 };
 
 typedef std::function<Matrix (const Matrix&)> mtxtransf;

@@ -36,37 +36,30 @@ namespace mdl {
 namespace math {
 namespace tools {
   using util::GetOpts;
+  using util::functional::AsFunction;
+  using util::functional::Assign;
+  using util::functional::Set;
+  using util::functional::SupplierIterable;
 
   GetOpts opts;
   const char* inputFiles = "/dev/stdin";
   const char* outputFile = "/dev/stdout";
-  bool skipFirstLine = false;
   bool help = false;
 
   void PrintUsage() {
     std::cout << 
-R"(usage: csv2mtx [-i <file>|-o <file>|-s|-h]
+R"(usage: mtxshuffle [-i <file>|-o <file>|-h]
 where:
   -i  Input file name. Default to stdin.
   -o  Output file name. Defaults to stdout.
-  -s  Whether or not to skip the first line in the CSV file. Defaults to false.
   -h  Shows this help message.
 )" << std::endl;
   }
 
   bool ParseArgs(const char** args, int argc) {
-    opts.AddOption('h', []() {
-      help = true;
-    });
-    opts.AddOption('i', [](const char* value) {
-      inputFiles = value;
-    });
-    opts.AddOption('o', [](const char* value) {
-      outputFile = value;
-    });
-    opts.AddOption('s', []() {
-      skipFirstLine = true;
-    });
+    opts.AddOption('h', Set(&help, true));
+    opts.AddOption("-i", Assign(&inputFiles));
+    opts.AddOption("-o", Assign(&outputFile));
 
     return opts.Parse(args, argc);
   }
@@ -82,8 +75,15 @@ where:
       return 0;
     }
 
-    Matrix m = mdl::math::Matrices::FromCsv(inputFiles, skipFirstLine);
-    mdl::math::SaveMtx(outputFile, m);
+    std::unique_ptr<Matrix> mat;
+    SaveMtx(outputFile, [supplier = FromMtxStream(inputFiles), &mat]() {
+      mat = supplier();
+      if (mat) {
+        mat->Shuffle();
+        return mat.get();
+      }
+      return static_cast<Matrix *>(nullptr);
+    });
 
     return 0;
   }

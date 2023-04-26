@@ -14,9 +14,6 @@
 
 namespace mdl {
 namespace math {
-  const int kMtxFileMark = 0x11080101;
-  const int kDoublePrecisionBit = 0x01;
-
   using multithread::BaseMatrixImpl;
 
   Matrix Abs(const BaseMatrix& matrix) {
@@ -201,101 +198,111 @@ namespace math {
   }
 
   std::vector<Matrix> FromMtx(const char* fileName) {
-    std::ifstream in(fileName, std::ios_base::binary);
+    std::vector<Matrix> vec;
+    FromMtx(fileName, [&vec](Matrix&& mat) {
+      vec.push_back(std::move(mat));
+      return true;
+    });
 
-    if (!in || !in.is_open()) {
+    return vec;
+  }
+
+  void FromMtx(const char* fileName, std::function<bool (Matrix&&)> consumer) {
+    auto supplier = FromMtxStream(fileName);
+    for (auto pMatrix = supplier(); pMatrix.get(); pMatrix = supplier()) {
+      consumer(std::move(*pMatrix));
+    }
+  }
+
+  std::function<std::unique_ptr<Matrix> ()> FromMtxStream(const char* fileName) {
+    // std::function's must be copy constructible, so whatever lambdas they point to must also be
+    // copy constructible. Ideally we'd want to use move semantics on the input stream and simply
+    // move the object around in-between lambdas. This doesn't work because ifstream is not copy
+    // constructible, and capturing an ifstream by value makes the lambda not copy constructible 
+    // too. This is a no no. C++23 now introduces std::move_only_function, which presumably solves
+    // this. Not also that capturing ifstream by reference doesn't work either as the reference 
+    // becomes dangling after this method returns.
+
+    std::shared_ptr<std::ifstream> in(new std::ifstream(fileName, std::ios_base::binary));
+
+    if (!in || !in->is_open()) {
       throw mdl::util::exceptionstream()
         .Append("Could not open file: ").Append(fileName)
         .Build<mdl::io::file_not_found_exception>();
     }
     
-    std::vector<Matrix> matrices;
-    in.exceptions(std::ios::badbit);
+    in->exceptions(std::ios::badbit);
 
+    int controlReg = 0;
     try {
       int mask;
-      in.read(reinterpret_cast<char *>(&mask), sizeof(int));
+      in->read(reinterpret_cast<char *>(&mask), sizeof(int));
       if (mask != kMtxFileMark) {
         throw mdl::util::exceptionstream()
             .Append("File does not appear to contain matrices: ").Append(fileName)
             .Build();
       }
 
-      int controlReg;
-      in.read(reinterpret_cast<char *>(&controlReg), sizeof(int));
-
-     do {
-        int rows;
-        int cols;
-        in.read(reinterpret_cast<char *>(&rows), sizeof(int));
-        in.read(reinterpret_cast<char *>(&cols), sizeof(int));
-
-        if (!in.eof()) {
-          if (rows * cols > 0) {
-            if (controlReg & kDoublePrecisionBit) {
-              std::unique_ptr<double_t> buffer(new double_t[((size_t) rows) * cols]);
-              in.read(reinterpret_cast<char *>(buffer.get()), sizeof(double_t) * rows * cols);
-
-              if (kDoublePrecision) {
-                matrices.push_back(Matrix(rows, cols, reinterpret_cast<float_t *>(buffer.release())));
-              } else {
-                matrices.push_back(Matrix(rows, cols, 
-                  reinterpret_cast<float_t *>(
-                    ToSingleBuff(buffer.get(), ((size_t) rows) * cols))));
-              }
-            } else {
-              std::unique_ptr<single_t> buffer(new single_t[((size_t) rows) * cols]);
-              in.read(reinterpret_cast<char *>(buffer.get()), sizeof(single_t) * rows * cols);
-
-              if (kDoublePrecision) {
-                matrices.push_back(Matrix(rows, cols, 
-                  reinterpret_cast<float_t *>(
-                    ToDoubleBuff(buffer.get(), ((size_t) rows) * cols))));
-              } else {
-                matrices.push_back(Matrix(rows, cols, reinterpret_cast<float_t *>(buffer.release())));
-              }
-            }
-          } else {
-            matrices.push_back(Matrix(0, 0));
-          }
-        }
-      } while (!in.eof());
-
+      in->read(reinterpret_cast<char *>(&controlReg), sizeof(int));
     } catch (const std::ios_base::failure& e) {
       throw mdl::io::io_exception(e.what());
     }
 
-    return matrices;
+    return [in, controlReg]() {
+      try {
+        if (in->eof()) { return std::unique_ptr<Matrix>(); }
+
+        int rows;
+        int cols;
+        in->read(reinterpret_cast<char *>(&rows), sizeof(int));
+        if (in->eof()) { return std::unique_ptr<Matrix>(); }
+        in->read(reinterpret_cast<char *>(&cols), sizeof(int));
+
+
+        Matrix matrix;
+        if (rows * cols > 0) {
+          if (controlReg & kDoublePrecisionBit) {
+            std::unique_ptr<double_t> buffer(new double_t[((size_t) rows) * cols]);
+            in->read(reinterpret_cast<char *>(buffer.get()), sizeof(double_t) * rows * cols);
+
+            if (kDoublePrecision) {
+              matrix = Matrix(rows, cols, reinterpret_cast<float_t *>(buffer.release()));
+            } else {
+              matrix = Matrix(rows, cols, 
+                reinterpret_cast<float_t *>(
+                  ToSingleBuff(buffer.get(), ((size_t) rows) * cols)));
+            }
+          } else {
+            std::unique_ptr<single_t> buffer(new single_t[((size_t) rows) * cols]);
+            in->read(reinterpret_cast<char *>(buffer.get()), sizeof(single_t) * rows * cols);
+
+            if (kDoublePrecision) {
+              matrix = Matrix(rows, cols, 
+                reinterpret_cast<float_t *>(
+                  ToDoubleBuff(buffer.get(), ((size_t) rows) * cols)));
+            } else {
+              matrix = Matrix(rows, cols, reinterpret_cast<float_t *>(buffer.release()));
+            }
+          }
+        } else {
+          matrix = Matrix(0, 0);
+        }
+
+        return std::unique_ptr<Matrix>(new Matrix(std::move(matrix)));
+      } catch (const std::ios_base::failure& e) {
+        throw mdl::io::io_exception(e.what());
+      }
+    };
+  }
+
+  void SaveMtx(const char* fileName, std::function<const Matrix* ()> supplier) {
+    mdl::util::functional::SupplierIterable<const Matrix> iterable(supplier);
+    SaveMtx(fileName, iterable.begin(), iterable.end());
   }
 
   void SaveMtx(const char* fileName, const Matrix& matrix) {
-    SaveMtx(fileName, std::vector<Matrix>({matrix}));
+    SaveMtx(fileName, mdl::util::functional::SupplyOne(&matrix));
   }
-
-
-  void SaveMtx(const char* fileName, const std::vector<Matrix>& mats) {
-    std::ofstream out(fileName, std::ios_base::binary | std::ios_base::out);
-    out.write(reinterpret_cast<const char *>(&kMtxFileMark), sizeof(int));
-
-    int controlReg = 0;
-    if (kDoublePrecision) {
-      controlReg |= kDoublePrecisionBit;
-    }
-
-    out.write(reinterpret_cast<const char *>(&controlReg), sizeof(controlReg));
-
-    for (auto mat = mats.begin(); mat != mats.end(); mat++) {
-      int rows = mat->rows;
-      int cols = mat->cols;
-      out.write(reinterpret_cast<const char *>(&rows), sizeof(int));
-      out.write(reinterpret_cast<const char *>(&cols), sizeof(int));
-      if (mat->rows * mat->cols > 0) {
-        out.write(reinterpret_cast<const char *>(mat->data.get()), 
-            sizeof(float_t) * mat->rows * mat->cols);
-      }
-    }
-  }
-
 
 } // math
 } // mdl

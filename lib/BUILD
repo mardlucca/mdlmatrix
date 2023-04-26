@@ -66,12 +66,3 @@ filegroup(
       "src/test/resources/**/*.*"
   ]),
 )
-
-# cc_binary(
-#   name = "main",
-#   srcs = ["main/cc/main.cc"],
-#   deps = [
-#     "//:lib",
-#     "@mdl_prof//:lib"
-#   ]
-# )

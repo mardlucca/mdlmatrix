@@ -28,11 +28,19 @@ namespace math {
     return true;
   }
 
+  float_t& BaseMatrix::operator[](size_t index) {
+    return NumCols() == 1 ? operator()(index, 0) : operator()(0, index);
+  }
+
+  float_t BaseMatrix::operator[](size_t index) const {
+    return NumCols() == 1 ? operator()(index, 0) : operator()(0, index);
+  }
+
   bool BaseMatrix::Equals(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {
     return matrix1.Equals(matrix2);
   }
 
-  void BaseMatrix::ForEach(std::function<void (size_t, size_t, float_t&)> fn) {
+  BaseMatrix& BaseMatrix::ForEach(std::function<void (size_t, size_t, float_t&)> fn) {
     size_t rows = NumRows();
     size_t cols = NumCols();
 
@@ -41,10 +49,12 @@ namespace math {
         fn(row, col, (*this)(row, col));
       }
     }
+
+    return *this;
   }
 
-  void BaseMatrix::RowSwap(size_t row1, size_t row2) {
-    if (row1 == row2) { return; }
+  BaseMatrix& BaseMatrix::RowSwap(size_t row1, size_t row2) {
+    if (row1 == row2) { return *this; }
 
     size_t cols = NumCols();
 
@@ -53,9 +63,11 @@ namespace math {
       (*this)(row1, col) = (*this)(row2, col);
       (*this)(row2, col) = temp;
     }
+
+    return *this;
   }
 
-  void BaseMatrix::Shuffle() {
+  BaseMatrix& BaseMatrix::Shuffle() {
     if (NumRows() == 1) {
       for (size_t i = NumCols() - 1; i > 0; i--) {
         size_t j = NextRand(i + 1);
@@ -69,6 +81,8 @@ namespace math {
         RowSwap(i, j);
       }
     }
+
+    return *this;
   }
 
 

@@ -42,5 +42,24 @@ cc_binary(
   srcs = ["csv2mtx/cc/main.cc"],
   deps = [
     "//:lib"
-  ]
+  ],
+  linkstatic = True
+)
+
+cc_binary(
+  name = "mtxcat",
+  srcs = ["mtxcat/cc/main.cc"],
+  deps = [
+    "//:lib"
+  ],
+  linkstatic = True
+)
+
+cc_binary(
+  name = "mtxshuffle",
+  srcs = ["mtxshuffle/cc/main.cc"],
+  deps = [
+    "//:lib"
+  ],
+  linkstatic = True
 )

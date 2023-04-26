@@ -15,6 +15,10 @@ namespace math {
 
   Matrix::Matrix() : Matrix(0, 0) {}
 
+  Matrix::Matrix(float_t value) : Matrix(1, 1) {
+    (*this)(0,0) = value;
+  }
+
   Matrix::Matrix(size_t rows, size_t cols) 
       : rows(rows), cols(cols), 
         data(std::shared_ptr<float_t[]>(new float_t[rows * cols])) {

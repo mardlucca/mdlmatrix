@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <iostream>
 
 #include <mdl/matrix.h>
@@ -35,6 +36,18 @@ namespace math {
           matrix(LeftRange(matrix.NumRows()), UnitRange(1));
       }
   };
+
+  TEST_F(BaseMatrixImplTestSuite, LengthTest) {
+    ASSERT_EQ(std::max(matrix.NumRows(), matrix.NumCols()), matrix.Length());
+    ASSERT_EQ(vector.NumCols(), vector.Length());
+    ASSERT_EQ(colVector.NumRows(), colVector.Length());
+  }
+
+  TEST_F(BaseMatrixImplTestSuite, IndexOperatorTest) {
+    ASSERT_EQ(matrix(0, 2), matrix[2]);
+    ASSERT_EQ(vector(0, 2), vector[2]);
+    ASSERT_EQ(colVector(2, 0), colVector[2]);
+  }
 
   TEST_F(BaseMatrixImplTestSuite, MatrixScalarOperateTest) {
     Matrix result = BaseMatrixImpl::Operate<op::Addition>(matrix, 20);
