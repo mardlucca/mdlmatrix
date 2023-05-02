@@ -29,70 +29,63 @@
 #include <iostream>
 
 #include <mdl/util.h>
-#include <mdl/matrix.h>
-#include <vector>
 
 namespace mdl {
 namespace math {
 namespace tools {
-  using util::cli::GetOpts;
-
-  GetOpts opts;
-  const char* inputFiles = "/dev/stdin";
-  const char* outputFile = "/dev/stdout";
-  bool skipFirstLine = false;
-  bool help = false;
-
-  void PrintUsage() {
-    std::cout << 
-R"(usage: csv2mtx [-i <file>|-o <file>|-s|-h]
-where:
-  -i  Input file name. Default to stdin.
-  -o  Output file name. Defaults to stdout.
-  -s  Whether or not to skip the first line in the CSV file. Defaults to false.
-  -h  Shows this help message.
-)" << std::endl;
+  namespace cat {
+    int Main(const char** args, int argc);
+  }
+  namespace shuffle {
+    int Main(const char** args, int argc);
+  }
+  namespace split {
+    int Main(const char** args, int argc);
   }
 
-  bool ParseArgs(const char** args, int argc) {
-    opts.AddOption('h', []() {
-      help = true;
-    });
-    opts.AddOption('i', [](const char* value) {
-      inputFiles = value;
-    });
-    opts.AddOption('o', [](const char* value) {
-      outputFile = value;
-    });
-    opts.AddOption('s', []() {
-      skipFirstLine = true;
-    });
+  int PrintUsage(int result = 0) {
+    std::cout << R"(Matrix file (e.g. mtx) manipulation tool.
 
-    return opts.Parse(args, argc);
+Usage: 
+  mtxtool [command] [command-options]
+
+Commands:
+  append
+  cat
+  pop
+  push
+  shuffle
+  split
+  take
+
+Use "mtxtool <command> --help for more information about a given command"
+)" << std::endl;
+    return result;
   }
 
   int DoMain(const char** args, int argc) {
-    if (!ParseArgs(args, argc)) {
-      PrintUsage();
-      return 1;
-    }
+    mdl::util::cli::CommandSwitch commands([](const char* command) {
+      if (!command) {
+        return PrintUsage();
+      }
 
-    if (help) {
-      PrintUsage();
-      return 0;
-    }
+      std::cout << "error: unknown command '" << command << "' for mtxtool";
+      return 100;
+    });
 
-    Matrix m = mdl::math::Matrices::FromCsv(inputFiles, skipFirstLine);
-    mdl::math::SaveMtx(outputFile, m);
-
-    return 0;
+    return commands
+      .AddCommand("cat", mdl::math::tools::cat::Main)
+      .AddCommand("shuffle", mdl::math::tools::shuffle::Main)
+      .AddCommand("split", mdl::math::tools::split::Main)
+      .Go(args, argc);
   }
-
 } // namespace tools
 } // namespace math
 } // namespace mdl
 
+
+
 int main(int argc, const char** args) {
+
   return mdl::math::tools::DoMain(args, argc);
 }
-

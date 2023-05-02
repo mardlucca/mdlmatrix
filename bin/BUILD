@@ -47,17 +47,8 @@ cc_binary(
 )
 
 cc_binary(
-  name = "mtxcat",
-  srcs = ["mtxcat/cc/main.cc"],
-  deps = [
-    "//:lib"
-  ],
-  linkstatic = True
-)
-
-cc_binary(
-  name = "mtxshuffle",
-  srcs = ["mtxshuffle/cc/main.cc"],
+  name = "mtxtool",
+  srcs = glob(["mtxtool/src/main/cc/**/*.cc", "mtxtool/src/main/h/**/*.h"]),
   deps = [
     "//:lib"
   ],

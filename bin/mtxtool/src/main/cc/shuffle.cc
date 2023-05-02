@@ -26,52 +26,44 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include <filesystem>
 #include <iostream>
+#include <vector>
 
-#include <mdl/text.h>
 #include <mdl/util.h>
 #include <mdl/matrix.h>
+
 
 namespace mdl {
 namespace math {
 namespace tools {
-  using util::GetOpts;
-  using util::functional::AsFunction;
+namespace shuffle {
+
+  using util::cli::GetOpts;
   using util::functional::Assign;
   using util::functional::Set;
-  using text::ParseInt;
+  using util::functional::SupplierIterable;
 
-  const char* inputFile = "/dev/stdin";
+  const char* inputFileName = nullptr;
   bool help = false;
-  int fr = 0;
-  int fc = 0;
-  int tr = 10;
-  int tc = 10;
-
-  GetOpts opts(Assign(&inputFile));
+  GetOpts opts(Assign(&inputFileName));
 
   void PrintUsage() {
     std::cout << 
-R"(usage: mtxcat [-h] file
+R"(usage: mtxtool shuffle [<file>]
 where:
-  --fr  From row. Defaults to 0.
-  --fc  From col. Defaults to 0.
-  --tr  To row, not including last. Defaults to 10.
-  --tc  To col, not including last. Defaults to 10.
+  <file>  Default to stdin if not provided
+  --help  Shows this help message.
 )" << std::endl;
   }
 
   bool ParseArgs(const char** args, int argc) {
-    opts.AddOption('h', Set(&help, true));
-    opts.AddOption("fr", Assign(&fr, AsFunction(ParseInt)));
-    opts.AddOption("fc", Assign(&fc, AsFunction(ParseInt)));
-    opts.AddOption("tr", Assign(&tr, AsFunction(ParseInt)));
-    opts.AddOption("tc", Assign(&tc, AsFunction(ParseInt)));
+    opts.AddOption("help", Set(&help, true));
 
     return opts.Parse(args, argc);
   }
 
-  int DoMain(const char** args, int argc) {
+  int Main(const char** args, int argc) {
     if (!ParseArgs(args, argc)) {
       PrintUsage();
       return 1;
@@ -82,18 +74,47 @@ where:
       return 0;
     }
 
-    FromMtx(inputFile, [](Matrix&& matrix) {
-      std::cout << matrix(Range(fr, tr), Range(fc, tc)) << std::endl;
-      return true;
+    std::string outputFileName("/dev/stdout");
+    if (inputFileName) {
+      auto file = std::filesystem::path(inputFileName);
+      if (!std::filesystem::exists(file)) {
+        std::cout << "error: file not found: " << inputFileName << std::endl;
+        return 2;
+      }
+      if (!std::filesystem::is_regular_file(file)) {
+        std::cout << "error: not a regular file: " << inputFileName << std::endl;
+        return 3;
+      }
+
+      auto inputFile = std::filesystem::path(inputFileName);
+      outputFileName = inputFile.parent_path().string() 
+          + "/." + inputFile.filename().c_str() + ".tmp";
+    }
+
+    std::unique_ptr<Matrix> mat;
+    int idx = 0;
+    SaveMtx(
+        outputFileName.c_str(), 
+        [supplier = FromMtxStream(inputFileName ? inputFileName : "/dev/stdin"), &mat, &idx]() mutable {
+      mat = supplier();
+      if (mat) {
+        if (idx == 0) { 
+          mat->Shuffle();
+        }
+        idx++;
+        return mat.get();
+      }
+      return static_cast<Matrix *>(nullptr);
     });
+
+    if (inputFileName) {
+      std::filesystem::rename(outputFileName, inputFileName);
+    }
+
     return 0;
   }
-
+} // namespace shuffle
 } // namespace tools
 } // namespace math
 } // namespace mdl
-
-int main(int argc, const char** args) {
-  return mdl::math::tools::DoMain(args, argc);
-}
 

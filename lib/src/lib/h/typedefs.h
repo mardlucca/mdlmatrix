@@ -29,6 +29,7 @@
 #ifndef _MDL_MATH_TYPEDEFS
 #define _MDL_MATH_TYPEDEFS
 
+#include <climits>
 #include <cstddef>
 #include <memory>
 
@@ -37,8 +38,10 @@ namespace math {
 
   #ifdef _MDL_MATH_LARGE_MATRICES
     typedef long size_t;
+    const long kMaxSizeT = LONG_MAX;
   #else
     typedef int size_t;
+    const int kMaxSizeT = INT_MAX;
   #endif  
 
   #define _MDL_MATH_SINGLE_PRECISION

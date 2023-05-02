@@ -1,8 +1,6 @@
 #ifndef _MDL_MATH_RANGE
 #define _MDL_MATH_RANGE
 
-#include <climits>
-
 #include "typedefs.h"
 
 namespace mdl {
@@ -58,7 +56,7 @@ namespace math {
       size_t increment;
       size_t length;
 
-      Range(size_t start = 0, size_t end = INT_MAX, size_t increment = 1);
+      Range(size_t start = 0, size_t end = kMaxSizeT, size_t increment = 1);
       
       inline size_t Get(size_t index) const {   
           return  start + index * increment;

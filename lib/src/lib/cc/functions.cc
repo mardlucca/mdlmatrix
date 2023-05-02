@@ -301,7 +301,7 @@ namespace math {
   }
 
   void SaveMtx(const char* fileName, const Matrix& matrix) {
-    SaveMtx(fileName, mdl::util::functional::SupplyOne(&matrix));
+    SaveMtx(fileName, mdl::util::functional::AsSupplier(&matrix));
   }
 
 } // math

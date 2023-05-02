@@ -82,7 +82,9 @@ namespace math {
       
       void OnValue(const std::wstring& val) override {
         try {
-          values.push_back(std::stod(val));
+        if (!ignoreFirstLine || line > 1) {
+            values.push_back(std::stod(val));
+        }
         } catch (const std::invalid_argument& e) {
           throw mdl::util::wexceptionstream()
               .Append("Cannot covert '").Append(val).Append("' to a float_t.")

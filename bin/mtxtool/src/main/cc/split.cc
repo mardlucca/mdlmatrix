@@ -26,45 +26,53 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include <filesystem>
 #include <iostream>
+#include <vector>
 
+#include <mdl/text.h>
 #include <mdl/util.h>
 #include <mdl/matrix.h>
-#include <vector>
+
 
 namespace mdl {
 namespace math {
 namespace tools {
-  using util::GetOpts;
+namespace split {
+
+  using mdl::text::ParseInt;
+  using util::cli::GetOpts;
   using util::functional::AsFunction;
   using util::functional::Assign;
   using util::functional::Set;
   using util::functional::SupplierIterable;
 
-  GetOpts opts;
-  const char* inputFiles = "/dev/stdin";
-  const char* outputFile = "/dev/stdout";
+  const char* inputFileName = nullptr;
   bool help = false;
+  math::size_t height = math::kMaxSizeT;
+  math::size_t width = math::kMaxSizeT;
+  GetOpts opts(Assign(&inputFileName));
 
   void PrintUsage() {
     std::cout << 
-R"(usage: mtxshuffle [-i <file>|-o <file>|-h]
+R"(usage: mtxtool split [<file>]
 where:
-  -i  Input file name. Default to stdin.
-  -o  Output file name. Defaults to stdout.
-  -h  Shows this help message.
+  <file>       Default to stdin if not provided
+  -w,--width   Grid width
+  -h,--height  Grid height
+  --help       Shows this help message.
 )" << std::endl;
   }
 
   bool ParseArgs(const char** args, int argc) {
-    opts.AddOption('h', Set(&help, true));
-    opts.AddOption("-i", Assign(&inputFiles));
-    opts.AddOption("-o", Assign(&outputFile));
+    opts.AddOption("help", Set(&help, true));
+    opts.AddOption('h', "height", Assign(&height, AsFunction(ParseInt)));
+    opts.AddOption('w', "width", Assign(&width, AsFunction(ParseInt)));
 
     return opts.Parse(args, argc);
   }
 
-  int DoMain(const char** args, int argc) {
+  int Main(const char** args, int argc) {
     if (!ParseArgs(args, argc)) {
       PrintUsage();
       return 1;
@@ -75,24 +83,67 @@ where:
       return 0;
     }
 
+    height = std::max(1, height);
+    width = std::max(1, width);
+
+    std::string outputFileName("/dev/stdout");
+    if (inputFileName) {
+      auto file = std::filesystem::path(inputFileName);
+      if (!std::filesystem::exists(file)) {
+        std::cout << "error: file not found: " << inputFileName << std::endl;
+        return 2;
+      }
+      if (!std::filesystem::is_regular_file(file)) {
+        std::cout << "error: not a regular file: " << inputFileName << std::endl;
+        return 3;
+      }
+
+      auto inputFile = std::filesystem::path(inputFileName);
+      outputFileName = inputFile.parent_path().string() 
+          + "/." + inputFile.filename().c_str() + ".tmp";
+    }
+
     std::unique_ptr<Matrix> mat;
-    SaveMtx(outputFile, [supplier = FromMtxStream(inputFiles), &mat]() {
+    Matrix split;
+
+    int idx = 0;
+    size_t row = 0;
+    size_t col = 0;
+    SaveMtx(
+        outputFileName.c_str(), 
+        [supplier = FromMtxStream(inputFileName ? inputFileName : "/dev/stdin"), 
+            &mat, &split, &idx, &row, &col]() mutable {
+      if (idx == 0) {
+        if (!mat) { mat = supplier(); }
+
+        if (mat && row < mat->NumRows()) {
+          split = (*mat)(Range(row, row + height), Range(col, col + width));
+          col += width;
+          if (col >= mat->NumCols()) {
+            col = 0;
+            row += height;
+          }
+          return &split;
+        } else {
+          idx++;
+        }
+      }
+
       mat = supplier();
       if (mat) {
-        mat->Shuffle();
         return mat.get();
       }
       return static_cast<Matrix *>(nullptr);
     });
 
+    if (inputFileName) {
+      std::filesystem::rename(outputFileName, inputFileName);
+    }
+
     return 0;
   }
-
+} // namespace split
 } // namespace tools
 } // namespace math
 } // namespace mdl
-
-int main(int argc, const char** args) {
-  return mdl::math::tools::DoMain(args, argc);
-}
 
