@@ -39,9 +39,7 @@ namespace tools {
 namespace cat {
 
   using util::cli::GetOpts;
-  using util::functional::AsFunction;
   using util::functional::Assign;
-  using util::functional::Set;
   using text::ParseInt;
 
   const char* inputFile = "/dev/stdin";
@@ -73,14 +71,14 @@ where:
   }
 
   bool ParseArgs(const char** args, int argc) {
-    opts.AddOption("help", Set(&help, true));
-    opts.AddOption("fr", Assign(&fr, AsFunction(ParseInt)));
-    opts.AddOption("fc", Assign(&fc, AsFunction(ParseInt)));
-    opts.AddOption("tr", Assign(&tr, AsFunction(ParseInt)));
-    opts.AddOption("tc", Assign(&tc, AsFunction(ParseInt)));
-    opts.AddOption("raw", Set(&raw, true));
-    opts.AddOption("csv", Set(&csv, true));
-    opts.AddOption('s', "sizes", Set(&sizesOnly, true));
+    opts.AddOption("help", Assign(&help, true));
+    opts.AddOption("fr", Assign(&fr, ParseInt));
+    opts.AddOption("fc", Assign(&fc, ParseInt));
+    opts.AddOption("tr", Assign(&tr, ParseInt));
+    opts.AddOption("tc", Assign(&tc, ParseInt));
+    opts.AddOption("raw", Assign(&raw, true));
+    opts.AddOption("csv", Assign(&csv, true));
+    opts.AddOption('s', "sizes", Assign(&sizesOnly, true));
 
     return opts.Parse(args, argc);
   }

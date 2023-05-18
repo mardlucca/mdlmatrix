@@ -29,11 +29,11 @@ namespace math {
   }
 
   float_t& BaseMatrix::operator[](size_t index) {
-    return NumCols() == 1 ? operator()(index, 0) : operator()(0, index);
+    return operator()(index / NumCols(), index % NumCols());
   }
 
   float_t BaseMatrix::operator[](size_t index) const {
-    return NumCols() == 1 ? operator()(index, 0) : operator()(0, index);
+    return operator()(index / NumCols(), index % NumCols());
   }
 
   bool BaseMatrix::Equals(const BaseMatrix& matrix1, const BaseMatrix& matrix2) {

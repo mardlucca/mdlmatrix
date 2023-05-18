@@ -41,7 +41,6 @@ namespace shuffle {
 
   using util::cli::GetOpts;
   using util::functional::Assign;
-  using util::functional::Set;
   using util::functional::SupplierIterable;
 
   const char* inputFileName = nullptr;
@@ -58,7 +57,7 @@ where:
   }
 
   bool ParseArgs(const char** args, int argc) {
-    opts.AddOption("help", Set(&help, true));
+    opts.AddOption("help", Assign(&help, true));
 
     return opts.Parse(args, argc);
   }

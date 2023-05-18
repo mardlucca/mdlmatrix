@@ -42,9 +42,7 @@ namespace split {
 
   using mdl::text::ParseInt;
   using util::cli::GetOpts;
-  using util::functional::AsFunction;
   using util::functional::Assign;
-  using util::functional::Set;
   using util::functional::SupplierIterable;
 
   const char* inputFileName = nullptr;
@@ -65,9 +63,9 @@ where:
   }
 
   bool ParseArgs(const char** args, int argc) {
-    opts.AddOption("help", Set(&help, true));
-    opts.AddOption('h', "height", Assign(&height, AsFunction(ParseInt)));
-    opts.AddOption('w', "width", Assign(&width, AsFunction(ParseInt)));
+    opts.AddOption("help", Assign(&help, true));
+    opts.AddOption('h', "height", Assign(&height, ParseInt));
+    opts.AddOption('w', "width", Assign(&width, ParseInt));
 
     return opts.Parse(args, argc);
   }

@@ -47,7 +47,7 @@ namespace tools {
     std::cout << R"(Matrix file (e.g. mtx) manipulation tool.
 
 Usage: 
-  mtxtool [command] [command-options]
+  mtxtool <command> [<command-options>]
 
 Commands:
   append

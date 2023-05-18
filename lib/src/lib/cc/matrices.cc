@@ -80,13 +80,13 @@ namespace math {
         line++;
       }
       
-      void OnValue(const std::wstring& val) override {
+      void OnValue(const std::string& val) override {
         try {
         if (!ignoreFirstLine || line > 1) {
             values.push_back(std::stod(val));
         }
         } catch (const std::invalid_argument& e) {
-          throw mdl::util::wexceptionstream()
+          throw mdl::util::exceptionstream()
               .Append("Cannot covert '").Append(val).Append("' to a float_t.")
               .Build<mdl::text::parse_exception>();
         }
