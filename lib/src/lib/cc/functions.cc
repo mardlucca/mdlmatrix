@@ -304,5 +304,28 @@ namespace math {
     SaveMtx(fileName, mdl::util::functional::AsSupplier(&matrix));
   }
 
+  void SaveCsv(const char* fileName, const Matrix& matrix) {
+    try {
+      std::ofstream out(fileName, std::ios_base::out);
+      out.exceptions(std::ios::badbit | std::ios::failbit);
+
+      SaveCsv(out, matrix);      
+    } catch (std::ios_base::failure& ex) {
+      throw mdl::util::exceptionstream()
+        .Append("Cannot write to file: ")
+        .Append(fileName)
+        .Build<mdl::io::io_exception>();
+    }
+  }
+  void SaveCsv(std::ostream& out, const Matrix& matrix) {
+    for (size_t row = 0; row < matrix.NumRows(); row++) {
+      for (size_t col = 0; col < matrix.NumCols(); col++) {
+        if (col > 0) { out << ','; }
+        out << matrix(row, col);
+      }
+      out << std::endl;
+    }
+  }
+
 } // math
 } // mdl

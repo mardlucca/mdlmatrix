@@ -99,28 +99,48 @@ where:
     }
 
     if (sizesOnly) {
-      FromMtx(inputFile, [](Matrix&& matrix) {
-        std::cout << matrix.NumRows() << " x " << matrix.NumCols() << std::endl;
-        return true;
-      });
-    } else if (csv) {
-      FromMtx(inputFile, [](Matrix&& matrix) {
-        for (size_t row = std::max(0, fr); row < std::min(tr, matrix.NumRows()); row++) {
-          for (size_t col = std::max(0, fc); col < std::min(tc, matrix.NumCols()); col++) {
-            if (col > 0) { std::cout << ','; }
-            std::cout << matrix(row, col);
+      if (raw) {
+        auto stream = FromMtxStream(inputFile);
+        Matrix mat(1, 2);
+        SaveMtx(stdoutFile, [&stream, &mat]() -> const Matrix* {
+          auto pMatrix = stream();
+          if (!pMatrix) { return nullptr; }
+          auto slice = (*pMatrix)(Range(fr, tr), Range(fc, tc));
+          mat(0, 0) = slice.NumRows();
+          mat(0, 1) = slice.NumCols();
+          return &mat;
+        });
+      } else {
+        FromMtx(inputFile, [](Matrix&& matrix) {
+          auto slice = matrix(Range(fr, tr), Range(fc, tc));
+          if (csv) {
+            std::cout << slice.NumRows() << "," << slice.NumCols() << std::endl;
+          } else {
+            std::cout << slice.NumRows() << " x " << slice.NumCols() << std::endl;
           }
-          std::cout << std::endl;
-        }
-        return true;
-      });
-    } else if (raw) {
-      SaveMtx(stdoutFile, mdl::util::functional::AsSupplier(FromMtxStream(inputFile)));
+          return true;
+        });
+      }
     } else {
-      FromMtx(inputFile, [](Matrix&& matrix) {
-        std::cout << matrix(Range(fr, tr), Range(fc, tc)) << std::endl;
-        return true;
-      });
+      if (raw) {
+        auto stream = FromMtxStream(inputFile);
+        Matrix mat;
+        SaveMtx(stdoutFile, [&stream, &mat]() -> const Matrix* {
+          auto pMatrix = stream();
+          if (!pMatrix) { return nullptr; }
+          mat = (*pMatrix)(Range(fr, tr), Range(fc, tc));
+          return &mat;
+        });
+      } else {
+        FromMtx(inputFile, [](Matrix&& matrix) {
+          if (csv) {
+            SaveCsv(std::cout, matrix(Range(fr, tr), Range(fc, tc)));
+          } else {
+            std::cout << matrix(Range(fr, tr), Range(fc, tc)) << std::endl;
+          }
+          return true;
+        });
+      }
     }
 
     return 0;

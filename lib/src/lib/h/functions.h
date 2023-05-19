@@ -100,6 +100,9 @@ namespace math {
     }
   }
 
+  void SaveCsv(const char* fileName, const Matrix& matrix);
+  void SaveCsv(std::ostream& out, const Matrix& matrix);
+
 } // math
 } // mdl
 
