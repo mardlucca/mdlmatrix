@@ -197,9 +197,9 @@ namespace math {
     return matrices;
   }
 
-  std::vector<Matrix> FromMtx(const char* fileName) {
+  std::vector<Matrix> FromMtx(std::istream& in) {
     std::vector<Matrix> vec;
-    FromMtx(fileName, [&vec](Matrix&& mat) {
+    FromMtx(in, [&vec](Matrix&& mat) {
       vec.push_back(std::move(mat));
       return true;
     });
@@ -207,39 +207,21 @@ namespace math {
     return vec;
   }
 
-  void FromMtx(const char* fileName, std::function<bool (Matrix&&)> consumer) {
-    auto supplier = FromMtxStream(fileName);
+  void FromMtx(std::istream& in, std::function<bool (Matrix&&)> consumer) {
+    auto supplier = FromMtxStream(&in);
     for (auto pMatrix = supplier(); pMatrix.get(); pMatrix = supplier()) {
       consumer(std::move(*pMatrix));
     }
   }
 
-  std::function<std::unique_ptr<Matrix> ()> FromMtxStream(const char* fileName) {
-    // std::function's must be copy constructible, so whatever lambdas they point to must also be
-    // copy constructible. Ideally we'd want to use move semantics on the input stream and simply
-    // move the object around in-between lambdas. This doesn't work because ifstream is not copy
-    // constructible, and capturing an ifstream by value makes the lambda not copy constructible 
-    // too. This is a no no. C++23 now introduces std::move_only_function, which presumably solves
-    // this. Not also that capturing ifstream by reference doesn't work either as the reference 
-    // becomes dangling after this method returns.
-
-    std::shared_ptr<std::ifstream> in(new std::ifstream(fileName, std::ios_base::binary));
-
-    if (!in || !in->is_open()) {
-      throw mdl::util::exceptionstream()
-        .Append("Could not open file: ").Append(fileName)
-        .Build<mdl::io::file_not_found_exception>();
-    }
-    
-    in->exceptions(std::ios::badbit);
-
+  std::function<std::unique_ptr<Matrix> ()> FromMtxStream(std::istream* in) {
     int controlReg = 0;
     try {
       int mask;
       in->read(reinterpret_cast<char *>(&mask), sizeof(int));
       if (mask != kMtxFileMark) {
         throw mdl::util::exceptionstream()
-            .Append("File does not appear to contain matrices: ").Append(fileName)
+            .Append("Input does not appear to contain matrices")
             .Build();
       }
 
@@ -293,6 +275,68 @@ namespace math {
         throw mdl::io::io_exception(e.what());
       }
     };
+  }
+
+  std::vector<Matrix> FromMtx(const char* fileName) {
+    std::vector<Matrix> vec;
+    FromMtx(fileName, [&vec](Matrix&& mat) {
+      vec.push_back(std::move(mat));
+      return true;
+    });
+
+    return vec;
+  }
+
+  void FromMtx(const char* fileName, std::function<bool (Matrix&&)> consumer) {
+    auto supplier = FromMtxStream(fileName);
+    for (auto pMatrix = supplier(); pMatrix.get(); pMatrix = supplier()) {
+      consumer(std::move(*pMatrix));
+    }
+  }
+
+  std::function<std::unique_ptr<Matrix> ()> FromMtxStream(const char* fileName) {
+    // std::function's must be copy constructible, so whatever lambdas they point to must also be
+    // copy constructible. This is important especially in return values, as today std::functions can
+    // only be copied to the result and not moved. Ideally we'd want to use move semantics on the 
+    // input stream and simply move the object around in-between lambdas. This doesn't work because 
+    // while ifstream supports move semantics, std::function does not (as stated above). As for copy
+    // semantics, we can't use it directly either because ifstream doesn't support it. Same thing 
+    // happens if we use a unique_ptr in a lambda capture (i.e. it doesn't work because it doesn't 
+    // support copy semantics and std::function doesn't support move semantics). However, C++23 now 
+    // introduces std::move_only_function, which presumably solves this (i.e. you can move the 
+    // contents of an object into values captured by the lambda and std::move_only_function values
+    // can be returned from functions using move semantics). So the only solution I could come up 
+    // with ATM (i.e. in C++20) is to use a shared pointer, which does allow for copy semantics. 
+    // Another solution would be to simply return dumb pointers and have callers manually free them. 
+    // That, however, sucks.
+    //
+    // (Note also that capturing ifstream by reference doesn't work either as the reference 
+    // becomes dangling after this method returns). 
+
+    std::shared_ptr<std::ifstream> in(new std::ifstream(fileName, std::ios_base::binary));
+
+    if (!in || !in->is_open()) {
+      throw mdl::util::exceptionstream()
+        .Append("Could not open file: ").Append(fileName)
+        .Build<mdl::io::file_not_found_exception>();
+    }
+    
+    in->exceptions(std::ios::badbit);
+
+    return [in, stream = FromMtxStream(in.get())]() {
+      // safe to reference the address of the ifstream as the ifstream will live while this lambda
+      // lives (because of how we keep a copy of shared_ptr "in")
+      return stream();
+    };
+  }
+
+  void SaveMtx(std::ostream& out, std::function<const Matrix* ()> supplier) {
+    mdl::util::functional::SupplierIterable<const Matrix> iterable(supplier);
+    SaveMtx(out, iterable.begin(), iterable.end());
+  }
+
+  void SaveMtx(std::ostream& out, const Matrix& matrix) {
+    SaveMtx(out, mdl::util::functional::AsSupplier(&matrix));
   }
 
   void SaveMtx(const char* fileName, std::function<const Matrix* ()> supplier) {

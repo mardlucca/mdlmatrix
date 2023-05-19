@@ -26,53 +26,57 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include <filesystem>
 #include <iostream>
-#include <vector>
+#include <memory>
 
 #include <mdl/text.h>
 #include <mdl/util.h>
 #include <mdl/matrix.h>
 
-
 namespace mdl {
 namespace math {
 namespace tools {
-namespace split {
+namespace zeros {
 
-  using mdl::text::ParseInt;
   using util::cli::GetOpts;
   using util::functional::Assign;
-  using util::functional::SupplierIterable;
+  using text::ParseInt;
 
-  const char* inputFileName = nullptr;
+  const char* stdoutFile = "/dev/stdout";
+  bool csv = false;
   bool help = false;
-  math::size_t height = math::kMaxSizeT;
-  math::size_t width = math::kMaxSizeT;
-  GetOpts opts(Assign(&inputFileName));
+  bool raw = false;
+  math::size_t rows = 1;
+  math::size_t cols = 1;
+
+  GetOpts opts;
 
   void PrintUsage() {
     std::cout << 
-R"(usage: mtxtool split [<file>]
+R"(usage: mtxtool zeros [options]
+Generate a matrix with values set to 0.0 (zero)
+
 where:
-  <file>       Default to stdin if not provided
-  -w,--width   Grid width
-  -h,--height  Grid height
-  --help       Shows this help message.
+  --rows     Number of rows. Defaults to 1.
+  --cols     From col. Defaults to 1.
+  --csv      Outputs in csv format
+  --raw      Outputs in raw format (e.g. binary MTX representation)
+  --help     Prints this mesage
 )" << std::endl;
   }
 
   bool ParseArgs(const char** args, int argc) {
     opts.AddOption("help", Assign(&help, true));
-    opts.AddOption('h', "height", Assign(&height, ParseInt));
-    opts.AddOption('w', "width", Assign(&width, ParseInt));
+    opts.AddOption("cols", Assign(&cols, ParseInt));
+    opts.AddOption("rows", Assign(&rows, ParseInt));
+    opts.AddOption("raw", Assign(&raw, true));
+    opts.AddOption("csv", Assign(&csv, true));
 
     return opts.Parse(args, argc);
   }
 
   int Main(const char** args, int argc) {
     if (!ParseArgs(args, argc)) {
-      PrintUsage();
       return 1;
     }
 
@@ -81,66 +85,24 @@ where:
       return 0;
     }
 
-    height = std::max(1, height);
-    width = std::max(1, width);
-
-    std::string outputFileName("/dev/stdout");
-    if (inputFileName) {
-      auto file = std::filesystem::path(inputFileName);
-      if (!std::filesystem::exists(file)) {
-        std::cout << "error: file not found: " << inputFileName << std::endl;
-        return 2;
-      }
-      if (!std::filesystem::is_regular_file(file)) {
-        std::cout << "error: not a regular file: " << inputFileName << std::endl;
-        return 3;
-      }
-
-      auto inputFile = std::filesystem::path(inputFileName);
-      outputFileName = inputFile.parent_path().string() 
-          + "/." + inputFile.filename().c_str() + ".tmp";
+    if (csv && raw) {
+      std::cout << "error: can only specify one of 'csv' and 'raw'" << std::endl;
+      return 2;
     }
 
-    std::unique_ptr<Matrix> mat;
-    Matrix split;
-
-    int idx = 0;
-    size_t row = 0;
-    size_t col = 0;
-    SaveMtx(
-        outputFileName.c_str(), 
-        [supplier = FromMtxStream(inputFileName ? inputFileName : "/dev/stdin"), 
-            &mat, &split, &idx, &row, &col]() mutable {
-      if (idx == 0) {
-        if (!mat) { mat = supplier(); }
-
-        if (mat && row < mat->NumRows()) {
-          split = (*mat)(Range(row, row + height), Range(col, col + width));
-          col += width;
-          if (col >= mat->NumCols()) {
-            col = 0;
-            row += height;
-          }
-          return &split;
-        } else {
-          idx++;
-        }
-      }
-
-      mat = supplier();
-      if (mat) {
-        return mat.get();
-      }
-      return static_cast<Matrix *>(nullptr);
-    });
-
-    if (inputFileName) {
-      std::filesystem::rename(outputFileName, inputFileName);
+    Matrix matrix = math::Matrices::Zeros(std::max(1, rows), std::max(1, cols));
+    if (raw) {
+      math::SaveMtx(stdoutFile, matrix);
+    } else if (csv) {
+      math::SaveCsv(std::cout, matrix);
+    } else {
+      std::cout << matrix << endl;
     }
 
     return 0;
   }
-} // namespace split
+
+} // namespace zeros
 } // namespace tools
 } // namespace math
 } // namespace mdl

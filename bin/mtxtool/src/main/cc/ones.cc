@@ -27,69 +27,83 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <iostream>
+#include <memory>
 
+#include <mdl/text.h>
 #include <mdl/util.h>
+#include <mdl/matrix.h>
 
 namespace mdl {
 namespace math {
 namespace tools {
-  namespace cat {
-    int Main(const char** args, int argc);
-  }
-  namespace ones {
-    int Main(const char** args, int argc);
-  }
-  namespace rand {
-    int Main(const char** args, int argc);
-  }
-  namespace shuffle {
-    int Main(const char** args, int argc);
-  }
-  namespace zeros {
-    int Main(const char** args, int argc);
-  }
+namespace ones {
 
-  int PrintUsage(int result = 0) {
-    std::cout << R"(Matrix file (e.g. mtx) manipulation tool.
+  using util::cli::GetOpts;
+  using util::functional::Assign;
+  using text::ParseInt;
 
-Usage: 
-  mtxtool <command> [<command-options>]
+  const char* stdoutFile = "/dev/stdout";
+  bool csv = false;
+  bool help = false;
+  bool raw = false;
+  math::size_t rows = 1;
+  math::size_t cols = 1;
 
-Commands:
-  cat
-  rand
-  shuffle
+  GetOpts opts;
 
-Use "mtxtool <command> --help for more information about a given command"
+  void PrintUsage() {
+    std::cout << 
+R"(usage: mtxtool ones [options]
+Generate a matrix with values set to 1.0 (one)
+
+where:
+  --rows       Number of rows. Defaults to 1.
+  --cols       From col. Defaults to 1.
+  --csv      Outputs in csv format
+  --raw      Outputs in raw format (e.g. binary MTX representation)
+  --help     Prints this mesage
 )" << std::endl;
-    return result;
   }
 
-  int DoMain(const char** args, int argc) {
-    mdl::util::cli::CommandSwitch commands([](const char* command) {
-      if (!command) {
-        return PrintUsage();
-      }
+  bool ParseArgs(const char** args, int argc) {
+    opts.AddOption("help", Assign(&help, true));
+    opts.AddOption("cols", Assign(&cols, ParseInt));
+    opts.AddOption("rows", Assign(&rows, ParseInt));
+    opts.AddOption("raw", Assign(&raw, true));
+    opts.AddOption("csv", Assign(&csv, true));
 
-      std::cout << "error: unknown command '" << command << "' for mtxtool";
-      return 100;
-    });
-
-    return commands
-      .AddCommand("cat", mdl::math::tools::cat::Main)
-      .AddCommand("ones", mdl::math::tools::ones::Main)
-      .AddCommand("rand", mdl::math::tools::rand::Main)
-      .AddCommand("shuffle", mdl::math::tools::shuffle::Main)
-      .AddCommand("zeros", mdl::math::tools::zeros::Main)
-      .Go(args, argc);
+    return opts.Parse(args, argc);
   }
+
+  int Main(const char** args, int argc) {
+    if (!ParseArgs(args, argc)) {
+      return 1;
+    }
+
+    if (help) {
+      PrintUsage();
+      return 0;
+    }
+
+    if (csv && raw) {
+      std::cout << "error: can only specify one of 'csv' and 'raw'" << std::endl;
+      return 2;
+    }
+
+    Matrix matrix = math::Matrices::Ones(std::max(1, rows), std::max(1, cols));
+    if (raw) {
+      math::SaveMtx(stdoutFile, matrix);
+    } else if (csv) {
+      math::SaveCsv(std::cout, matrix);
+    } else {
+      std::cout << matrix << endl;
+    }
+
+    return 0;
+  }
+
+} // namespace ones
 } // namespace tools
 } // namespace math
 } // namespace mdl
 
-
-
-int main(int argc, const char** args) {
-
-  return mdl::math::tools::DoMain(args, argc);
-}

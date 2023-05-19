@@ -1,6 +1,7 @@
 #ifndef _MDL_MATH_MATRIX
 #define _MDL_MATH_MATRIX
 
+#include <ostream>
 #include <sstream>
 
 #include "typedefs.h"
@@ -135,6 +136,8 @@ class Matrix : public BaseMatrix {
         const Matrix& matrix, 
         const std::vector<std::pair<size_t, size_t>>& sizes);
     
+    template <class It>
+    friend void SaveMtx(std::ostream& out, It begin, It end);
     template <class It>
     friend void SaveMtx(const char* fileName, It begin, It end);
 };

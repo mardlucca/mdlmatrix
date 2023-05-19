@@ -59,39 +59,35 @@ namespace math {
       const Matrix& matrix, 
       const std::vector<std::pair<size_t, size_t>>& sizes);
 
+  std::vector<Matrix> FromMtx(std::istream& in);
+  void FromMtx(std::istream& in, std::function<bool (Matrix&&)> consumer);
+  std::function<std::unique_ptr<Matrix> ()> FromMtxStream(std::istream* in);
   std::vector<Matrix> FromMtx(const char* fileName);
   void FromMtx(const char* fileName, std::function<bool (Matrix&&)> consumer);
   std::function<std::unique_ptr<Matrix> ()> FromMtxStream(const char* fileName);
 
   template <class It>
+  void SaveMtx(std::ostream& out, It begin, It end);  
+  void SaveMtx(std::ostream& out, std::function<const Matrix* ()> supplier);
+  void SaveMtx(std::ostream& out, const Matrix& matrix);
+  template <class It>
   void SaveMtx(const char* fileName, It begin, It end);
   void SaveMtx(const char* fileName, std::function<const Matrix* ()> supplier);
   void SaveMtx(const char* fileName, const Matrix& matrix);
+
+  void SaveCsv(const char* fileName, const Matrix& matrix);
+  void SaveCsv(std::ostream& out, const Matrix& matrix);
+
+
+  // IMPLEMENTATIONS
 
   template <class It>
   void SaveMtx(const char* fileName, It begin, It end) {
     try {
       std::ofstream out(fileName, std::ios_base::binary | std::ios_base::out);
       out.exceptions(std::ios::badbit | std::ios::failbit);
-      out.write(reinterpret_cast<const char *>(&kMtxFileMark), sizeof(int));
 
-      int controlReg = 0;
-      if (kDoublePrecision) {
-        controlReg |= kDoublePrecisionBit;
-      }
-
-      out.write(reinterpret_cast<const char *>(&controlReg), sizeof(controlReg));
-
-      for (It mat = begin; mat != end; ++mat) {
-        int rows = mat->rows;
-        int cols = mat->cols;
-        out.write(reinterpret_cast<const char *>(&rows), sizeof(int));
-        out.write(reinterpret_cast<const char *>(&cols), sizeof(int));
-        if (mat->rows * mat->cols > 0) {
-          out.write(reinterpret_cast<const char *>(mat->data.get()), 
-              sizeof(float_t) * mat->rows * mat->cols);
-        }
-      }
+      SaveMtx(out, begin, end);
     } catch (std::ios_base::failure& ex) {
       throw mdl::util::exceptionstream()
         .Append("Cannot write to file: ")
@@ -100,9 +96,28 @@ namespace math {
     }
   }
 
-  void SaveCsv(const char* fileName, const Matrix& matrix);
-  void SaveCsv(std::ostream& out, const Matrix& matrix);
+  template <class It>
+  void SaveMtx(std::ostream& out, It begin, It end) {
+    out.write(reinterpret_cast<const char *>(&kMtxFileMark), sizeof(int));
 
+    int controlReg = 0;
+    if (kDoublePrecision) {
+      controlReg |= kDoublePrecisionBit;
+    }
+
+    out.write(reinterpret_cast<const char *>(&controlReg), sizeof(controlReg));
+
+    for (It mat = begin; mat != end; ++mat) {
+      int rows = mat->rows;
+      int cols = mat->cols;
+      out.write(reinterpret_cast<const char *>(&rows), sizeof(int));
+      out.write(reinterpret_cast<const char *>(&cols), sizeof(int));
+      if (mat->rows * mat->cols > 0) {
+        out.write(reinterpret_cast<const char *>(mat->data.get()), 
+            sizeof(float_t) * mat->rows * mat->cols);
+      }
+    }
+  }
 } // math
 } // mdl
 
