@@ -290,7 +290,7 @@ namespace math {
   void FromMtx(const char* fileName, std::function<bool (Matrix&&)> consumer) {
     auto supplier = FromMtxStream(fileName);
     for (auto pMatrix = supplier(); pMatrix.get(); pMatrix = supplier()) {
-      consumer(std::move(*pMatrix));
+      if (!consumer(std::move(*pMatrix))) { break; }
     }
   }
 

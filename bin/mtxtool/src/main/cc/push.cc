@@ -26,56 +26,54 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include <filesystem>
 #include <iostream>
-#include <memory>
+#include <vector>
 
-#include <mdl/text.h>
 #include <mdl/util.h>
 #include <mdl/matrix.h>
+
 
 namespace mdl {
 namespace math {
 namespace tools {
-namespace rand {
+namespace push {
 
   using util::cli::GetOpts;
   using util::functional::Assign;
-  using text::ParseInt;
+  using util::functional::SupplierIterable;
 
-  bool csv = false;
+  const char* outputFileName = nullptr;
   bool help = false;
-  bool raw = false;
-  math::size_t rows = 1;
-  math::size_t cols = 1;
-
-  GetOpts opts;
+  GetOpts opts(Assign(&outputFileName));
 
   void PrintUsage() {
     std::cout << 
-R"(usage: mtxtool rand [options]
-Generate a matrix with random values from [0, 1.0)
-
+R"(usage: mtxtool push <output-file>
 where:
-  --rows       Number of rows. Defaults to 0.
-  --cols       From col. Defaults to 0.
-  --csv      Outputs in csv format
-  --raw      Outputs in raw format (e.g. binary MTX representation)
-  --help     Prints this mesage
+  stdin          Matrix to push is read from stdin.
+  <output-file>  Matrix file, in MTX format, to push to.
+  --help         Shows this help message.
 )" << std::endl;
   }
 
   bool ParseArgs(const char** args, int argc) {
     opts.AddOption("help", Assign(&help, true));
-    opts.AddOption("cols", Assign(&cols, ParseInt));
-    opts.AddOption("rows", Assign(&rows, ParseInt));
-    opts.AddOption("raw", Assign(&raw, true));
-    opts.AddOption("csv", Assign(&csv, true));
 
     return opts.Parse(args, argc);
   }
 
+  std::string GetTemporaryFileName(const char* fileName) {
+    if (!fileName) { return std::string(); }
+
+    auto tempFile = std::filesystem::path(fileName);
+    return tempFile.parent_path().string() 
+        + "/." + tempFile.filename().c_str() + ".tmp";
+  }
+
   int Main(const char** args, int argc) {
     if (!ParseArgs(args, argc)) {
+      PrintUsage();
       return 1;
     }
 
@@ -84,24 +82,34 @@ where:
       return 0;
     }
 
-    if (csv && raw) {
-      std::cout << "error: can only specify one of 'csv' and 'raw'" << std::endl;
+    if (!outputFileName) {
+      std::cout << "error: output file name not provided" << std::endl;
       return 2;
     }
 
-    Matrix matrix = math::Matrices::Random(std::max(1, rows), std::max(1, cols));
-    if (raw) {
-      math::SaveMtx(std::cout, matrix);
-    } else if (csv) {
-      math::SaveCsv(std::cout, matrix);
-    } else {
-      std::cout << matrix << endl;
+    std::string tempFileName = GetTemporaryFileName(outputFileName);
+    auto toPushStream = FromMtxStream(&std::cin);
+    std::unique_ptr<Matrix> mat;
+    std::function<std::unique_ptr<Matrix>()> outputStream = []() { return std::unique_ptr<Matrix>(); };
+    auto path = std::filesystem::path(outputFileName);
+    if (std::filesystem::exists(path)) {
+      outputStream = FromMtxStream(outputFileName);
     }
+
+    SaveMtx(tempFileName.c_str(), [&toPushStream, &mat, &outputStream]() -> const Matrix* {
+      mat = toPushStream();
+      if (mat) {
+        return mat.get();
+      }
+      mat = outputStream();
+      return mat.get();
+    });    
+
+    std::filesystem::rename(tempFileName, outputFileName);
 
     return 0;
   }
-
-} // namespace rand
+} // namespace push
 } // namespace tools
 } // namespace math
 } // namespace mdl

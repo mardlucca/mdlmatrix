@@ -36,40 +36,23 @@
 namespace mdl {
 namespace math {
 namespace tools {
-namespace rand {
+namespace empty {
 
   using util::cli::GetOpts;
   using util::functional::Assign;
-  using text::ParseInt;
 
-  bool csv = false;
   bool help = false;
-  bool raw = false;
-  math::size_t rows = 1;
-  math::size_t cols = 1;
-
   GetOpts opts;
 
   void PrintUsage() {
     std::cout << 
-R"(usage: mtxtool rand [options]
-Generate a matrix with random values from [0, 1.0)
-
-where:
-  --rows       Number of rows. Defaults to 0.
-  --cols       From col. Defaults to 0.
-  --csv      Outputs in csv format
-  --raw      Outputs in raw format (e.g. binary MTX representation)
-  --help     Prints this mesage
+R"(usage: mtxtool empty
+Generates an empty matrix file (i.e. containing no matrices, not even 0 sized matrix) in stdout.
 )" << std::endl;
   }
 
   bool ParseArgs(const char** args, int argc) {
     opts.AddOption("help", Assign(&help, true));
-    opts.AddOption("cols", Assign(&cols, ParseInt));
-    opts.AddOption("rows", Assign(&rows, ParseInt));
-    opts.AddOption("raw", Assign(&raw, true));
-    opts.AddOption("csv", Assign(&csv, true));
 
     return opts.Parse(args, argc);
   }
@@ -84,24 +67,12 @@ where:
       return 0;
     }
 
-    if (csv && raw) {
-      std::cout << "error: can only specify one of 'csv' and 'raw'" << std::endl;
-      return 2;
-    }
-
-    Matrix matrix = math::Matrices::Random(std::max(1, rows), std::max(1, cols));
-    if (raw) {
-      math::SaveMtx(std::cout, matrix);
-    } else if (csv) {
-      math::SaveCsv(std::cout, matrix);
-    } else {
-      std::cout << matrix << endl;
-    }
+    SaveMtx(std::cout, []() -> const Matrix* { return nullptr; });
 
     return 0;
   }
 
-} // namespace rand
+} // namespace empty
 } // namespace tools
 } // namespace math
 } // namespace mdl

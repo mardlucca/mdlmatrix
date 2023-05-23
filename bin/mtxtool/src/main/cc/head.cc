@@ -36,28 +36,25 @@
 namespace mdl {
 namespace math {
 namespace tools {
-namespace rand {
+namespace head {
 
   using util::cli::GetOpts;
   using util::functional::Assign;
-  using text::ParseInt;
 
+  const char* intputFileName;
   bool csv = false;
   bool help = false;
   bool raw = false;
-  math::size_t rows = 1;
-  math::size_t cols = 1;
 
-  GetOpts opts;
+  GetOpts opts(Assign(&intputFileName));
 
   void PrintUsage() {
     std::cout << 
-R"(usage: mtxtool rand [options]
-Generate a matrix with random values from [0, 1.0)
+R"(usage: mtxtool head [options] <matrix-file>
+Outputs the head matrix from an MTX file.
 
 where:
-  --rows       Number of rows. Defaults to 0.
-  --cols       From col. Defaults to 0.
+  <matrix-file> Matrix file, in MTX format, to read head from
   --csv      Outputs in csv format
   --raw      Outputs in raw format (e.g. binary MTX representation)
   --help     Prints this mesage
@@ -66,8 +63,6 @@ where:
 
   bool ParseArgs(const char** args, int argc) {
     opts.AddOption("help", Assign(&help, true));
-    opts.AddOption("cols", Assign(&cols, ParseInt));
-    opts.AddOption("rows", Assign(&rows, ParseInt));
     opts.AddOption("raw", Assign(&raw, true));
     opts.AddOption("csv", Assign(&csv, true));
 
@@ -89,19 +84,39 @@ where:
       return 2;
     }
 
-    Matrix matrix = math::Matrices::Random(std::max(1, rows), std::max(1, cols));
+    if (!intputFileName) {
+      std::cout << "error: input file name not provided" << std::endl;
+      return 2;
+    }
+
+    Matrix matrix;
+    bool empty = true;
+    FromMtx(intputFileName, [&matrix, &empty](Matrix&& mat) {
+      matrix = std::move(mat);
+      empty = false;
+      return false;
+    });
+
     if (raw) {
-      math::SaveMtx(std::cout, matrix);
+      if (empty) {
+        math::SaveMtx(std::cout, []() -> const Matrix* { return nullptr; });
+      } else {
+        math::SaveMtx(std::cout, matrix);
+      }
     } else if (csv) {
-      math::SaveCsv(std::cout, matrix);
+      if (!empty) {
+        math::SaveCsv(std::cout, matrix);
+      }
     } else {
-      std::cout << matrix << endl;
+      if (!empty) {
+        std::cout << matrix << endl;
+      }
     }
 
     return 0;
   }
 
-} // namespace rand
+} // namespace head
 } // namespace tools
 } // namespace math
 } // namespace mdl

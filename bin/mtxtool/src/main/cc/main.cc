@@ -33,7 +33,22 @@
 namespace mdl {
 namespace math {
 namespace tools {
+  namespace append {
+    int Main(const char** args, int argc);
+  }
   namespace cat {
+    int Main(const char** args, int argc);
+  }
+  namespace empty {
+    int Main(const char** args, int argc);
+  }
+  namespace head {
+    int Main(const char** args, int argc);
+  }
+  namespace push {
+    int Main(const char** args, int argc);
+  }
+  namespace pop {
     int Main(const char** args, int argc);
   }
   namespace ones {
@@ -43,6 +58,9 @@ namespace tools {
     int Main(const char** args, int argc);
   }
   namespace shuffle {
+    int Main(const char** args, int argc);
+  }
+  namespace tail {
     int Main(const char** args, int argc);
   }
   namespace zeros {
@@ -56,9 +74,17 @@ Usage:
   mtxtool <command> [<command-options>]
 
 Commands:
+  append
   cat
+  empty
+  head
+  push
+  pop
+  opnes
   rand
   shuffle
+  tail
+  zeros
 
 Use "mtxtool <command> --help for more information about a given command"
 )" << std::endl;
@@ -76,10 +102,16 @@ Use "mtxtool <command> --help for more information about a given command"
     });
 
     return commands
+      .AddCommand("append", mdl::math::tools::append::Main)
       .AddCommand("cat", mdl::math::tools::cat::Main)
+      .AddCommand("empty", mdl::math::tools::empty::Main)
+      .AddCommand("head", mdl::math::tools::head::Main)
+      .AddCommand("push", mdl::math::tools::push::Main)
+      .AddCommand("pop", mdl::math::tools::pop::Main)
       .AddCommand("ones", mdl::math::tools::ones::Main)
       .AddCommand("rand", mdl::math::tools::rand::Main)
       .AddCommand("shuffle", mdl::math::tools::shuffle::Main)
+      .AddCommand("tail", mdl::math::tools::tail::Main)
       .AddCommand("zeros", mdl::math::tools::zeros::Main)
       .Go(args, argc);
   }

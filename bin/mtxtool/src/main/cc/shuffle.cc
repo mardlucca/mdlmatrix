@@ -49,10 +49,10 @@ namespace shuffle {
 
   void PrintUsage() {
     std::cout << 
-R"(usage: mtxtool shuffle [<file>]
+R"(usage: mtxtool shuffle [<matrix-file>]
 where:
-  <file>  Default to stdin if not provided
-  --help  Shows this help message.
+  <matrix-file>  Matrix file, in MTX format, to shuffle. Defaults to stdin.
+  --help         Shows this help message.
 )" << std::endl;
   }
 
@@ -60,6 +60,26 @@ where:
     opts.AddOption("help", Assign(&help, true));
 
     return opts.Parse(args, argc);
+  }
+
+  std::string GetTemporaryFileName(const char* fileName) {
+    if (!fileName) { return std::string(); }
+
+    auto file = std::filesystem::path(fileName);
+    if (!std::filesystem::exists(file)) {
+      util::exceptionstream() 
+          << "error: file not found: " << fileName
+          << util::raise<io::file_not_found_exception>();
+    }
+    if (!std::filesystem::is_regular_file(file)) {
+      util::exceptionstream() 
+          << "error: not a regular file: " << fileName
+          << util::raise<io::io_exception>();
+    }
+
+    auto tempFile = std::filesystem::path(fileName);
+    return tempFile.parent_path().string() 
+        + "/." + tempFile.filename().c_str() + ".tmp";
   }
 
   int Main(const char** args, int argc) {
@@ -73,41 +93,34 @@ where:
       return 0;
     }
 
-    std::string outputFileName("/dev/stdout");
-    if (inputFileName) {
-      auto file = std::filesystem::path(inputFileName);
-      if (!std::filesystem::exists(file)) {
-        std::cout << "error: file not found: " << inputFileName << std::endl;
-        return 2;
-      }
-      if (!std::filesystem::is_regular_file(file)) {
-        std::cout << "error: not a regular file: " << inputFileName << std::endl;
-        return 3;
-      }
+    std::string outputFileName = GetTemporaryFileName(inputFileName);
 
-      auto inputFile = std::filesystem::path(inputFileName);
-      outputFileName = inputFile.parent_path().string() 
-          + "/." + inputFile.filename().c_str() + ".tmp";
-    }
-
+    std::function<std::unique_ptr<Matrix> ()> stream = inputFileName
+        ? FromMtxStream(inputFileName)
+        : FromMtxStream(&std::cin);
     std::unique_ptr<Matrix> mat;
     int idx = 0;
-    SaveMtx(
-        outputFileName.c_str(), 
-        [supplier = FromMtxStream(inputFileName ? inputFileName : "/dev/stdin"), &mat, &idx]() mutable {
-      mat = supplier();
-      if (mat) {
-        if (idx == 0) { 
-          mat->Shuffle();
-        }
-        idx++;
-        return mat.get();
+
+    auto supplier = [&stream, &mat, &idx]() {
+      mat = stream();
+      if (!mat) {
+        return static_cast<Matrix *>(nullptr);
       }
-      return static_cast<Matrix *>(nullptr);
-    });
+
+      if (idx == 0) { 
+        // only the first matrix (head) is shuffled
+        mat->Shuffle();
+        idx++;
+      }
+  
+      return mat.get();
+    };
 
     if (inputFileName) {
+      SaveMtx(outputFileName.c_str(), supplier);
       std::filesystem::rename(outputFileName, inputFileName);
+    } else {
+      SaveMtx(std::cout, supplier);
     }
 
     return 0;

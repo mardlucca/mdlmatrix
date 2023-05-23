@@ -42,7 +42,6 @@ namespace ones {
   using util::functional::Assign;
   using text::ParseInt;
 
-  const char* stdoutFile = "/dev/stdout";
   bool csv = false;
   bool help = false;
   bool raw = false;
@@ -92,7 +91,7 @@ where:
 
     Matrix matrix = math::Matrices::Ones(std::max(1, rows), std::max(1, cols));
     if (raw) {
-      math::SaveMtx(stdoutFile, matrix);
+      math::SaveMtx(std::cout, matrix);
     } else if (csv) {
       math::SaveCsv(std::cout, matrix);
     } else {
