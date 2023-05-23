@@ -74,7 +74,7 @@ namespace tools {
   }
 
   int PrintUsage(int result = 0) {
-    std::cout << R"(Matrix file (e.g. mtx) manipulation tool.
+    std::cerr << R"(Matrix file (e.g. mtx) manipulation tool.
 
 Usage: 
   mtxtool <command> [<command-options>]
@@ -105,7 +105,7 @@ Use "mtxtool <command> --help for more information about a given command"
         return PrintUsage();
       }
 
-      std::cout << "error: unknown command '" << command << "' for mtxtool";
+      std::cerr << "error: unknown command '" << command << "' for mtxtool";
       return 100;
     });
 

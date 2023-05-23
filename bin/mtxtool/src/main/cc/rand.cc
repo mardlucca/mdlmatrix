@@ -51,7 +51,7 @@ namespace rand {
   GetOpts opts;
 
   void PrintUsage() {
-    std::cout << 
+    std::cerr << 
 R"(usage: mtxtool rand [options]
 Generate a matrix with random values from [0, 1.0)
 
@@ -85,7 +85,7 @@ where:
     }
 
     if (csv && raw) {
-      std::cout << "error: can only specify one of 'csv' and 'raw'" << std::endl;
+      std::cerr << "error: can only specify one of 'csv' and 'raw'" << std::endl;
       return 2;
     }
 

@@ -55,7 +55,7 @@ namespace cat {
   GetOpts opts(Assign(&inputFile));
 
   void PrintUsage() {
-    std::cout << 
+    std::cerr << 
 R"(usage: mtxtool cat [options] <file>
 where:
   --fr       From row. Defaults to 0.
@@ -105,7 +105,7 @@ where:
     }
 
     if (csv && raw) {
-      std::cout << "error: can only specify one of 'csv' and 'raw'" << std::endl;
+      std::cerr << "error: can only specify one of 'csv' and 'raw'" << std::endl;
       return 2;
     }
 

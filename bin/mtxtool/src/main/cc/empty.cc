@@ -45,7 +45,7 @@ namespace empty {
   GetOpts opts;
 
   void PrintUsage() {
-    std::cout << 
+    std::cerr << 
 R"(usage: mtxtool empty
 Generates an empty matrix file (i.e. containing no matrices, not even 0 sized matrix) in stdout.
 )" << std::endl;

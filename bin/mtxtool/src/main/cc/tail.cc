@@ -49,7 +49,7 @@ namespace tail {
   GetOpts opts(Assign(&intputFileName));
 
   void PrintUsage() {
-    std::cout << 
+    std::cerr << 
 R"(usage: mtxtool tail [options] <matrix-file>
 Outputs the tail matrix from an MTX file.
 
@@ -80,12 +80,12 @@ where:
     }
 
     if (csv && raw) {
-      std::cout << "error: can only specify one of 'csv' and 'raw'" << std::endl;
+      std::cerr << "error: can only specify one of 'csv' and 'raw'" << std::endl;
       return 2;
     }
 
     if (!intputFileName) {
-      std::cout << "error: input file name not provided" << std::endl;
+      std::cerr << "error: input file name not provided" << std::endl;
       return 2;
     }
 

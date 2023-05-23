@@ -51,7 +51,7 @@ namespace zeros {
   GetOpts opts;
 
   void PrintUsage() {
-    std::cout << 
+    std::cerr << 
 R"(usage: mtxtool zeros [options]
 Generate a matrix with values set to 0.0 (zero)
 
@@ -85,7 +85,7 @@ where:
     }
 
     if (csv && raw) {
-      std::cout << "error: can only specify one of 'csv' and 'raw'" << std::endl;
+      std::cerr << "error: can only specify one of 'csv' and 'raw'" << std::endl;
       return 2;
     }
 

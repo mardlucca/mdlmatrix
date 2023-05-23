@@ -49,7 +49,7 @@ namespace pop {
   GetOpts opts(Assign(&inputFileName));
 
   void PrintUsage() {
-    std::cout << 
+    std::cerr << 
 R"(usage: mtxtool pop <input-file>
 where:
   <input-file>  Matrix file, in MTX format, to pop from.
@@ -79,12 +79,12 @@ where:
     }
 
     if (!inputFileName) {
-      std::cout << "error: input file name not provided" << std::endl;
+      std::cerr << "error: input file name not provided" << std::endl;
       return 2;
     }
 
     if (csv && raw) {
-      std::cout << "error: can only specify one of 'csv' and 'raw'" << std::endl;
+      std::cerr << "error: can only specify one of 'csv' and 'raw'" << std::endl;
       return 3;
     }
 

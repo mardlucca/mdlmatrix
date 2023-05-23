@@ -48,7 +48,7 @@ namespace shuffle {
   GetOpts opts(Assign(&inputFileName));
 
   void PrintUsage() {
-    std::cout << 
+    std::cerr << 
 R"(usage: mtxtool shuffle [<matrix-file>]
 where:
   <matrix-file>  Matrix file, in MTX format, to shuffle. Defaults to stdin.

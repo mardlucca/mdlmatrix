@@ -47,7 +47,7 @@ namespace join {
   GetOpts opts(Assign(&intputFileName));
 
   void PrintUsage() {
-    std::cout << 
+    std::cerr << 
 R"(usage: mtxtool join <matrix-file>
 Joins all matrices in an MTX file into one single matrix, appending them vertically.
 

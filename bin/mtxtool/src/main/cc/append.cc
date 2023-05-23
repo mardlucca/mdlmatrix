@@ -48,7 +48,7 @@ namespace append {
   GetOpts opts(Assign(&outputFileName));
 
   void PrintUsage() {
-    std::cout << 
+    std::cerr << 
 R"(usage: mtxtool append <output-file>
 where:
   stdin          Matrix to append is read from stdin.
@@ -83,7 +83,7 @@ where:
     }
 
     if (!outputFileName) {
-      std::cout << "error: output file name not provided" << std::endl;
+      std::cerr << "error: output file name not provided" << std::endl;
       return 2;
     }
 
