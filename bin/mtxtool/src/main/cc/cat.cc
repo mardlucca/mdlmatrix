@@ -62,6 +62,8 @@ where:
   --fc       From col. Defaults to 0.
   --tr       To row, not including last. Defaults to last row in matrix.
   --tc       To col, not including last. Defaults to last col in matrix.
+  --row      Outputs a specific row. Equivalent to --fr <row> --tr <row + 1>
+  --col      Outputs a specific column. Equivalent to --fc <col> --tc <col + 1>
   --csv      Outputs in csv format
   --raw      Outputs in raw format (e.g. binary MTX representation)
   -s,--sizes Prints matrix sizes only 
@@ -77,6 +79,16 @@ where:
     opts.AddOption("tc", Assign(&tc, ParseInt));
     opts.AddOption("raw", Assign(&raw, true));
     opts.AddOption("csv", Assign(&csv, true));
+    opts.AddOption("row", [](const char* val) {
+      int row = ParseInt(val);
+      fr = row;
+      tr = row + 1;
+    });
+    opts.AddOption("col", [](const char* val) {
+      int col = ParseInt(val);
+      fc = col;
+      tc = col + 1;
+    });
     opts.AddOption('s', "sizes", Assign(&sizesOnly, true));
 
     return opts.Parse(args, argc);

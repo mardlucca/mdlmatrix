@@ -42,7 +42,13 @@ namespace tools {
   namespace empty {
     int Main(const char** args, int argc);
   }
+  namespace flatten {
+    int Main(const char** args, int argc);
+  }
   namespace head {
+    int Main(const char** args, int argc);
+  }
+  namespace join {
     int Main(const char** args, int argc);
   }
   namespace push {
@@ -77,7 +83,9 @@ Commands:
   append
   cat
   empty
+  flatten
   head
+  join
   push
   pop
   opnes
@@ -105,7 +113,9 @@ Use "mtxtool <command> --help for more information about a given command"
       .AddCommand("append", mdl::math::tools::append::Main)
       .AddCommand("cat", mdl::math::tools::cat::Main)
       .AddCommand("empty", mdl::math::tools::empty::Main)
+      .AddCommand("flatten", mdl::math::tools::flatten::Main)
       .AddCommand("head", mdl::math::tools::head::Main)
+      .AddCommand("join", mdl::math::tools::join::Main)
       .AddCommand("push", mdl::math::tools::push::Main)
       .AddCommand("pop", mdl::math::tools::pop::Main)
       .AddCommand("ones", mdl::math::tools::ones::Main)
